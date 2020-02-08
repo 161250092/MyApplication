@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#86a1a4</color>
+    <color name="colorPrimaryDark">#86a1a4</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="logoScreenBackground">#ffffff</color>
+    <color name="colorLoginButton">#99baae</color>
+    <color name="colorCursor">#cccccc</color>
+
+
+    <color name="tab_indicator">#4784e0</color>
+    <color name="title_bg">#2f3535</color>
+    <color name="update_dialog_stroke">#0055aa</color>
+    <color name="blank">#000000</color>
+
+    <color name="black_overlay">#66000000</color>
+
+    <color name="ldrawer_color">#FFFFFF</color>
+    <color name="actionbar_color">#bf360c</color>
+    <color name="drawer_arrow_second_color">#303f9f</color>
+
+    <color name="psts_background_tab_pressed">#1AFFFFFF</color>
+    <color name="psts_background_tab_pressed_ripple">#AAFFFFFF</color>
+    <!--做任务选择文件菜单动画-->
+    <color name="white">#ffffff</color>
+    <color name="gray">#cccccc</color>
+
+    <color name="drop_down_selected">#7B1FA2</color>
+    <color name="drop_down_unselected">#111111</color>
+
+    <color name="mask_color">#88888888</color>
+    <color name="check_bg">#f2f2f2</color>
+    <color name="un_press_color">#9C27B0</color>
+
+
+    <color name="colorWhite">#ffffff</color>
+    <color name="white2">#f5f3f3</color>
+    <color name="colorRed">#ff0000</color>
+    <color name="colorGray">#666666</color>
+    <color name="colorblack">#000000</color>
+    <color name="colorLightGrey">#eeeeee</color>
+    <color name="colorTransparent">#00000000</color>
+
+    <color name="m_charcoal_grey">#323233</color><!--深灰色-->
+    <color name="m_steel">#7d7d80</color><!--灰色-->
+    <color name="m_silver">#c8c8cc</color><!--浅灰色-->
+    <color name="m_pale_grey">#f2f2f7</color><!--淡灰色-->
+    <color name="m_warm_grey">#777777</color>
+    <color name="m_item_text">#535353</color>
+</resources>

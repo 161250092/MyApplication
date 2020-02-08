@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#F4F4F3"
+              android:orientation="vertical"
+              tools:context="com.example.kongmin.view.sort.DotaskOneSortActivity">
+<android.support.v7.widget.RecyclerView
+        android:id="@+id/rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <!--<TextView android:layout_width="50dp"
+              android:layout_height="50dp"
+              android:id="@+id/edit"
+              android:text="编辑" />-->
+    <TextView android:layout_width="50dp"
+              android:layout_height="50dp"
+              android:id="@+id/save"
+              android:text="完成"/>
+</LinearLayout>
+

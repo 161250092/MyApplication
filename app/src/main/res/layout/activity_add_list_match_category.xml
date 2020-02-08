@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:id="@+id/scrollView"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            tools:context="com.example.kongmin.view.publictask.AddListMatchCategoryActivity">
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical"
+                  android:id="@+id/layout"
+                  android:layout_margin="10dp">
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:background="#ededed"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dip"
+                android:paddingRight="10dip" > 
+            <TextView
+                    android:id="@+id/matchcancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_message_button"
+                    android:gravity="center"
+                    android:padding="5dip"
+                    android:text="@string/cancel_back"
+                    android:textColor="@color/tab_indicator" /> 
+            <TextView
+                    android:id="@+id/title"
+                    android:layout_width="0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="10"
+                    android:gravity="center"
+                    android:text="文本配对标注"
+                    android:textColor="@color/blank" /> 
+            <TextView
+                    android:id="@+id/matchsave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_message_button"
+                    android:gravity="center"
+                    android:padding="5dip"
+                    android:text="保存"
+                    android:textColor="@color/tab_indicator" />
+        </LinearLayout>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:weightSum="1">
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                <TextView
+                        android:id="@+id/textView1"
+                        android:textSize="18sp"
+                        android:textColor="#636363"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="任务标题：" />
+                <EditText
+                        android:id="@+id/matchtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:paddingLeft="5dp"
+                        android:textColor="#626366"
+                        android:background="@null"
+                        android:textSize="18sp"
+                        android:ems="10">
+                    <requestFocus />
+                </EditText>
+            </LinearLayout>
+            <View  android:layout_height="2px"
+                   android:layout_width="match_parent"
+                   android:background="#d9d9d9"/>
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                <TextView
+                        android:id="@+id/typename"
+                        android:textSize="18sp"
+                        android:textColor="#636363"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="任务类型：" />
+                <TextView
+                        android:id="@+id/matchtype"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:gravity="center"
+                        android:paddingLeft="5dp"
+                        android:textColor="#626366"
+                        android:textSize="18sp">
+                </TextView>
+            </LinearLayout>
+            <View  android:layout_height="2px"
+                   android:layout_width="match_parent"
+                   android:background="#d9d9d9"/>
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                <TextView
+                        android:id="@+id/matchtypestr"
+                        android:textSize="18sp"
+                        android:textColor="#636363"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="配对类型：" />
+                <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:gravity="center"
+                        android:paddingLeft="5dp"
+                        android:textColor="#626366"
+                        android:orientation="horizontal"
+                        android:id="@+id/matchtypedetail">
+                    <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="一对一"
+                            android:textColor="#626366"
+                            android:id="@+id/onetoone"
+                            android:layout_marginRight="10dp"
+                            android:checked="true"/>
+                    <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="一对多"
+                            android:textColor="#626366"
+                            android:id="@+id/onetomutil"
+                            android:layout_marginRight="10dp"/>
+                    <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="多对多"
+                            android:textColor="#626366"
+                            android:id="@+id/mutiltomutil"
+                            android:layout_marginRight="30dp"/>
+                </RadioGroup>
+            </LinearLayout>
+            <View  android:layout_height="2px"
+                   android:layout_width="match_parent"
+                   android:background="#d9d9d9" />
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                <TextView
+                        android:id="@+id/deadlinename"
+                        android:textSize="18sp"
+                        android:textColor="#636363"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="截止日期：" />
+                <EditText
+                        android:id="@+id/matchdeadline"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:paddingLeft="5dp"
+                        android:textColor="#626366"
+                        android:background="@null"
+                        android:textSize="18sp"
+                        android:ems="10">
+                    <requestFocus />
+                </EditText>
+            </LinearLayout>
+            <View  android:layout_height="2px"
+                   android:layout_width="match_parent"
+                   android:background="#d9d9d9" />
+            <EditText
+                    android:id="@+id/matchcontent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top"
+                    android:textColor="#626366"
+                    android:background="@null"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="10dp"
+                    android:paddingLeft="5dp" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

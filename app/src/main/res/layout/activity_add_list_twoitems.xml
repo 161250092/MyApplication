@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:id="@+id/scrollView"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            tools:context="com.example.kongmin.view.publictask.AddListTwoitemsActivity">
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:orientation="vertical"
+                      android:id="@+id/layout"
+                      android:layout_margin="10dp">
+            <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:background="#ededed"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dip"
+                    android:paddingRight="10dip" > 
+                <TextView
+                        android:id="@+id/twoitemscancel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/selector_message_button"
+                        android:gravity="center"
+                        android:padding="5dip"
+                        android:text="@string/cancel_back"
+                        android:textColor="@color/tab_indicator" /> 
+                <TextView
+                        android:id="@+id/title"
+                        android:layout_width="0dip"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="10"
+                        android:gravity="center"
+                        android:text="文本关系类别标注"
+                        android:textColor="@color/blank" /> 
+                <TextView
+                        android:id="@+id/twoitemssave"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/selector_message_button"
+                        android:gravity="center"
+                        android:padding="5dip"
+                        android:text="保存"
+                        android:textColor="@color/tab_indicator" />
+            </LinearLayout>
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:weightSum="1">
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                    <TextView
+                            android:id="@+id/textView1"
+                            android:textSize="18sp"
+                            android:textColor="#636363"
+                            android:layout_gravity="center_vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="任务标题：" />
+                    <EditText
+                            android:id="@+id/twoitemstitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:paddingLeft="5dp"
+                            android:textColor="#626366"
+                            android:background="@null"
+                            android:textSize="18sp"
+                            android:ems="10">
+                        <requestFocus />
+                    </EditText>
+                </LinearLayout>
+                <View  android:layout_height="2px"
+                       android:layout_width="match_parent"
+                       android:background="#d9d9d9"/>
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                    <TextView
+                            android:id="@+id/typename"
+                            android:textSize="18sp"
+                            android:textColor="#636363"
+                            android:layout_gravity="center_vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="任务类型：" />
+                    <TextView
+                            android:id="@+id/twoitemstype"
+                            android:layout_width="wrap_content"
+                            android:layout_height="50dp"
+                            android:gravity="center"
+                            android:paddingLeft="5dp"
+                            android:textColor="#626366"
+                            android:textSize="18sp">
+                    </TextView>
+                </LinearLayout>
+                <View  android:layout_height="2px"
+                       android:layout_width="match_parent"
+                       android:background="#d9d9d9" />
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                    <TextView
+                            android:id="@+id/tagname1"
+                            android:textSize="18sp"
+                            android:textColor="#636363"
+                            android:layout_gravity="center_vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="instance标签：" />
+                    <EditText
+                            android:id="@+id/instancetag_layout"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:paddingLeft="5dp"
+                            android:textColor="#626366"
+                            android:background="@null"
+                            android:textSize="18sp"
+                            android:ems="10"/>
+                    <com.example.kongmin.util.Flowlayout
+                            android:id="@+id/instanctag"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center">
+                    </com.example.kongmin.util.Flowlayout>
+                </LinearLayout>
+                <View  android:layout_height="2px"
+                       android:layout_width="match_parent"
+                       android:background="#d9d9d9" />
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                    <TextView
+                            android:id="@+id/tagname2"
+                            android:textSize="18sp"
+                            android:textColor="#636363"
+                            android:layout_gravity="center_vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="item1标签：" />
+                    <EditText
+                            android:id="@+id/itemtag1_layout"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:paddingLeft="5dp"
+                            android:textColor="#626366"
+                            android:background="@null"
+                            android:textSize="18sp"
+                            android:ems="10"/>
+                    <com.example.kongmin.util.Flowlayout
+                            android:id="@+id/itemtag1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center">
+                    </com.example.kongmin.util.Flowlayout>
+                </LinearLayout>
+                <View  android:layout_height="2px"
+                       android:layout_width="match_parent"
+                       android:background="#d9d9d9" />
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                    <TextView
+                            android:id="@+id/itemtagname2"
+                            android:textSize="18sp"
+                            android:textColor="#636363"
+                            android:layout_gravity="center_vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="item2标签：" />
+                    <EditText
+                            android:id="@+id/itemtag2_layout"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:paddingLeft="5dp"
+                            android:textColor="#626366"
+                            android:background="@null"
+                            android:textSize="18sp"
+                            android:ems="10"/>
+                    <com.example.kongmin.util.Flowlayout
+                            android:id="@+id/itemtag2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center">
+                    </com.example.kongmin.util.Flowlayout>
+                </LinearLayout>
+                <View  android:layout_height="2px"
+                       android:layout_width="match_parent"
+                       android:background="#d9d9d9" />
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                    <TextView
+                            android:id="@+id/labelnumtv1"
+                            android:textSize="18sp"
+                            android:textColor="#636363"
+                            android:layout_gravity="center_vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:text="标签个数：" />
+                    <EditText
+                            android:id="@+id/instancenum"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:digits="1234567890"
+                            android:inputType="phone|number"
+                            android:hint="instance"
+                            android:paddingLeft="5dp"
+                            android:textColor="#626366"
+                            android:textSize="18sp"
+                            android:layout_weight="1"
+                            android:singleLine="true"
+                            android:ems="10">
+                            <requestFocus />
+                    </EditText>
+                    <EditText
+                            android:id="@+id/itemnum1"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:digits="1234567890"
+                            android:inputType="phone|number"
+                            android:hint="item1"
+                            android:paddingLeft="5dp"
+                            android:textColor="#626366"
+                            android:textSize="18sp"
+                            android:layout_weight="1"
+                            android:singleLine="true"
+                            android:ems="10">
+                            <requestFocus />
+                    </EditText>
+                    <EditText
+                            android:id="@+id/itemnum2"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:digits="1234567890"
+                            android:inputType="phone|number"
+                            android:hint="item2"
+                            android:paddingLeft="5dp"
+                            android:textColor="#626366"
+                            android:textSize="18sp"
+                            android:layout_weight="1"
+                            android:ems="10">
+                            <requestFocus />
+                    </EditText>
+                </LinearLayout>
+                <View  android:layout_height="2px"
+                       android:layout_width="match_parent"
+                       android:background="#d9d9d9" />
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                    <TextView
+                            android:id="@+id/deadlinename"
+                            android:textSize="18sp"
+                            android:textColor="#636363"
+                            android:layout_gravity="center_vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="积分个数：" />
+                    <EditText
+                            android:id="@+id/twoitemsdeadline"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:paddingLeft="5dp"
+                            android:textColor="#626366"
+                            android:background="@null"
+                            android:textSize="18sp"
+                            android:ems="10">
+                        <requestFocus />
+                    </EditText>
+                </LinearLayout>
+                <View  android:layout_height="2px"
+                       android:layout_width="match_parent"
+                       android:background="#d9d9d9" />
+                <EditText
+                        android:id="@+id/twoitemscontent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top"
+                        android:textColor="#626366"
+                        android:background="@null"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="10dp"
+                        android:paddingLeft="5dp" />
+                <!--<EditText
+                        android:layout_marginTop="0dp"
+                        android:id="@+id/et"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="标签"/>-->
+            </LinearLayout>
+     </LinearLayout>
+</ScrollView>
+

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:id="@+id/layout"
+              android:layout_margin="10dp">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:weightSum="1">
+
+        <!--<TextView
+                android:id="@+id/textView1"
+                android:textSize="20sp"
+                android:textColor="#636363"
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title" />-->
+
+        <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:paddingLeft="5dp"
+                android:textSize="24sp"
+                android:textColor="#626366">
+        </TextView>
+
+        <!--<TextView
+                android:id="@+id/textView2"
+                android:textSize="20sp"
+                android:textColor="#636363"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/content" />-->
+
+        <EditText
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="#626366"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="5dp"
+                android:paddingLeft="5dp" />
+    </LinearLayout>
+    <com.example.kongmin.util.Flowlayout
+            android:id="@+id/tag_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+    </com.example.kongmin.util.Flowlayout>
+    <Button
+            android:id="@+id/email_sign_in_button"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="确认做任务"
+            android:textStyle="bold"/>
+</LinearLayout>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#efefef"
+                android:paddingTop="5dp"
+                tools:context="com.example.kongmin.view.rebuild.MainActivity" >
+    <LinearLayout
+
+            android:layout_width="fill_parent"
+
+            android:layout_height="40dp"
+
+            android:layout_gravity="top"
+
+            android:background="#ededed"
+
+            android:gravity="center_vertical"
+
+            android:paddingLeft="10dip"
+
+            android:paddingRight="10dip" >
+
+         
+        <TextView
+
+                android:id="@+id/cancel"
+
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+
+                android:layout_weight="1"
+
+                android:background="@drawable/selector_message_button"
+
+                android:gravity="center"
+
+                android:padding="5dip"
+
+                android:text="@string/cancel_back"
+
+                android:textColor="@color/tab_indicator" />
+
+         
+        <TextView
+
+                android:id="@+id/textannotation"
+
+                android:layout_width="0dip"
+
+                android:layout_height="fill_parent"
+
+                android:layout_weight="10"
+
+                android:gravity="center"
+
+                android:text="文本标注"
+
+                android:textColor="@color/blank" />
+
+         
+        <TextView
+
+                android:id="@+id/upload"
+
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+
+                android:layout_weight="1"
+
+                android:background="@drawable/selector_message_button"
+
+                android:gravity="center"
+
+                android:padding="5dip"
+
+                android:text="确定"
+
+                android:textColor="@color/tab_indicator" />
+
+    </LinearLayout>
+
+    <ListView
+            android:id="@+id/lv_bwlList"
+            android:divider="#d9d9d9"
+            android:dividerHeight="1dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="49dp"/>
+
+    <ImageButton
+            android:id="@+id/btnAdd"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_new"
+            android:alpha="70"
+            android:background="#00ffffff"
+            android:layout_margin="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

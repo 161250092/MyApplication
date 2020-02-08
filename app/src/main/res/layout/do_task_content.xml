@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:paddingTop="15dp">
+    <!--<ImageView
+            android:id="@+id/iv_logo"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="17dp"
+            android:layout_marginRight="17dp"
+            android:scaleType="centerCrop" />-->
+
+    <TextView
+            android:id="@+id/doccontent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textIsSelectable="true"
+            android:layout_marginTop="5dp"
+            android:gravity="start"
+            android:background="@null"
+            android:lineSpacingMultiplier="1.5"
+            android:keepScreenOn="true"
+            android:text="@string/dummy_content"/>
+
+</LinearLayout>
