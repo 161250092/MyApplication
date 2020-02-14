@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.kongmin.Constant.Constant;
+import com.example.kongmin.network.OkHttpUtil;
 import com.example.kongmin.view.adapter.TaskListItemAdapter;
 import com.example.kongmin.myapplication.R;
 import com.example.kongmin.view.dotask.MyListView;
@@ -21,7 +22,12 @@ import com.example.kongmin.pojo.MarkCategory1;
 import com.example.kongmin.util.HttpUtil;
 import com.example.kongmin.util.MyApplication;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -132,7 +138,7 @@ public class MyDoingtaskListFragment extends Fragment implements MyListView.Load
         mApplication = (MyApplication)getActivity().getApplication();
         userId = mApplication.getLoginUserId();
 
-        new Thread(runnable).start();
+        getFileContent();
         try {
             Thread.sleep(1000);
         }catch (InterruptedException e){
@@ -143,8 +149,7 @@ public class MyDoingtaskListFragment extends Fragment implements MyListView.Load
         for (int i=0;i<num;i++){
             loadarray.add(array.get(i));
         }
-        //EdittextAdapter adapter=new EdittextAdapter(inflater,array);
-        //adapter=new EdittextAdapter(inflater,array);
+
         adapter=new TaskListItemAdapter(inflater,loadarray);
         lv.setAdapter(adapter);
         /*
@@ -226,6 +231,76 @@ public class MyDoingtaskListFragment extends Fragment implements MyListView.Load
             }
         },2000);
 
+    }
+
+    public void getFileContent(){
+        String requestUrl = Constant.selectmydotaskUrl;
+        //String params = "";
+        if(typename.equals("正在进行")){
+            dtstatus = "进行中";
+        }else{
+            dtstatus = "已完成";
+        }
+        int page = 1;
+        int limit = Integer.MAX_VALUE;
+        String params = "?dtstatus="+dtstatus+"&page="+page+"&limit="+limit+"&userId="+userId;
+
+        OkHttpUtil.sendGetRequest(requestUrl + params, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                int  id = 0;
+                String title = "";
+                String createtime = "";
+                String taskcompstatus = "";
+                String typename="";
+                JSONObject jsonObject = JSONObject.parseObject(result);
+                //把字符串转成JSONArray对象
+                JSONArray jsonArray = (JSONArray)jsonObject.get("data");
+                if(jsonArray.size()>0){
+                    for(int i=0;i<jsonArray.size();i++){
+                        //遍历jsonarray数组，把每一个对象转成json对象
+                        JSONObject job = jsonArray.getJSONObject(i);
+                        //得到每个对象中的属性值
+                        //Log.e("size---->", "Post方式请求成功，size--->" + jsonArray.size());
+                        if(job.get("taskId")!=null) {
+                            //Log.e("tid---->", "Post方式请求成功，tid--->" + job.get("tid").toString());
+                            id =Integer.valueOf(job.get("taskId").toString());
+                        }
+                        if(job.get("title")!=null) {
+                            //Log.e("title---->", "Post方式请求成功，title--->" + job.get("title").toString());
+                            title = job.get("title").toString();
+                        }
+                        if(job.get("typeName")!=null) {
+                            //Log.e("title---->", "Post方式请求成功，title--->" + job.get("title").toString());
+                            typename = job.get("typeName").toString();
+                        }
+                        if(job.get("dotime")!=null) {
+                            //Log.e("createtime---->", "Post方式请求成功，createtime--->" + job.get("createtime").toString());
+                            createtime = job.get("dotime").toString();
+                        }
+                        if(job.get("dpercent")!=null) {
+                            //Log.e("taskcompstatus---->", "Post方式请求成功，taskcompstatus--->" + job.get("taskcompstatus").toString());
+                            taskcompstatus = job.get("dpercent").toString();
+                        }
+                        MarkCategory1 cun1 = new MarkCategory1(id,title,taskcompstatus,typename,createtime);;
+                        array.add(cun1);
+                        title = "";
+                        createtime = "";
+                        taskcompstatus = "";
+                        typename="";
+                    }
+                }
+                Integer num = (Integer)jsonObject.get("count");
+                Log.e("count---->", "Post方式请求成功，count--->" + num);
+
+            }
+        });
     }
 
     private Runnable runnable = new Runnable() {

@@ -100,7 +100,7 @@
                     android:padding="5dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="5dp"
-                    android:text="结束本段"
+                    android:text="@string/submit_paragraph"
                     android:textColor="@color/tab_indicator" />
             <TextView
                     android:id="@+id/completedoc"
@@ -116,23 +116,9 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="5dp"
                     android:text="结束该文档"
-                    android:textColor="@color/tab_indicator" />
+                    android:textColor="@color/tab_indicator"
+                    />
         </LinearLayout>
     </LinearLayout>
-    <!--</android.support.constraint.ConstraintLayout>-->
-    <!--<TextView
-            android:id="@+id/completecon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/selector_message_button"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="right"
-            android:padding="5dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_toLeftOf="@id/completedoc"
-            android:text="结束本段"
-            android:textColor="@color/tab_indicator" />-->
+
 </RelativeLayout>

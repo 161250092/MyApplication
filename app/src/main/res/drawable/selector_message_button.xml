@@ -11,7 +11,7 @@
     <item >
         <shape >
             <gradient android:startColor="#ededed" android:endColor="#ededed"/>
-            <corners android:radius="5dip"/>
+            <corners android:radius="20dip"/>
             <stroke android:width="1dip" android:color="@color/colorPrimary"/>
         </shape>
     </item>

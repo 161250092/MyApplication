@@ -19,10 +19,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.kongmin.Constant.Constant;
 import com.example.kongmin.myapplication.R;
+import com.example.kongmin.network.OkHttpUtil;
 import com.example.kongmin.view.textcategory.DropDownMenu;
 import com.example.kongmin.view.textcategory.MyTabIndicator;
 import com.example.kongmin.view.textcategory.util.ListDropDownAdapter;
@@ -35,17 +40,11 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-
+/**
+ * 文本排序或文本类比排序
+ */
 public class DtOneSortActivity extends AppCompatActivity {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     private OneSortAdapter mOneSortAdapter;
 
     /**
@@ -60,14 +59,6 @@ public class DtOneSortActivity extends AppCompatActivity {
     private List<OneSortFragment> list = new ArrayList<OneSortFragment>();
     private List<String> titles = new ArrayList<>();
 
-    //任务ID
-    //private int taskid;
-    //private int docId;
-
-    //private int fragmentsize;
-
-    //发送http请求获取到的数据
-    //每个fragment显示一个instance
     private int instanceid;
     //每一个instance在一个文本里面的位置
     private int instanceindex;
@@ -87,12 +78,6 @@ public class DtOneSortActivity extends AppCompatActivity {
     private List<String> itemcontents = new ArrayList<>();
     private List<Integer> itemindexs = new ArrayList<>();
 
-    //文件内容
-    private String content;
-    //内容ID
-    private int contentid;
-    //段落在文本中的索引
-    private int contentindex;
 
     private List<String> contents = new ArrayList<String>();
     private List<Integer> contentids = new ArrayList<Integer>();
@@ -137,8 +122,6 @@ public class DtOneSortActivity extends AppCompatActivity {
     private String status[] = {"全部", "进行中"};
     private String confirm[] = {"确定"};
 
-    private int constellationPosition = 0;
-
     //任务ID
     private int taskid;
     //是做任务页面还是查看做任务页面
@@ -146,8 +129,6 @@ public class DtOneSortActivity extends AppCompatActivity {
     private int docId;
     //文件状态默认是全部
     private String docStatus = "全部";
-
-
 
     private TextView downloadextract;
 
@@ -159,7 +140,6 @@ public class DtOneSortActivity extends AppCompatActivity {
     private String singlelinecontent;
 
     private String downloadfilename;
-    private String downloadcontent;
 
     private MyApplication mApplication;
     //todo 设置userId
@@ -169,9 +149,10 @@ public class DtOneSortActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dt_one_sort);
-        // 获取整个应用的Application对象
-        // 在不同的Activity中获取的对象是同一个
-        mApplication = (MyApplication)getApplication();
+
+        if (getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }
 
         //获取读写权限
         requestReadExternalPermission();
@@ -204,12 +185,7 @@ public class DtOneSortActivity extends AppCompatActivity {
         docId = fileid.get(0);
         downloadfilename = filename.get(0);
 
-        new Thread(runnable).start();
-        try {
-            Thread.sleep(1000);
-        }catch (InterruptedException e){
-            e.printStackTrace();
-        }
+        getFileContent();
 
         //下载文档按钮
         downloadextract = (TextView)findViewById(R.id.downloadextract);
@@ -236,73 +212,6 @@ public class DtOneSortActivity extends AppCompatActivity {
 
         initFragment();
 
-        /*for(int i=0;i<fragmentsize;i++){
-            //导航栏加标题
-            titles.add("第"+instanceindexs.get(i)+"段");
-            //titles.add("第:"+(i+1)+"段");
-            OneSortFragment f1 = OneSortFragment.newInstance(i);
-            list.add(f1);
-
-            Bundle bundle = new Bundle();
-            //传递lebel数据
-            bundle.putInt("fragmentindex",i);
-            //todo 设置taskid
-            taskid = 12;
-            bundle.putInt("taskid", taskid);
-
-            bundle.putInt("instanceid" + i,instanceids.get(i));
-            bundle.putInt("instanceindex" + i,instanceindexs.get(i));
-
-            ArrayList<Integer> citemids = new ArrayList<>();
-            ArrayList<String> citemcontents = new ArrayList<>();
-            ArrayList<Integer> citemindexs = new ArrayList<>();
-
-            //和item相关的参数
-            for(int j=0;j<iteminstids.size();j++){
-                if(iteminstids.get(j).equals(instanceids.get(i))){
-                        citemids.add(itemids.get(j));
-                        citemcontents.add(itemcontents.get(j));
-                        citemindexs.add(itemindexs.get(j));
-                }
-            }
-            bundle.putIntegerArrayList("itemidp"+i,citemids);
-            bundle.putStringArrayList("itemconp"+i,citemcontents);
-            bundle.putIntegerArrayList("itemindexp"+i,citemindexs);
-
-            Log.e("DtOneSortActivity---->", "GET方式请求成功，itemid--->"+citemids);
-            Log.e("DtOneSortActivity---->", "GET方式请求成功，itemcontent--->"+citemcontents);
-            Log.e("DtOneSortActivity---->", "GET方式请求成功，itemidex--->"+citemindexs);
-
-            //todo 获取用户ID
-            bundle.putInt("userid", 1);
-            list.get(i).setArguments(bundle);
-        }*/
-
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        //先注释掉
-        //mOneSortAdapter = new OneSortAdapter(getSupportFragmentManager(),list);
-
-
-        // Set up the ViewPager with the sections adapter.
-        //mViewPager = (ViewPager) findViewById(R.id.container);
-        //先注释掉
-        //mViewPager.setAdapter(mOneSortAdapter);
-
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
-
-
-        //先注释掉
-        //mTabIndicator.setTitles(titles);
         mTabIndicator.setViewPager(mViewPager, 0);
 
         mTabIndicator.setOnPageChangeListener(new MyTabIndicator.PageChangeListener() {
@@ -366,7 +275,7 @@ public class DtOneSortActivity extends AppCompatActivity {
                 file.mkdirs();
                 Log.e("DotaskExtract---->", "activity中的filepath新建成功--->" + file.getAbsolutePath() + "------" );
             } catch (Exception e) {
-                // TODO: handle exception
+
             }
         }else{
             Log.e("DotaskExtract---->", "activity中的filepath已经存在--->" + file.getAbsolutePath() + "------" );
@@ -471,18 +380,8 @@ public class DtOneSortActivity extends AppCompatActivity {
             Log.e("DtOneSortActivity---->", "GET方式请求成功，itemcontent--->"+citemcontents);
             Log.e("DtOneSortActivity---->", "GET方式请求成功，itemidex--->"+citemindexs);
 
-
             bundle.putString("parastatus"+ i, parastatus.get(i));
-            if(parastatus.get(i).equals("已完成")){
-               /*for(int j=0;j<index_begins.size();j++){
-                    Log.e("DotaskExtract---->", "activity中的index_beginsindex_ends--->" + index_begins.get(j) + "------" );
-                }
-                //把标注好的标签信息传过去
-                label_idList.setList(label_ids);
-                bundle.putSerializable("label_ids",label_idList);*/
-            }
 
-            //todo 获取用户ID
             bundle.putInt("userid", 1);
             list.get(i).setArguments(bundle);
         }
@@ -492,143 +391,151 @@ public class DtOneSortActivity extends AppCompatActivity {
         mTabIndicator.setTitles(titles);
     }
 
+    public void getFileContent(){
+        final String requestUrl = Constant.DotaskOneSortRequestUrl;
+        String paramUrl;
+        if(typename.equals("dotask")){
+            paramUrl = "?docId="+docId+"&status="+docStatus+"&taskId="+taskid+"&userId="+userId;
+        }else{
+            paramUrl = "?docId="+docId+"&status="+docStatus+"&taskId="+taskid+"&userId="+userId;
+            Log.e("ExtractActivity---->", "GET方式请求成功，result2---> 查看我做的任务");
+        }
 
-    private Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            // TODO: http request.
-            String requestUrl = Constant.DotaskOneSortRequestUrl;
-            //String paramUrl = "?docId="+docId+"&status="+docStatus+"&taskId="+taskid;
-            String paramUrl;
-            if(typename.equals("dotask")){
-                paramUrl = "?docId="+docId+"&status="+docStatus+"&taskId="+taskid+"&userId="+userId;
-            }else{
-                paramUrl = "?docId="+docId+"&status="+docStatus+"&taskId="+taskid+"&userId="+userId;
-                Log.e("ExtractActivity---->", "GET方式请求成功，result2---> 查看我做的任务");
+        OkHttpUtil.sendGetRequest(requestUrl + paramUrl, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
             }
-            String result = HttpUtil.requestGet(requestUrl,paramUrl);
-            Log.e("DotaskOneSort---->", "Post方式请求成功，result--->" + result);
-            JSONObject instanceItemjson = JSONObject.parseObject(result);
-            JSONArray instanceItemArray = (JSONArray)instanceItemjson.get("instanceItem");
-            fragmentsize = instanceItemArray.size();
-            //清空instance和item
-            instanceids.clear();
-            instanceindexs.clear();
-            itemids.clear();
-            iteminstids.clear();
-            itemcontents.clear();
-            itemindexs.clear();
-            //sortedindexmap.clear();
-            if(instanceItemArray!=null&&instanceItemArray.size()>0){
-                for(int i=0;i<instanceItemArray.size();i++){
-                    //遍历jsonarray数组，把每一个对象转成json对象
-                    JSONObject job = instanceItemArray.getJSONObject(i);
-                    //得到每个对象中的属性值
-                    if(job.get("instid")!=null) {
-                        //instance
-                        instanceid = (Integer)job.get("instid");
-                        instanceids.add(instanceid);
-                        Log.e("DtOneSortActivity---->", "activity中的instanceid--->" + instanceid);
-                    }
-                    if(job.get("instindex")!=null) {
-                        //instance
-                        instanceindex = (Integer) job.get("instindex");
-                        instanceindexs.add(instanceindex);
-                        Log.e("DtOneSortActivity---->", "activity中的instanceindex--->" + instanceindex);
-                    }
-                    if(job.get("dtstatus")!=null) {
-                        parastatusstr = (String)job.get("dtstatus");
-                        parastatus.add(parastatusstr);
-                        Log.e("DotaskExtract---->", "activity中的contentparastatus-->" + parastatusstr);
-                    }else{
-                        //不是已完成任务的状态就是空
-                        parastatus.add("");
-                    }
-                    HashMap<Integer,String> hashMap = new HashMap<Integer,String>();
-                    if(job.get("itemList")!=null) {
-                        //instance
-                        JSONArray itemList = (JSONArray)job.get("itemList");
-                        for(int j=0;j<itemList.size();j++){
-                            JSONObject item = itemList.getJSONObject(j);
-                            if(item.get("itid")!=null) {
-                                //instance
-                                itemid = (Integer)item.get("itid");
-                                itemids.add(itemid);
-                                iteminstids.add(instanceid);
-                                Log.e("DtOneSortActivity---->", "activity中的listitemid--->" + itemid);
-                            }
-                            if(item.get("itemcontent")!=null) {
-                                //instance
-                                itemcontent = (String)item.get("itemcontent").toString();
-                                itemcontents.add(itemcontent);
-                                Log.e("DtOneSortActivity---->", "activity中的litemcontent--->" + itemcontent);
-                            }
-                            if(item.get("itemindex")!=null) {
-                                //instance
-                                String listindexstr = item.get("itemindex").toString();
-                                itemindex = Integer.valueOf(listindexstr);
-                                itemindexs.add(itemindex);
-                                hashMap.put(itemid,itemcontent);
-                                Log.e("DtOneSortActivity---->", "activity中的listindex--->" + itemindex);
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                String result = response.body().string();
+                JSONObject instanceItemjson = JSONObject.parseObject(result);
+                JSONArray instanceItemArray = (JSONArray)instanceItemjson.get("instanceItem");
+                fragmentsize = instanceItemArray.size();
+                //清空instance和item
+                instanceids.clear();
+                instanceindexs.clear();
+                itemids.clear();
+                iteminstids.clear();
+                itemcontents.clear();
+                itemindexs.clear();
+                //sortedindexmap.clear();
+                if(instanceItemArray!=null&&instanceItemArray.size()>0){
+                    for(int i=0;i<instanceItemArray.size();i++){
+                        //遍历jsonarray数组，把每一个对象转成json对象
+                        JSONObject job = instanceItemArray.getJSONObject(i);
+                        //得到每个对象中的属性值
+                        if(job.get("instid")!=null) {
+                            //instance
+                            instanceid = (Integer)job.get("instid");
+                            instanceids.add(instanceid);
+                            Log.e("DtOneSortActivity---->", "activity中的instanceid--->" + instanceid);
+                        }
+                        if(job.get("instindex")!=null) {
+                            //instance
+                            instanceindex = (Integer) job.get("instindex");
+                            instanceindexs.add(instanceindex);
+                            Log.e("DtOneSortActivity---->", "activity中的instanceindex--->" + instanceindex);
+                        }
+                        if(job.get("dtstatus")!=null) {
+                            parastatusstr = (String)job.get("dtstatus");
+                            parastatus.add(parastatusstr);
+                            Log.e("DotaskExtract---->", "activity中的contentparastatus-->" + parastatusstr);
+                        }else{
+                            //不是已完成任务的状态就是空
+                            parastatus.add("");
+                        }
+                        HashMap<Integer,String> hashMap = new HashMap<Integer,String>();
+                        if(job.get("itemList")!=null) {
+                            //instance
+                            JSONArray itemList = (JSONArray)job.get("itemList");
+                            for(int j=0;j<itemList.size();j++){
+                                JSONObject item = itemList.getJSONObject(j);
+                                if(item.get("itid")!=null) {
+                                    //instance
+                                    itemid = (Integer)item.get("itid");
+                                    itemids.add(itemid);
+                                    iteminstids.add(instanceid);
+                                    Log.e("DtOneSortActivity---->", "activity中的listitemid--->" + itemid);
+                                }
+                                if(item.get("itemcontent")!=null) {
+                                    //instance
+                                    itemcontent = (String)item.get("itemcontent").toString();
+                                    itemcontents.add(itemcontent);
+                                    Log.e("DtOneSortActivity---->", "activity中的litemcontent--->" + itemcontent);
+                                }
+                                if(item.get("itemindex")!=null) {
+                                    //instance
+                                    String listindexstr = item.get("itemindex").toString();
+                                    itemindex = Integer.valueOf(listindexstr);
+                                    itemindexs.add(itemindex);
+                                    hashMap.put(itemid,itemcontent);
+                                    Log.e("DtOneSortActivity---->", "activity中的listindex--->" + itemindex);
+                                }
                             }
                         }
-                    }
-                    //sortedindex.clear();
-                    //sorteditemId.clear();
-                    TreeMap<Integer,String> treeMap = new  TreeMap<Integer,String>();
-                    if(job.get("alreadyDone")!=null) {
-                        //instance
-                        JSONArray alreadyDonelArray = (JSONArray)job.get("alreadyDone");
-                        if(alreadyDonelArray.size()>0) {
-                            for (int j = 0; j < alreadyDonelArray.size(); j++) {
-                                JSONObject item = alreadyDonelArray.getJSONObject(j);
-                                int index = 0;
-                                if (item.get("newindex") != null) {
-                                    index = (Integer) item.get("newindex");
-                                    sortedindex.add(index);
-                                    Log.e("DoTask2Activity---->", "activity中的newindex--->" + index);
+
+                        TreeMap<Integer,String> treeMap = new  TreeMap<Integer,String>();
+                        if(job.get("alreadyDone")!=null) {
+                            //instance
+                            JSONArray alreadyDonelArray = (JSONArray)job.get("alreadyDone");
+                            if(alreadyDonelArray.size()>0) {
+                                for (int j = 0; j < alreadyDonelArray.size(); j++) {
+                                    JSONObject item = alreadyDonelArray.getJSONObject(j);
+                                    int index = 0;
+                                    if (item.get("newindex") != null) {
+                                        index = (Integer) item.get("newindex");
+                                        sortedindex.add(index);
+                                        Log.e("DoTask2Activity---->", "activity中的newindex--->" + index);
+                                    }
+                                    if (item.get("itemId") != null) {
+                                        int itemId = (Integer)item.get("itemId");
+                                        sorteditemId.add(itemId);
+                                        treeMap.put(index,hashMap.get(itemId));
+                                        Log.e("DoTask2Activity---->", "activity中的itemId--->" + itemId);
+                                    }
                                 }
-                                if (item.get("itemId") != null) {
-                                    int itemId = (Integer)item.get("itemId");
-                                    sorteditemId.add(itemId);
-                                    treeMap.put(index,hashMap.get(itemId));
-                                    Log.e("DoTask2Activity---->", "activity中的itemId--->" + itemId);
+
+                                sortedindexmap.put(instanceid,sortedindex);
+                                sorteditemIdmap.put(instanceid,sorteditemId);
+
+                                for(int index:hashMap.keySet()){
+                                    Log.e("DoTask2Activity---->", "hashMap--->" + index + hashMap.get(index));
                                 }
+
+                                for(int index:treeMap.keySet()){
+                                    Log.e("DoTask2Activity---->", "treeMap--->" + index + treeMap.get(index));
+                                }
+
+                                StringBuffer itemcontent = new StringBuffer();
+                                for(int index:treeMap.keySet()){
+                                    itemcontent.append(downloadfilename+"\t"+(index+1)+"\t"+treeMap.get(index)+"\n");
+                                }
+                                singlelinecontent = itemcontent.toString()+"-----------------\n";
+                                downloadfilecontent.append(singlelinecontent);
+
                             }
-
-                            sortedindexmap.put(instanceid,sortedindex);
-                            sorteditemIdmap.put(instanceid,sorteditemId);
-
-                            for(int index:hashMap.keySet()){
-                                Log.e("DoTask2Activity---->", "hashMap--->" + index + hashMap.get(index));
-                            }
-
-                            for(int index:treeMap.keySet()){
-                                Log.e("DoTask2Activity---->", "treeMap--->" + index + treeMap.get(index));
-                            }
-
-                            StringBuffer itemcontent = new StringBuffer();
-                            for(int index:treeMap.keySet()){
-                                itemcontent.append(downloadfilename+"\t"+(index+1)+"\t"+treeMap.get(index)+"\n");
-                            }
-                            singlelinecontent = itemcontent.toString()+"-----------------\n";
-                            downloadfilecontent.append(singlelinecontent);
-
-                            Log.e("DoTask2Activity---->", "activity中的sorteditemIdmap--->" + sortedindexmap.get(35));
-                            Log.e("DoTask2Activity---->", "activity中的sorteditemIdmap--->" + sorteditemIdmap.get(35));
                         }
                     }
                 }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        initFragment();
+                    }
+                });
             }
-        }
-    };
 
+        });
+    }
 
 
     //和选择弹出框相关的
     private void initView() {
 
-        //init file menu
+
         final ListView fileView = new ListView(this);
         fileAdapter = new ListDropDownAdapter(this, filename);
         fileView.setDividerHeight(0);
@@ -695,25 +602,14 @@ public class DtOneSortActivity extends AppCompatActivity {
                         }
 
                         //请求数据
-                        new Thread(runnable).start();
-                        try {
-                            Thread.sleep(1000);
-                        }catch (InterruptedException e){
-                            e.printStackTrace();
-                        }
-                        initFragment();
+                       getFileContent();
                     }
                 }else if(btnfileid==-1 && !filestatus.equals("")){
                     //选了状态没选文件
                     if(!filestatus.equals("全部")){
                         docStatus = filestatus;
                         //请求数据
-                        new Thread(runnable).start();
-                        try {
-                            Thread.sleep(1000);
-                        }catch (InterruptedException e){
-                            e.printStackTrace();
-                        }
+                        getFileContent();
                         initFragment();
                     }
                 }else if(btnfileid!=-1 && !filestatus.equals("")){
@@ -732,14 +628,7 @@ public class DtOneSortActivity extends AppCompatActivity {
 
                     docStatus = filestatus;
                     //请求数据
-                    new Thread(runnable).start();
-                    try {
-                        Thread.sleep(1000);
-                    }catch (InterruptedException e){
-                        e.printStackTrace();
-                    }
-                    initFragment();
-                    //}
+                    getFileContent();
                 }
                 mDropDownMenu.closeMenu();
             }
@@ -774,12 +663,8 @@ public class DtOneSortActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }

@@ -1,14 +1,11 @@
 package com.example.kongmin.view.rebuild;
 
 import android.os.Bundle;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.example.kongmin.myapplication.R;
-import com.example.kongmin.view.ManagerFragment;
 import com.example.kongmin.view.dotask.DtListFragment;
 
 public class TaskListActivity extends AppCompatActivity {
@@ -16,6 +13,8 @@ public class TaskListActivity extends AppCompatActivity {
 
     //任务列表清单
     private DtListFragment dtListFragment;
+
+    private TaskListFragment taskListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +42,19 @@ public class TaskListActivity extends AppCompatActivity {
 
     private void initFragment()
     {
-        dtListFragment = new DtListFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.task_list_fragment,dtListFragment).show(dtListFragment).commit();
+       // dtListFragment = new DtListFragment();
+       // getSupportFragmentManager().beginTransaction().replace(R.id.task_list_fragment,dtListFragment).show(dtListFragment).commit();
+        taskListFragment = new TaskListFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.task_list_fragment, taskListFragment).show(taskListFragment).commit();
+    }
+
+
+    @Override
+    public void onRestart(){
+        super.onRestart();
+        taskListFragment = null;
+        taskListFragment = new TaskListFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.task_list_fragment, taskListFragment).show(taskListFragment).commit();
     }
 
 

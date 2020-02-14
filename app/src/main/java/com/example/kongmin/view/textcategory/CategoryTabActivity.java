@@ -119,15 +119,5 @@ public class CategoryTabActivity extends AppCompatActivity {
             }
         });
 
-        //上面是有ViewPager的情况。如果不想与Viewpager绑定则可以调用：
-//        mTabIndicator.setTabSelectedListener(new MyTabIndicator.TabSelectedListener() {
-//            @Override
-//            public void tabClicked(int position) {
-//
-//            }
-//        });
-//
-//        mTabIndicator.setClicked(3);
-
     }
 }

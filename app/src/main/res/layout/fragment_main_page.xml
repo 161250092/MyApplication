@@ -6,42 +6,30 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-    <TableLayout
+
+    <com.youth.banner.Banner
+        android:id="@+id/banner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="180dp"
+        />
 
-        <TableRow
+
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:text="@string/notification"
+            android:background="@color/notification"/>
 
-            <SearchView
-                android:id="@+id/searchView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:iconifiedByDefault="false"
-                android:queryHint="请输入搜索内容"
-                android:background="#FFFFFF"
-                android:paddingBottom="3dp">
-            </SearchView>
-
-        </TableRow>
-
-    </TableLayout>
-    </LinearLayout>
 
 
     <GridView
             android:id="@+id/gridview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:numColumns="2"
+            android:numColumns="3"
             android:verticalSpacing="10dp"
             android:horizontalSpacing="10dp"
             android:gravity="center" />
-
 
 
 </LinearLayout>

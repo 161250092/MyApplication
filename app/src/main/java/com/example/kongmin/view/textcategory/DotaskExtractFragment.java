@@ -71,12 +71,6 @@ public class DotaskExtractFragment extends BaseLazyFragment {
 
     private static ArrayList<String> checked = new ArrayList<String>();
 
-
-    //private List<TextView> labellist = new ArrayList<TextView>();
-
-    //private static String label;
-    //private static String content;
-
     private int taskid;
     //是做任务页面还是查看做任务页面
     private String typename;
@@ -134,61 +128,15 @@ public class DotaskExtractFragment extends BaseLazyFragment {
         DotaskExtractFragment fragment = new DotaskExtractFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-        //args.putInt(ARG_CONTENT_NUMBER, contentid);
         fragment.setArguments(args);
         return fragment;
     }
 
-
-   /* @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_dotask_extract, container, false);
-        //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-        //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-        TextView textView2 = (TextView) rootView.findViewById(R.id.section_label2);
-        //textView2.setText(getString(R.string.section_format,getArguments().getInt(ARG_CONTENT_NUMBER)));
-        TextView textView3 = (TextView) rootView.findViewById(R.id.complete);
-        initData(textView2,textView3);
-        //和设置标签相关的
-        labelview =  rootView.findViewById(R.id.flowgroupview2);
-        //每次加载之前需要清空一下，否则会有数据重复加载的问题
-        names.clear();
-        setData();
-        for (int i = 0; i < names.size(); i++) {
-            addTextView(names.get(i));
-        }
-        return rootView;
-    }*/
-
     public void initData(TextView textView2,TextView textView3,final String selectlabel){
-        /*textView.setOnLongClickListener(new View.OnLongClickListener() {
-
-            @Override
-            public boolean onLongClick(View v) {
-                // TODO Auto-generated method stub
-                Toast.makeText(getContext(), "点击了textView1", Toast.LENGTH_SHORT).show();
-                return true;
-            }
-        });*/
-        /*textView2.setOnLongClickListener(new View.OnLongClickListener() {
-
-            @Override
-            public boolean onLongClick(View v) {
-                // TODO Auto-generated method stub
-                Toast.makeText(getContext(), "点击了textView2", Toast.LENGTH_SHORT).show();
-                return true;
-            }
-        });*/
         textView3.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
-                /*for(int i=0;i<checked.size();i++){
-                    str+=checked.get(i);
-                }
-                checked.clear();*/
                 Toast.makeText(getContext(), "选中了"+selectlabel+" ", Toast.LENGTH_SHORT).show();
             }
         });
@@ -223,59 +171,18 @@ public class DotaskExtractFragment extends BaseLazyFragment {
                 // TODO Auto-generated method stub
                 String selectlabel = "";
                 if(button==false) {
-                    //tv.setBackgroundResource(R.drawable.red_sold_round_sel);
-                    //tv.setTextColor(Color.WHITE);
                     checked.add(tv.getText().toString());
-                    //Toast.makeText(getContext(), tv.getText().toString()+"选中了", Toast.LENGTH_SHORT).show();
                     button = true;
                 }else{
-                    //tv.setBackgroundResource(R.drawable.line_rect_huise);
-                    //tv.setTextColor(Color.BLACK);
-                    //names.put(tv.getText().toString(),false);
                     checked.remove(tv.getText().toString());
-                    //Toast.makeText(getContext(), tv.getText().toString()+"取消选中了", Toast.LENGTH_SHORT).show();
                     button = false;
                 }
                 for(int i=0;i<checked.size();i++){
                     selectlabel+=checked.get(i);
                 }
-                //initData(doccontent,completecon,selectlabel);
-
             }
         });
     }
-
-    /*private void setData(){
-        names.add("降龙十八掌");
-        names.add("黯然销魂掌");
-        names.add("左右互搏术");
-        names.add("七十二路空明拳");
-        names.add("小无相功");
-        names.add("拈花指");
-        names.add("打狗棍法");
-        names.add("蛤蟆功");
-        names.add("九阴白骨爪");
-        names.add("一招半式闯江湖");
-        names.add("醉拳");
-        names.add("龙蛇虎豹");
-        names.add("葵花宝典");
-        names.add("吸星大法");
-        names.add("如来神掌警示牌");
-    }*/
-
-    /*Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            Bundle data = msg.getData();
-            label = data.getString("label");
-            Log.i("myloglebel", "请求结果为-->" + label);
-            label = data.getString("content");
-            Log.i("mylogcontent", "请求结果为-->" + content);
-            // TODO
-            // UI界面的更新等相关操作
-        }
-    };*/
 
     //设置加载动画
     @Override
@@ -291,16 +198,9 @@ public class DotaskExtractFragment extends BaseLazyFragment {
                 mLoadDataFinished = true;
                 if (mViewInflateFinished) {
                     fragmentlayout.setVisibility(View.VISIBLE);
-                    //btnbutton.setVisibility(View.VISIBLE);
-                    //每次加载之前需要清空一下，否则会有数据重复加载的问题
                     names.clear();
-
                     Bundle bundle =getArguments();
-                    /*String message = null;
-                    if(bundle!=null){
-                        message = bundle.getString("toFragment");
-                    }
-                    Log.e("DotaskExtract---->", "GET方式请求成功，toFragment--->" + message);*/
+
                     sectionnumber = bundle.getInt("fragmentindex");
                     taskid =  bundle.getInt("taskid");
                     docid = bundle.getInt("docid");
@@ -416,36 +316,11 @@ public class DotaskExtractFragment extends BaseLazyFragment {
         //获取选中的起始位置和结束位置
         selectionStart = doccontent.getSelectionStart();
         selectionEnd = doccontent.getSelectionEnd();
-        //Log.i(TAG,"selectionStart="+selectionStart+",selectionEnd="+selectionEnd);
-        //截取选中的文本
-        //String txt = content.getText().toString();
+
         String txt = doccontent.getText().toString();
         substring = txt.substring(selectionStart, selectionEnd);
         dotaskcolor = colormap.get(labelid);
-        //Log.i(TAG,"substring="+substring);
-       /* SpannableStringBuilder spanText=new SpannableStringBuilder(content.getText().toString());
-        spanText.setSpan(new ClickableSpan() {
 
-            @Override
-            public void updateDrawState(TextPaint ds) {
-                super.updateDrawState(ds);
-                ds.setColor(Color.RED);       //设置文件颜色
-                ds.setUnderlineText(true);      //设置下划线
-            }
-
-            @Override
-            public void onClick(View view) {
-
-                final Snackbar snackbar = Snackbar.make(content,"别点我",Snackbar.LENGTH_LONG);
-                snackbar.show();
-                snackbar.setAction("取消", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        snackbar.dismiss();
-                    }
-                });
-            }
-        }, selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);*/
         ClickableSpan clickableSpan = new ClickableSpan() {
 
             @Override
@@ -493,9 +368,7 @@ public class DotaskExtractFragment extends BaseLazyFragment {
                //获取选中的起始位置和结束位置
                selectionStart = index_begins.get(i);
                selectionEnd = index_ends.get(i);
-               //Log.e("params---->", "Post方式请求成功，selectionStart--->" + selectionStart);
-               //Log.e("params---->", "Post方式请求成功，selectionStart--->" + selectionEnd);
-               //Log.e("params---->", "Post方式请求成功，selectionStart--->" + txt);
+
                substring = txt.substring(selectionStart, selectionEnd);
                final String labelname = hashmaplabel.get(label_ids.get(i));
                //随机生成一个颜色
@@ -611,15 +484,6 @@ public class DotaskExtractFragment extends BaseLazyFragment {
 
     @Override
     protected void findViewById(View view) {
-        /*mTextView = view.findViewById(R.id.section_label);
-        mPb = view.findViewById(R.id.pb);
-        if (mLoadDataFinished) {
-            // 一般情况下这时候数据请求都还没完成, 所以不会进这个if
-            mTextView.setVisibility(View.VISIBLE);
-            mTextView.setText(mData);
-            mPb.setVisibility(View.GONE);
-        }*/
-
          fragmentlayout = (LinearLayout)view.findViewById(R.id.section_label);
          //btnbutton = (LinearLayout)view.findViewById(R.id.btnbutton);
          //存放content的textview
@@ -679,12 +543,12 @@ public class DotaskExtractFragment extends BaseLazyFragment {
             if(data.toString().equals("0")){
                 String loginres = jsonObject.getString("msg");
                 Looper.prepare();
-                Toast.makeText(getContext(),loginres,Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(),"已提交",Toast.LENGTH_LONG).show();
                 Looper.loop();
             }else{
                 String loginres = jsonObject.getString("msg");
                 Looper.prepare();
-                Toast.makeText(getContext(),loginres,Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(),"已提交",Toast.LENGTH_LONG).show();
                 Looper.loop();
             }
         }
@@ -707,14 +571,14 @@ public class DotaskExtractFragment extends BaseLazyFragment {
             if(data.toString().equals("0")){
                 String loginres = jsonObject.getString("msg");
                 Looper.prepare();
-                Toast.makeText(getContext(),loginres,Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(),"已经结束",Toast.LENGTH_LONG).show();
                 Looper.loop();
             }else{
                 //上传的文件不符合要求
                 //4011,"msg":"该文件你的段落还没有全部完成"
                 String loginres = jsonObject.getString("msg");
                 Looper.prepare();
-                Toast.makeText(getContext(),loginres,Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(),"已经结束",Toast.LENGTH_LONG).show();
                 Looper.loop();
             }
         }

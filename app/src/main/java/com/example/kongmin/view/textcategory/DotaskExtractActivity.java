@@ -21,6 +21,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.kongmin.Constant.Constant;
 import com.example.kongmin.myapplication.R;
+import com.example.kongmin.view.rebuild.InitViewCallBack;
 import com.example.kongmin.view.textcategory.util.ListDropDownAdapter;
 import com.example.kongmin.network.OkHttpUtil;
 import com.example.kongmin.network.Url;
@@ -68,12 +69,6 @@ public class DotaskExtractActivity extends AppCompatActivity {
     private List<DotaskExtractFragment> list = new ArrayList<DotaskExtractFragment>();
     private List<String> titles = new ArrayList<>();
 
-    //标签ID
-    private int labelid;
-    //标签名称
-    private String labelname;
-    //private final SerializableMap labelMap = new SerializableMap();
-    //private Map<String,Integer> labelmap = new LinkedHashMap<String,Integer>();
     //文件内容
     private String content;
     //内容ID
@@ -103,21 +98,16 @@ public class DotaskExtractActivity extends AppCompatActivity {
     private String parastatusstr;
     private List<String> parastatus= new ArrayList<String>();
 
-
     //和选择弹出框相关的
     @InjectView(R.id.dropDownMenu) DropDownMenu mDropDownMenu;
     private String headers[] = {"文件列表", "完成状态", "确定"};
     private List<View> popupViews = new ArrayList<>();
 
-
     private ListDropDownAdapter fileAdapter;
     private ListDropDownAdapter statusAdapter;
     private ListDropDownAdapter btnAdapter;
-
     private String status[] = {"全部", "进行中"};
     private String confirm[] = {"确定"};
-
-    private int constellationPosition = 0;
 
     //任务ID
     private int taskid;
@@ -130,11 +120,10 @@ public class DotaskExtractActivity extends AppCompatActivity {
     private int userId;
 
     //已经标注了的标签
-    private SerializableList index_beginList = new SerializableList();
     private ArrayList<Integer> index_begins = new ArrayList<Integer>();
-    private SerializableList index_endList = new SerializableList();
+
     private ArrayList<Integer> index_ends = new ArrayList<Integer>();
-    private SerializableList label_idList = new SerializableList();
+
     private ArrayList<Integer> label_ids = new ArrayList<Integer>();
 
     private int index_begin;
@@ -143,7 +132,6 @@ public class DotaskExtractActivity extends AppCompatActivity {
 
     private TextView downloadextract;
 
-    //private String filePath = "/storage/emulated/0/textannotation/";
     private String filePath = "/sdcard/xinjian/";
 
     private String filenameTemp = filePath+ "信息抽取"+ ".txt";
@@ -173,14 +161,12 @@ public class DotaskExtractActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dotask_extract);
-        // 获取整个应用的Application对象
-        // 在不同的Activity中获取的对象是同一个
-        mApplication = (MyApplication)getApplication();
-
+        if (getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }
         //获取读写权限
         requestReadExternalPermission();
         requestWriteExternalPermission();
-
 
         mTabIndicator = (MyTabIndicator) findViewById(R.id.mTabIndicator);
         mViewPager = (ViewPager) findViewById(R.id.mViewPager);
@@ -200,7 +186,7 @@ public class DotaskExtractActivity extends AppCompatActivity {
         Bundle tdbundle = intent.getExtras();
         //传送过来的做任务的文件内容
         SerializableMap fileMap = (SerializableMap) tdbundle.get("filemap");
-        filemap =fileMap.getMap();
+        filemap = fileMap.getMap();
         for(String labelname : filemap.keySet()){
             fileid.add(filemap.get(labelname));
             filename.add(labelname);
@@ -221,13 +207,7 @@ public class DotaskExtractActivity extends AppCompatActivity {
             colormap = colorsMap.getMap();
         }
 
-        //new Thread(runnable).start();
         getFileContent();
-        try {
-            Thread.sleep(1000);
-        }catch (InterruptedException e){
-            e.printStackTrace();
-        }
 
         //下载文档按钮
         downloadextract = (TextView)findViewById(R.id.downloadextract);
@@ -251,47 +231,9 @@ public class DotaskExtractActivity extends AppCompatActivity {
             });
         }
 
-        initFragment(inststrMap);
 
 
-
-        /*PlaceholderFragment f1 = PlaceholderFragment.newInstance(3);
-        list.add(f1);
-        PlaceholderFragment f2 = PlaceholderFragment.newInstance(5);
-        list.add(f2);
-        PlaceholderFragment f3 = PlaceholderFragment.newInstance(7);
-        list.add(f3);*/
-
-
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        //先注释掉
-        //mDotaskExtractAdapter = new DotaskExtractAdapter(getSupportFragmentManager(),list);
-
-        /*for(int i = 0; i < 3; i ++){
-            titles.add("标题:" + i+1);
-        }*/
-
-        // Set up the ViewPager with the sections adapter.
-        //mViewPager = (ViewPager) findViewById(R.id.container);
-        //先注释掉
-        //mViewPager.setAdapter(mDotaskExtractAdapter);
-
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
-        //先注释掉
-        //mTabIndicator.setTitles(titles);
         mTabIndicator.setViewPager(mViewPager, 0);
-        //mTabIndicator.setTitles(titles, 3);//可以设置默认选中的title
-
         mTabIndicator.setOnPageChangeListener(new MyTabIndicator.PageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -299,15 +241,15 @@ public class DotaskExtractActivity extends AppCompatActivity {
             }
             @Override
             public void onPageSelected(int position) {
-                Toast.makeText(DotaskExtractActivity.this, "选择了：" + position, Toast.LENGTH_SHORT).show();
+               // Toast.makeText(DotaskExtractActivity.this, "第 " + position+" 段", Toast.LENGTH_SHORT).show();
             }
             @Override
             public void onPageScrollStateChanged(int state) {
 
             }
         });
-
     }
+
 
 
     @SuppressLint("NewApi")
@@ -406,7 +348,7 @@ public class DotaskExtractActivity extends AppCompatActivity {
         list.clear();
         for(int i=0;i<fragmentsize;i++){
             //导航栏加标题
-            titles.add("第:"+contentindexs.get(i)+"段");
+            titles.add("第"+contentindexs.get(i)+"段");
             //titles.add("第:"+(i+1)+"段");
             DotaskExtractFragment f1 = DotaskExtractFragment.newInstance(i);
             list.add(f1);
@@ -448,8 +390,8 @@ public class DotaskExtractActivity extends AppCompatActivity {
         mTabIndicator.setTitles(titles);
     }
 
-
     private void getFileContent(){
+        Log.e("mlgeb",Url.extradotaskUrl+"?docId="+docId+"&status="+docStatus+"&taskId="+taskid+"&userId="+userId);
         OkHttpUtil.sendGetRequest(Url.extradotaskUrl+"?docId="+docId+"&status="+docStatus+"&taskId="+taskid+"&userId="+userId, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -549,13 +491,13 @@ public class DotaskExtractActivity extends AppCompatActivity {
                                 Log.e("DotaskExtract---->", "activity中的index_beginsindex_ends--->" + index_begins.get(j) + "------" );
                             }
                         }
-
                     }
                 }
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
+                        initFragment(inststrMap);
                     }
                 });
             }
@@ -563,188 +505,8 @@ public class DotaskExtractActivity extends AppCompatActivity {
 
     }
 
-
-
-    private Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            // TODO: http request.
-            /*// 在这里进行 http request.网络请求相关操作
-            String requestUrl = "http://172.20.10.5:8080/label/getLabelByTask";
-            String paramUrl = "?taskid=1";
-            String label = HttpUtil.requestGet(requestUrl,paramUrl);
-            //Log.e("ExtractActivity---->", "GET方式请求成功，result--->" + label);
-            String requestUrl2 = "http://172.20.10.5:8080/content/getContent";
-            String paramUrl2 = "?docId=1";
-            String docontent = HttpUtil.requestGet(requestUrl2,paramUrl2);
-            //Log.e("ExtractActivity---->", "GET方式请求成功，result2--->" + docontent);*/
-
-            String requestUrl = Constant.extrafileUrl;
-            //String paramUrl = "?docId="+docId+"&status="+docStatus+"&taskId="+taskid;
-            String paramUrl;
-            Log.e("DotaskExtract---->","?docId="+docId+"&status="+docStatus+"&taskId="+taskid+"&userId="+userId);
-
-            if(typename.equals("dotask")){
-                paramUrl = "?docId="+docId+"&status="+docStatus+"&taskId="+taskid+"&userId="+userId;
-            }else{
-                paramUrl = "?docId="+docId+"&status="+docStatus+"&taskId="+taskid+"&userId="+userId;
-                Log.e("ExtractActivity---->", "GET方式请求成功，result2--->查看我做的任务");
-            }
-            String docontent = HttpUtil.requestGet(requestUrl,paramUrl);
-
-
-            //对标签进行解析，首先把字符串转成JSONArray对象
-            /*JSONObject jsonObject = JSONObject.parseObject(label);
-            JSONArray jsonArray = (JSONArray)jsonObject.get("label");
-            if(jsonArray.size()>0){
-                for(int i=0;i<jsonArray.size();i++){
-                    //遍历jsonarray数组，把每一个对象转成json对象
-                    JSONObject job = jsonArray.getJSONObject(i);
-                    //得到每个对象中的属性值
-                    if(job.get("lid")!=null) {
-                        labelid = (Integer)job.get("lid");
-                        Log.e("DotaskExtract---->", "activity中的labelID--->" + labelid);
-                    }
-                    if(job.get("labelname")!=null) {
-                        labelname = (String)job.get("labelname").toString();
-                        Log.e("DotaskExtract---->", "activity中的labelname--->" + labelname);
-                        //labelmap.put(labelname,labelid);
-                    }
-
-                }
-            }*/
-            Log.e("DotaskExtract---->",docontent);
-
-            //对文件内容进行解析，首先把字符串转成JSONArray对象
-            JSONObject jsonObject = JSONObject.parseObject(docontent);
-            JSONArray jsonArray = (JSONArray)jsonObject.get("data");
-            fragmentsize = jsonArray.size();
-            //清空content
-            contentids.clear();
-            contents.clear();
-            contentindexs.clear();
-            if(jsonArray!=null && jsonArray.size()>0){
-                for(int i=0;i<jsonArray.size();i++){
-                    //遍历jsonarray数组，把每一个对象转成json对象
-                    JSONObject job = jsonArray.getJSONObject(i);
-                    //得到每个对象中的属性值
-                    /*if(job.get("cid")!=null) {
-                        contentid = (Integer)job.get("cid");
-                        contentids.add(contentid);
-                        Log.e("DotaskExtract---->", "activity中的contentID--->" + contentid);
-                    }
-                    if(job.get("paracontent")!=null) {
-                        content = (String)job.get("paracontent").toString();
-                        contents.add(content);
-                        Log.e("DotaskExtract---->", "activity中的content具体内容--->" + content);
-                    }
-                    if(job.get("paraindex")!=null) {
-                        contentindex = (Integer)job.get("paraindex");
-                        contentindexs.add(contentindex);
-                        Log.e("DotaskExtract---->", "activity中的content具体内容--->" + contentindex);
-                    }*/
-                    if(job.get("pid")!=null) {
-                        contentid = (Integer)job.get("pid");
-                        contentids.add(contentid);
-                        Log.e("DotaskExtract---->", "activity中的contentID--->" + contentid);
-                    }
-                    if(job.get("paracontent")!=null) {
-                        content = (String)job.get("paracontent").toString();
-                        contents.add(content);
-                        Log.e("DotaskExtract---->", "activity中的content具体内容--->" + content);
-                    }
-                    if(job.get("paraindex")!=null) {
-                        contentindex = (Integer)job.get("paraindex");
-                        contentindexs.add(contentindex);
-                        Log.e("DotaskExtract---->", "activity中的content具体内容--->" + contentindex);
-                    }
-                    if(job.get("dtstatus")!=null) {
-                        parastatusstr = (String)job.get("dtstatus");
-                        parastatus.add(parastatusstr);
-                        Log.e("DotaskExtract---->", "activity中的contentparastatus-->" + parastatusstr);
-                    }else{
-                        //不是已完成任务的状态就是空
-                        parastatus.add("");
-                    }
-
-                    //已经做了的部分
-                    JSONArray alreadyDone = (JSONArray)job.get("alreadyDone");
-                    //index_begins.clear();
-                    //index_ends.clear();
-                    //label_ids.clear();
-                    ArrayList<String> colorlist = new ArrayList<String>();
-                    ArrayList<Integer> beginlist = new ArrayList<Integer>();
-                    ArrayList<Integer> endlist = new ArrayList<Integer>();
-                    ArrayList<Integer> labelidlist = new ArrayList<Integer>();
-                    if(alreadyDone!=null && alreadyDone.size()>0) {
-                        for (int j = 0; j < alreadyDone.size(); j++) {
-                            //遍历jsonarray数组，把每一个对象转成json对象
-                            JSONObject done = alreadyDone.getJSONObject(j);
-                            //得到每个对象中的属性值
-                            if (done.get("color") != null) {
-                                String color = (String) done.get("color");
-                                colorlist.add(color);
-                                //Log.e("DotaskExtract---->", "activity中的index_begins--->" + index_begins.get(j) + "------");
-                            }
-                            if (done.get("index_begin") != null) {
-                                index_begin = (Integer) done.get("index_begin");
-                                index_begins.add(index_begin);
-                                beginlist.add(index_begin);
-                                //Log.e("DotaskExtract---->", "activity中的index_begins--->" + index_begins.get(j) + "------");
-                            }
-                            if (done.get("index_end") != null) {
-                                index_end = (Integer) done.get("index_end");
-                                index_ends.add(index_end);
-                                endlist.add(index_end);
-                                //下载文件对应的抽取内容
-                                downloadcontent = content.substring(index_begin,index_end);
-                                //Log.e("DotaskExtract---->", "activity中的index_ends--->" + index_ends.get(j) + "------" );
-                            }
-                            if (done.get("label_id") != null) {
-                                label_id = (Integer) done.get("label_id");
-                                label_ids.add(label_id);
-                                labelidlist.add(label_id);
-                                //下载文件对应的标签名称
-                                downloadlabelname = downloadlabel.get(label_id);
-                                //Log.e("DotaskExtract---->", "activity中的label_id--->" + label_ids.get(j) + "------");
-                            }
-                            singlelinecontent = downloadfilename+"\t"+downloadlabelname+"\t"+downloadcontent+"\n";
-                            downloadfilecontent.append(singlelinecontent);
-                        }
-                        colorhashMap.put(contentid,colorlist);
-                        beginhashMap.put(contentid,beginlist);
-                        endhashMap.put(contentid,endlist);
-                        labelidhashMap.put(contentid,labelidlist);
-                        for(int j=0;j<index_begins.size();j++){
-                            Log.e("DotaskExtract---->", "activity中的index_beginsindex_ends--->" + index_begins.get(j) + "------" );
-                        }
-                    }
-
-                }
-            }
-            /*for(int i=0;i<list.size();i++){
-                Bundle bundle = new Bundle();
-                bundle.putString("toFragment",docontent);
-                //传递lebel数据
-                bundle.putInt("taskid",taskid);
-                //将map数据添加到封装的myMap中
-                labelMap.setMap(labelmap);
-                bundle.putSerializable("lebelmap", labelMap);
-                bundle.putInt("contentid",contentid);
-                bundle.putInt("contentindex",contentindex);
-                bundle.putString("content",content);
-                //todo 获取用户ID
-                bundle.putInt("userid",1);
-                //Log.e("DotaskExtract---->", "activity中的content--->" + docontent);
-                list.get(i).setArguments(bundle);
-            }*/
-
-        }
-    };
-
     //和选择弹出框相关的
     private void initView() {
-
         //init file menu
         final ListView fileView = new ListView(this);
         fileAdapter = new ListDropDownAdapter(this, filename);
@@ -768,7 +530,6 @@ public class DotaskExtractActivity extends AppCompatActivity {
         popupViews.add(statusView);
         popupViews.add(btnView);
 
-        //add item click event
         fileView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -813,35 +574,29 @@ public class DotaskExtractActivity extends AppCompatActivity {
                              break;
                          }
                       }
-
                      //请求数据
-                     new Thread(runnable).start();
-                     try {
-                         Thread.sleep(1000);
-                     }catch (InterruptedException e){
-                         e.printStackTrace();
-                     }
-                     initFragment(inststrMap);
+//                     new Thread(runnable).start();
+//                     try {
+//                         Thread.sleep(1000);
+//                     }catch (InterruptedException e){
+//                         e.printStackTrace();
+//                     }
+                     getFileContent();
+ //                    initFragment(inststrMap);
                  }
                 }else if(btnfileid==-1 && !filestatus.equals("")){
                     //选了状态没选文件
                     if(!filestatus.equals("全部")){
                         docStatus = filestatus;
                         //请求数据
-                        new Thread(runnable).start();
-                        try {
-                            Thread.sleep(1000);
-                        }catch (InterruptedException e){
-                            e.printStackTrace();
-                        }
-                        initFragment(inststrMap);
+                        getFileContent();
+
                     }
                 }else if(btnfileid!=-1 && !filestatus.equals("")){
                     Toast.makeText(DotaskExtractActivity.this, "选择了文件：" + btnfileid+filestatus, Toast.LENGTH_SHORT).show();
                     //如果文件和文件状态都没有选择默认值
                     //if(!filestatus.equals("全部")){
                         docId = btnfileid;
-
                         //设置下载文件的文件名称
                         for(int i=0;i<fileid.size();i++){
                         if(docId==fileid.get(i)){
@@ -852,13 +607,7 @@ public class DotaskExtractActivity extends AppCompatActivity {
 
                         docStatus = filestatus;
                         //请求数据
-                        new Thread(runnable).start();
-                        try {
-                            Thread.sleep(1000);
-                        }catch (InterruptedException e){
-                            e.printStackTrace();
-                        }
-                        initFragment(inststrMap);
+                        getFileContent();
                     //}
                 }
                 mDropDownMenu.closeMenu();
@@ -868,13 +617,6 @@ public class DotaskExtractActivity extends AppCompatActivity {
         //init context view
         TextView contentView = new TextView(this);
         contentView.setHeight(0);
-        /*contentView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        contentView.setText("内容显示区域");
-        contentView.setGravity(Gravity.CENTER);
-        contentView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);*/
-        //TextView contentView = findViewById(R.id.textview);
-
-        //init dropdownview
         mDropDownMenu.setDropDownMenu(Arrays.asList(headers), popupViews, contentView);
     }
 
@@ -888,91 +630,4 @@ public class DotaskExtractActivity extends AppCompatActivity {
         }
     }
 
-
-
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_text_category_tab, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
-
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    /*public static class PlaceholderFragment extends Fragment {
-     *//**
-     * The fragment argument representing the section number for this
-     * fragment.
-     *//*
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
-        *//**
-     * Returns a new instance of this fragment for the given section
-     * number.
-     *//*
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_text_category_tab, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
-        }
-    }*/
-
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    /*public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
-        }
-
-        @Override
-        public int getCount() {
-            // Show 3 total pages.
-            return 5;
-        }
-    }*/
 }

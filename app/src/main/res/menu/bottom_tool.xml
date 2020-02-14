@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/before_paragraph"
+        android:icon="@drawable/before_paragraph"
+        android:title="@string/before_paragraph"/>
+
+    <item
+        android:id="@+id/next_paragraph"
+        android:icon="@drawable/next_paragraph"
+        android:title="@string/next_paragraph"/>
+
+    <item
+        android:id="@+id/files"
+        android:icon="@drawable/file_icon"
+        android:title="@string/files"
+        />
+
+    <item android:id="@+id/settings"
+        android:icon="@drawable/setting_icon"
+        android:title="@string/settings"/>
+
+    <item android:id="@+id/end_task"
+        android:icon="@drawable/end_task"
+        android:title="@string/end_task"/>
+
+</menu>

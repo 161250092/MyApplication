@@ -81,22 +81,5 @@ public class TaskListItemAdapter extends BaseAdapter{
             TextView tv1,tv2,tv3,tv4;
         }
 
-   /* private final int resourceId;
-
-    public EdittextAdapter(Context context, int textViewResourceId, List<MarkCategory1> objects) {
-        super(context, textViewResourceId, objects);
-        resourceId = textViewResourceId;
-    }
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        MarkCategory1 fruit = (MarkCategory1) getItem(position); // 获取当前项的Fruit实例
-        View view = LayoutInflater.from(getContext()).inflate(resourceId, null);//实例化一个对象
-        TextView tv1=(TextView) view.findViewById(R.id.textView1);
-        TextView tv2=(TextView) view.findViewById(R.id.textView2);
-        tv1.setText(fruit.getTitle());
-        tv2.setText(fruit.getTimes());
-        return view;
-    }*/
-
 
 }

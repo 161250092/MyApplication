@@ -4,7 +4,9 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         tools:context="com.example.kongmin.view.dotask.TaskDetailActivity">
+
 <ScrollView android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -15,6 +17,7 @@
                       android:layout_height="match_parent"
                       android:orientation="vertical"
                       android:id="@+id/layout"
+                      android:background="@color/white"
                       android:layout_margin="10dp">
             <LinearLayout
                     android:layout_width="fill_parent"
@@ -33,7 +36,10 @@
                         android:gravity="center"
                         android:padding="5dip"
                         android:text="@string/get_task"
-                        android:textColor="@color/tab_indicator" />
+                        android:textColor="@color/tab_indicator"
+                    />
+
+
             </LinearLayout>
 
             <LinearLayout
@@ -67,6 +73,7 @@
                             android:ems="10">
                     </TextView>
                 </LinearLayout>
+
                 <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -75,7 +82,8 @@
                             android:id="@+id/typename"
                             android:textSize="15sp"
                             android:textColor="#BEBEBE"
-                            android:layout_marginTop="6dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="5dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="任务类型：" />
@@ -84,7 +92,7 @@
                             android:id="@+id/type"
                             android:layout_width="match_parent"
                             android:layout_height="30dp"
-                            android:layout_marginTop="5dp"
+                            android:layout_marginTop="10dp"
                             android:layout_marginBottom="5dp"
                             android:paddingLeft="5dp"
                             android:textColor="#626366"
@@ -101,15 +109,20 @@
                     <TextView
                         android:textSize="15sp"
                         android:textColor="#BEBEBE"
-                        android:layout_marginTop="6dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/file_list" />
 
-                    <Button
+                    <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/selector_message_button"
+                        android:textSize="15sp"
                         android:text="展示文件"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"
                         android:textColor="@color/tab_indicator"
                         android:id="@+id/show_file_list"
                         android:onClick="showTaskList"/>
@@ -124,7 +137,8 @@
                             android:id="@+id/deadlinename"
                             android:textSize="15sp"
                             android:textColor="#BEBEBE"
-                            android:layout_marginTop="6dp"
+                             android:layout_marginTop="10dp"
+                            android:layout_marginBottom="5dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="截止日期：" />
@@ -133,8 +147,8 @@
                             android:id="@+id/deadline"
                             android:layout_width="match_parent"
                             android:layout_height="30dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"
                             android:paddingLeft="5dp"
                             android:textColor="#626366"
                             android:background="@null"
@@ -142,6 +156,7 @@
                             android:ems="10">
                     </TextView>
                 </LinearLayout>
+
                 <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -150,7 +165,8 @@
                             android:id="@+id/begintime"
                             android:textSize="15sp"
                             android:textColor="#BEBEBE"
-                            android:layout_marginTop="6dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="创建时间：" />
@@ -159,8 +175,8 @@
                             android:id="@+id/createtime"
                             android:layout_width="match_parent"
                             android:layout_height="30dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"
                             android:paddingLeft="5dp"
                             android:textColor="#626366"
                             android:background="@null"
@@ -176,7 +192,8 @@
                             android:id="@+id/publishuser"
                             android:textSize="15sp"
                             android:textColor="#BEBEBE"
-                            android:layout_marginTop="6dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="发 布 者：" />
@@ -186,8 +203,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:minHeight="30dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"
                             android:paddingLeft="5dp"
                             android:textColor="#626366"
                             android:background="@null"
@@ -199,15 +216,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:minHeight="30dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
                         android:id="@+id/instlv"
                         android:orientation="horizontal">
                     <TextView
                             android:id="@+id/instancelabeltv"
                             android:textSize="15sp"
                             android:textColor="#BEBEBE"
-                            android:layout_marginTop="6dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="相关标签：" />
@@ -216,8 +234,8 @@
                             android:id="@+id/instancelabel"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp">
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp">
                     </com.example.kongmin.util.FlowGroupView>
 
                 </LinearLayout>
@@ -226,15 +244,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:minHeight="30dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
                         android:id="@+id/item1lv"
                         android:orientation="horizontal">
                     <TextView
                             android:id="@+id/item1labeltv"
                             android:textSize="15sp"
                             android:textColor="#BEBEBE"
-                            android:layout_marginTop="6dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="item1标签：" />
@@ -249,15 +268,15 @@
                 <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
+
                         android:id="@+id/item2lv"
                         android:orientation="horizontal">
                     <TextView
                             android:id="@+id/item2labeltv"
                             android:textSize="15sp"
                             android:textColor="#BEBEBE"
-                            android:layout_marginTop="6dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="item2标签：" />
@@ -265,8 +284,8 @@
                             android:id="@+id/item2label"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp">
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="5dp">
                     </com.example.kongmin.util.FlowGroupView>
                 </LinearLayout>
                 <View  android:layout_height="1px"

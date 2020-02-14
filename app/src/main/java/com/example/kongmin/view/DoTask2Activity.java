@@ -12,13 +12,19 @@ import android.view.View;
 import android.widget.*;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import java.io.IOException;
 import java.util.*;
 
 import com.example.kongmin.Constant.Constant;
 import com.example.kongmin.myapplication.R;
+import com.example.kongmin.network.OkHttpUtil;
 import com.example.kongmin.view.textcategory.DropDownMenu;
 import com.example.kongmin.view.textcategory.FragmentMessgeI;
 import com.example.kongmin.view.textcategory.MatchCategoryAdapter;
@@ -31,19 +37,11 @@ import com.example.kongmin.util.SerializableMap;
 
 /*
  * 文本配对做任务新页面
- * Created by kongmin
- * 2018.01.15
+ * update by mwx
+ * 2020.2.10
  * */
 public class DoTask2Activity extends AppCompatActivity implements FragmentMessgeI {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
 
     private MatchCategoryAdapter mMatchCategoryAdapter;
 
@@ -58,8 +56,6 @@ public class DoTask2Activity extends AppCompatActivity implements FragmentMessge
     //初始化数据
     public List<MatchCategoryFragment> list = new ArrayList<>();
     private List<String> titles = new ArrayList<>();
-
-
 
     //发送http请求获取到的数据
     //每个fragment显示一个instance
@@ -149,11 +145,11 @@ public class DoTask2Activity extends AppCompatActivity implements FragmentMessge
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_text_category_tab);
         setContentView(R.layout.activity_do_task2);
-        // 获取整个应用的Application对象
-        // 在不同的Activity中获取的对象是同一个
-        mApplication = (MyApplication)getApplication();
+
+        if (getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }
 
         mTabIndicator = (MyTabIndicator) findViewById(R.id.mTabIndicator);
         mViewPager = (ViewPager) findViewById(R.id.mViewPager);
@@ -161,11 +157,8 @@ public class DoTask2Activity extends AppCompatActivity implements FragmentMessge
         ButterKnife.inject(this);
         initView();
 
-        // 获取整个应用的Application对象
-        // 在不同的Activity中获取的对象是同一个
         mApplication = (MyApplication)getApplication();
         userId = mApplication.getLoginUserId();
-
 
         //接收从上一个页面传递进来的参数
         Intent intent = getIntent();
@@ -189,114 +182,9 @@ public class DoTask2Activity extends AppCompatActivity implements FragmentMessge
         }else{
             extractlinear.setVisibility(View.VISIBLE);
         }
+        getFileContent();
 
-
-        new Thread(runnable).start();
-        try {
-            Thread.sleep(1000);
-        }catch (InterruptedException e){
-            e.printStackTrace();
-        }
-
-        initFragment();
-
-
-       /* for(int i=0;i<fragmentsize;i++){
-            //导航栏加标题
-            titles.add("第"+instanceindexs.get(i)+"段");
-            //titles.add("第:"+(i+1)+"段");
-            MatchCategoryFragment f1 = MatchCategoryFragment.newInstance(i);
-            list.add(f1);
-
-            Bundle bundle = new Bundle();
-            //传递lebel数据
-            bundle.putInt("fragmentindex",i);
-            //todo 设置taskid
-            taskid = 1;
-            bundle.putInt("taskid", taskid);
-
-            bundle.putInt("instanceid" + i,instanceids.get(i));
-            bundle.putInt("instanceindex" + i,instanceindexs.get(i));
-
-            ArrayList<Integer> clistitemids1 = new ArrayList<>();
-            ArrayList<String> clitemcontents1 = new ArrayList<>();
-            ArrayList<Integer> clistindexs1 = new ArrayList<>();
-            ArrayList<Integer> clitemindexs1 = new ArrayList<>();
-            //list2
-            ArrayList<Integer> clistitemids2 = new ArrayList<>();
-            ArrayList<String> clitemcontents2 = new ArrayList<>();
-            ArrayList<Integer> clistindexs2 = new ArrayList<>();
-            ArrayList<Integer> clitemindexs2 = new ArrayList<>();
-
-            //和item相关的参数
-            for(int j=0;j<iteminstids.size();j++){
-                if(iteminstids.get(j).equals(instanceids.get(i))){
-                    if(listindexs.get(j)==1){
-                        clistitemids1.add(listitemids.get(j));
-                        clitemcontents1.add(litemcontents.get(j));
-                        clistindexs1.add(listindexs.get(j));
-                        clitemindexs1.add(litemindexs.get(j));
-                    }else{
-                        clistitemids2.add(listitemids.get(j));
-                        clitemcontents2.add(litemcontents.get(j));
-                        clistindexs2.add(listindexs.get(j));
-                        clitemindexs2.add(litemindexs.get(j));
-                    }
-                }
-            }
-            bundle.putIntegerArrayList("itemid1p"+i, clistitemids1);
-            bundle.putStringArrayList("itemcon1p"+i,clitemcontents1);
-            bundle.putIntegerArrayList("itemlist1p"+i, clistindexs1);
-            bundle.putIntegerArrayList("iteminst1p"+i, clitemindexs1);
-
-            bundle.putIntegerArrayList("itemid2p"+i, clistitemids2);
-            bundle.putStringArrayList("itemcon2p"+i,clitemcontents2);
-            bundle.putIntegerArrayList("itemlist2p"+i, clistindexs2);
-            bundle.putIntegerArrayList("iteminst2p"+i, clitemindexs2);
-
-
-            Log.e("DoTask2Activity---->", "GET方式请求成功，listitemid1--->" + "itemid1p"+i+"——--"+clistitemids1);
-            Log.e("DoTask2Activity---->", "GET方式请求成功，listitemid2--->" + "itemid2p"+i+"——--"+clistitemids2);
-            Log.e("DoTask2Activity---->", "GET方式请求成功，itemcontent1--->" +"itemcon1p"+i+"----"+ clitemcontents1);
-            Log.e("DoTask2Activity---->", "GET方式请求成功，itemcontent2--->" +"itemcon2p"+i+"----"+ clitemcontents2);
-
-            Log.e("DoTask2Activity---->", "GET方式请求成功，listindex1--->" + "itemlist1p"+i+"----"+ clistindexs1);
-            Log.e("DoTask2Activity---->", "GET方式请求成功，listindex2--->" + "itemlist2p"+i+"----"+clistindexs2);
-            Log.e("DoTask2Activity---->", "GET方式请求成功，litemindex1--->" + "iteminst1p"+i+"----"+clitemindexs1);
-            Log.e("DoTask2Activity---->", "GET方式请求成功，litemindex2--->" + "iteminst1p"+i+"----"+clitemindexs2);
-
-            //todo 获取用户ID
-            bundle.putInt("userid", 1);
-            list.get(i).setArguments(bundle);
-        }*/
-
-
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        //先注释掉
-        //mMatchCategoryAdapter = new MatchCategoryAdapter(getSupportFragmentManager(),list);
-
-
-        // Set up the ViewPager with the sections adapter.
-        //mViewPager = (ViewPager) findViewById(R.id.container);
-        //先注释掉
-        //mViewPager.setAdapter(mMatchCategoryAdapter);
-
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
-        //先注释掉
-        //mTabIndicator.setTitles(titles);
         mTabIndicator.setViewPager(mViewPager, 0);
-        //mTabIndicator.setTitles(titles, 3);//可以设置默认选中的title
-
         mTabIndicator.setOnPageChangeListener(new MyTabIndicator.PageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -313,7 +201,6 @@ public class DoTask2Activity extends AppCompatActivity implements FragmentMessge
             }
         });
 
-
     }
 
     public void initFragment(){
@@ -322,7 +209,6 @@ public class DoTask2Activity extends AppCompatActivity implements FragmentMessge
         for(int i=0;i<fragmentsize;i++){
             //导航栏加标题
             titles.add("第"+instanceindexs.get(i)+"段");
-            //titles.add("第:"+(i+1)+"段");
             MatchCategoryFragment f1 = MatchCategoryFragment.newInstance(i);
             list.add(f1);
             Bundle bundle = new Bundle();
@@ -407,121 +293,125 @@ public class DoTask2Activity extends AppCompatActivity implements FragmentMessge
     }
 
 
-
-    private Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-
-            //String requestUrl = "http://172.20.10.5:8080/instance/getInstanceListitem";
-            //String paramUrl = "?docId=2";
-            String requestUrl = Constant.pairingfileUrl;
-            //String paramUrl = "?docId=2";
-            //String paramUrl = "?docId="+docId+"&status="+docStatus+"&taskId="+taskid;
-            String paramUrl;
-            if(typename.equals("dotask")){
-                paramUrl = "?docId="+docId+"&status="+docStatus+"&taskId="+taskid+"&userId="+userId;
-            }else{
-                paramUrl = "?docId="+docId+"&status="+docStatus+"&taskId="+taskid+"&userId="+userId;
-                Log.e("ExtractActivity---->", "GET方式请求成功，result2---> 查看我做的任务");
-            }
-            //String paramUrl= "?docId=19&status=全部&taskId=17";
-            String listitem = HttpUtil.requestGet(requestUrl,paramUrl);
-            Log.e("DoTask2Activity---->", "GET方式请求成功，result--->" + listitem);
-            JSONObject instanceItemjson = JSONObject.parseObject(listitem);
-            JSONArray instanceItemArray = (JSONArray)instanceItemjson.get("instanceItem");
-            fragmentsize = instanceItemArray.size();
-            instanceids.clear();
-            instanceindexs.clear();
-            listitemids.clear();
-            iteminstids.clear();
-            litemcontents.clear();
-            listindexs.clear();
-            litemindexs.clear();
-            if(instanceItemArray!=null&&instanceItemArray.size()>0){
-                for(int i=0;i<instanceItemArray.size();i++){
-                    //遍历jsonarray数组，把每一个对象转成json对象
-                    JSONObject job = instanceItemArray.getJSONObject(i);
-                    //得到每个对象中的属性值
-                    if(job.get("instid")!=null) {
-                        //instance
-                        instanceid = (Integer)job.get("instid");
-                        instanceids.add(instanceid);
-                        Log.e("DoTask2Activity---->", "activity中的instanceid--->" + instanceid);
-                    }
-                    if(job.get("instindex")!=null) {
-                        //instance
-                        String instindexstr = (String)job.get("instindex").toString();
-                        instanceindex = Integer.valueOf(instindexstr);
-                        instanceindexs.add(instanceindex);
-                        Log.e("DoTask2Activity---->", "activity中的instanceindex--->" + instanceindex);
-                    }
-                    if(job.get("listitems")!=null) {
-                        //instance
-                        JSONArray itemList = (JSONArray)job.get("listitems");
-                        for(int j=0;j<itemList.size();j++){
-                            JSONObject item = itemList.getJSONObject(j);
-                            if(item.get("ltid")!=null) {
-                                //instance
-                                listitemid = (Integer)item.get("ltid");
-                                listitemids.add(listitemid);
-                                iteminstids.add(instanceid);
-                                Log.e("DoTask2Activity---->", "activity中的listitemid--->" + listitemid);
-                            }
-                            if(item.get("litemcontent")!=null) {
-                                //instance
-                                litemcontent = (String)item.get("litemcontent").toString();
-                                litemcontents.add(litemcontent);
-                                Log.e("DoTask2Activity---->", "activity中的litemcontent--->" + litemcontent);
-                            }
-                            if(item.get("listIndex")!=null) {
-                                //instance
-                                String listindexstr = item.get("listIndex").toString();
-                                listindex = Integer.valueOf(listindexstr);
-                                listindexs.add(listindex);
-                                Log.e("DoTask2Activity---->", "activity中的listindex--->" + listindex);
-                            }
-                            if(item.get("litemindex")!=null) {
-                                //instance
-                                String litemindexstr = item.get("litemindex").toString();
-                                litemindex = Integer.valueOf(litemindexstr);
-                                litemindexs.add(litemindex);
-                                Log.e("DoTask2Activity---->", "activity中的litemindex--->" + litemindex);
-                            }
-                        }
-                    }
-                    //已经做过的部分
-                    if(job.get("alreadyDone")!=null) {
-                        JSONArray alreadyDonelArray = (JSONArray)job.get("alreadyDone");
-                        if(alreadyDonelArray!=null&&alreadyDonelArray.size()>0){
-                            for(int j=0;j<alreadyDonelArray.size();j++){
-                                //遍历jsonarray数组，把每一个对象转成json对象
-                                JSONObject alreadyDone = alreadyDonelArray.getJSONObject(j);
-                                //得到每个对象中的属性值
-                                if(alreadyDone.get("aLitemid")!=null) {
-                                    //instance
-                                    doneaitemid = (Integer)alreadyDone.get("aLitemid");
-                                    doneinstids.add(instanceid);
-                                    doneaitemids.add(doneaitemid);
-                                    Log.e("DotaskOneCategory---->", "activity中的doneaitemid--->" + doneaitemid);
-                                }
-                                if(alreadyDone.get("bLitemid")!=null) {
-                                    //instance
-                                    donebitemid = (Integer)alreadyDone.get("bLitemid");
-                                    donebitemids.add(donebitemid);
-                                    Log.e("DotaskOneCategory---->", "activity中的donebitemid--->" + donebitemid);
-                                }
-                            }
-                        }
-                    }
-
-
-
-                }
-            }
-
-
+    public void getFileContent(){
+        String requestUrl = Constant.pairingfileUrl;
+        String paramUrl;
+        if(typename.equals("dotask")){
+            paramUrl = "?docId="+docId+"&status="+docStatus+"&taskId="+taskid+"&userId="+userId;
+        }else{
+            paramUrl = "?docId="+docId+"&status="+docStatus+"&taskId="+taskid+"&userId="+userId;
+            Log.e("ExtractActivity---->", "GET方式请求成功，result2---> 查看我做的任务");
         }
-    };
+
+        OkHttpUtil.sendGetRequest(requestUrl + paramUrl, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String listitem = response.body().string();
+                JSONObject instanceItemjson = JSONObject.parseObject(listitem);
+                JSONArray instanceItemArray = (JSONArray)instanceItemjson.get("instanceItem");
+                fragmentsize = instanceItemArray.size();
+                instanceids.clear();
+                instanceindexs.clear();
+                listitemids.clear();
+                iteminstids.clear();
+                litemcontents.clear();
+                listindexs.clear();
+                litemindexs.clear();
+                if(instanceItemArray.size()>0){
+                    for(int i=0;i<instanceItemArray.size();i++){
+                        //遍历jsonarray数组，把每一个对象转成json对象
+                        JSONObject job = instanceItemArray.getJSONObject(i);
+                        //得到每个对象中的属性值
+                        if(job.get("instid")!=null) {
+                            //instance
+                            instanceid = (Integer)job.get("instid");
+                            instanceids.add(instanceid);
+                            Log.e("DoTask2Activity---->", "activity中的instanceid--->" + instanceid);
+                        }
+                        if(job.get("instindex")!=null) {
+                            //instance
+                            String instindexstr = (String)job.get("instindex").toString();
+                            instanceindex = Integer.valueOf(instindexstr);
+                            instanceindexs.add(instanceindex);
+                            Log.e("DoTask2Activity---->", "activity中的instanceindex--->" + instanceindex);
+                        }
+                        if(job.get("listitems")!=null) {
+                            //instance
+                            JSONArray itemList = (JSONArray)job.get("listitems");
+                            for(int j=0;j<itemList.size();j++){
+                                JSONObject item = itemList.getJSONObject(j);
+                                if(item.get("ltid")!=null) {
+                                    //instance
+                                    listitemid = (Integer)item.get("ltid");
+                                    listitemids.add(listitemid);
+                                    iteminstids.add(instanceid);
+                                    Log.e("DoTask2Activity---->", "activity中的listitemid--->" + listitemid);
+                                }
+                                if(item.get("litemcontent")!=null) {
+                                    //instance
+                                    litemcontent = (String)item.get("litemcontent").toString();
+                                    litemcontents.add(litemcontent);
+                                    Log.e("DoTask2Activity---->", "activity中的litemcontent--->" + litemcontent);
+                                }
+                                if(item.get("listIndex")!=null) {
+                                    //instance
+                                    String listindexstr = item.get("listIndex").toString();
+                                    listindex = Integer.valueOf(listindexstr);
+                                    listindexs.add(listindex);
+                                    Log.e("DoTask2Activity---->", "activity中的listindex--->" + listindex);
+                                }
+                                if(item.get("litemindex")!=null) {
+                                    //instance
+                                    String litemindexstr = item.get("litemindex").toString();
+                                    litemindex = Integer.valueOf(litemindexstr);
+                                    litemindexs.add(litemindex);
+                                    Log.e("DoTask2Activity---->", "activity中的litemindex--->" + litemindex);
+                                }
+                            }
+                        }
+                        //已经做过的部分
+                        if(job.get("alreadyDone")!=null) {
+                            JSONArray alreadyDonelArray = (JSONArray)job.get("alreadyDone");
+                            if(alreadyDonelArray!=null&&alreadyDonelArray.size()>0){
+                                for(int j=0;j<alreadyDonelArray.size();j++){
+                                    //遍历jsonarray数组，把每一个对象转成json对象
+                                    JSONObject alreadyDone = alreadyDonelArray.getJSONObject(j);
+                                    //得到每个对象中的属性值
+                                    if(alreadyDone.get("aLitemid")!=null) {
+                                        //instance
+                                        doneaitemid = (Integer)alreadyDone.get("aLitemid");
+                                        doneinstids.add(instanceid);
+                                        doneaitemids.add(doneaitemid);
+                                        Log.e("DotaskOneCategory---->", "activity中的doneaitemid--->" + doneaitemid);
+                                    }
+                                    if(alreadyDone.get("bLitemid")!=null) {
+                                        //instance
+                                        donebitemid = (Integer)alreadyDone.get("bLitemid");
+                                        donebitemids.add(donebitemid);
+                                        Log.e("DotaskOneCategory---->", "activity中的donebitemid--->" + donebitemid);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        initFragment();
+                    }
+                });
+            }
+        });
+
+    }
+
+
 
 
     //和选择弹出框相关的
@@ -585,26 +475,14 @@ public class DoTask2Activity extends AppCompatActivity implements FragmentMessge
                     if(btnfileid!=fileid.get(0)) {
                         docId = btnfileid;
                         //请求数据
-                        new Thread(runnable).start();
-                        try {
-                            Thread.sleep(1000);
-                        }catch (InterruptedException e){
-                            e.printStackTrace();
-                        }
-                        initFragment();
+                        getFileContent();
                     }
                 }else if(btnfileid==-1 && !filestatus.equals("")){
                     //选了状态没选文件
                     if(!filestatus.equals("全部")){
                         docStatus = filestatus;
                         //请求数据
-                        new Thread(runnable).start();
-                        try {
-                            Thread.sleep(1000);
-                        }catch (InterruptedException e){
-                            e.printStackTrace();
-                        }
-                        initFragment();
+                        getFileContent();
                     }
                 }else if(btnfileid!=-1 && !filestatus.equals("")){
                     Toast.makeText(DoTask2Activity.this, "选择了文件：" + btnfileid+filestatus, Toast.LENGTH_SHORT).show();
@@ -613,12 +491,7 @@ public class DoTask2Activity extends AppCompatActivity implements FragmentMessge
                     docId = btnfileid;
                     docStatus = filestatus;
                     //请求数据
-                    new Thread(runnable).start();
-                    try {
-                        Thread.sleep(1000);
-                    }catch (InterruptedException e){
-                        e.printStackTrace();
-                    }
+                    getFileContent();
                     initFragment();
                     //}
                 }

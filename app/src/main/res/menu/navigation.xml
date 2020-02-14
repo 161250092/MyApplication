@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--<item-->
-            <!--android:id="@+id/navigation_home"-->
-            <!--android:icon="@drawable/ic_home_black_24dp"-->
-            <!--android:title="@string/title_home"/>-->
 
     <item
             android:id="@+id/navigation_main_page"
-            android:icon="@mipmap/tab_home_normal"
+            android:icon="@drawable/main_page_icon"
             android:title="@string/main_page"/>
 
     <item

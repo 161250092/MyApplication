@@ -110,6 +110,7 @@ public class DtListFragment extends Fragment implements MyListView.LoadListener,
     private int tasktype = 0;
 
     LoadingDialog loadingDialog;
+
     @Override
     public void initListView(final ArrayList<MarkCategory1> markCategory1s) {
         loadingDialog = new LoadingDialog(getActivity());

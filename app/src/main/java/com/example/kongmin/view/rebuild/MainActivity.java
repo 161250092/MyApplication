@@ -4,23 +4,25 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
+import android.widget.SearchView;
 
 import com.example.kongmin.myapplication.R;
+import com.example.kongmin.util.MyApplication;
 import com.example.kongmin.view.ManagerFragment;
 import com.example.kongmin.view.PublishFragment;
 import com.example.kongmin.view.dotask.DtListFragment;
 
 /**
- * Tab首页
- * 每个Tab页有一个Fragment，
- * 分别为publishFragment,doFragment,managerFragment
- * Tab首页实现三个Fragment的切换
- * Created by kongmin on 2019/02/11.
+ * update by mwx on 2020/01/18.
  * Tab首页
  */
 
@@ -33,18 +35,22 @@ public class MainActivity extends AppCompatActivity {
     private int lastfragment;
     private BottomNavigationView bottomNavigationView;
 
+    MyApplication myApplication;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getSupportActionBar() != null){
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null){
+//            getSupportActionBar().hide();
+//        }
         setContentView(R.layout.activity_main);
 
+        myApplication = (MyApplication)getApplication();
+        initActionBar();
         initFragment();
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        //navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setOnNavigationItemSelectedListener(changeFragment);
+    }
+    private void initActionBar(){
     }
 
     //初始化fragment和fragment数组
@@ -77,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                     return true;
                 }
-
             }
             return false;
         }
@@ -93,8 +98,34 @@ public class MainActivity extends AppCompatActivity {
         transaction.show(fragments[index]).commitAllowingStateLoss();
     }
 
-    public void jumpToTaskList(View view){
-        Intent intent = new Intent(MainActivity.this, TaskListActivity.class);
-        startActivity(intent);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_main_page, menu);
+        MenuItem searchItem = menu.findItem(R.id.search_line);
+
+        SearchView sv = (SearchView) MenuItemCompat.getActionView(searchItem);
+        //设置监听
+        if (sv != null)
+        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+
+        Log.e("MainActivity","end");
+        return super.onCreateOptionsMenu(menu);
     }
+
+    public MyApplication getMyApplication(){
+        return myApplication;
+    }
+
 }

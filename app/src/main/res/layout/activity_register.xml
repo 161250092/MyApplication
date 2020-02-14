@@ -47,7 +47,7 @@
                     android:background="@android:color/transparent"
                     android:lines="1"
                     android:maxLines="1"
-                    android:hint="昵称，不能为空！"
+                    android:hint="昵称"
                     android:textSize="18sp" />
         </LinearLayout>
         <!--item的下分割线-->
@@ -89,7 +89,7 @@
                     android:background="@android:color/transparent"
                     android:lines="1"
                     android:maxLines="1"
-                    android:hint="邮箱，不能为空！"
+                    android:hint="邮箱"
                     android:textSize="18sp" />
         </LinearLayout>
         <!--item的下分割线-->
@@ -132,7 +132,7 @@
                     android:inputType="textPassword"
                     android:lines="1"
                     android:maxLines="1"
-                    android:hint="密码，不能为空！"
+                    android:hint="密码"
                     android:textSize="18sp" />
         </LinearLayout>
         <!--item的下分割线-->
@@ -175,7 +175,7 @@
                     android:inputType="textPassword"
                     android:lines="1"
                     android:maxLines="1"
-                    android:hint="确认密码，不能为空！"
+                    android:hint="确认密码"
                     android:textSize="18sp" />
         </LinearLayout>
         <!--item的下分割线-->

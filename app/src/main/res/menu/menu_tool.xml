@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--<item android:id="@+id/empty"-->
+        <!--android:title=""/>-->
+
+
+
+    <item android:id="@+id/upload_paragraph"
+        android:icon="@drawable/upload_icon1"
+        android:title="提交" />
+
+
+
+    <item
+        android:id="@+id/before"
+        android:icon="@drawable/before_para"
+        android:title=""/>
+
+    <item
+        android:id="@+id/next"
+        android:icon="@drawable/next_paragraph"
+        android:title=""/>
+
+
+    <item
+        android:id="@+id/file_list"
+        android:icon="@drawable/file_icon1"
+        android:title=""/>
+
+
+    <!--<item android:icon="@drawable/end_task1"-->
+        <!--android:id="@+id/end"-->
+        <!--android:title="结束"/>-->
+
+
+    <item android:id="@+id/settings"
+        android:icon="@drawable/setting_icon1"
+        android:title=""/>
+
+
+</menu>

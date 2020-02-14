@@ -120,7 +120,7 @@ public class MyTabIndicator extends HorizontalScrollView{
             TEXTNORMALCOLOR = typedArray.getColor(R.styleable.MyTabIndicator_textNormalColor, 0x80FFFFFF);
             TEXTSELECTEDCOLOR = typedArray.getColor(R.styleable.MyTabIndicator_textSelectedColor, 0xFFFFFFFF);
             TEXTNORMALSIZE = typedArray.getDimension(R.styleable.MyTabIndicator_textNormalSize, 13);
-            TEXTSELECTEDSIZE = typedArray.getDimension(R.styleable.MyTabIndicator_textSelectedSize, 15);
+            TEXTSELECTEDSIZE = typedArray.getDimension(R.styleable.MyTabIndicator_textSelectedSize, 30);
             BACKGROUNDCOLOR = typedArray.getColor(R.styleable.MyTabIndicator_backGroundColor, 0xFF242425);
             INDICATORCOLOR = typedArray.getColor(R.styleable.MyTabIndicator_indicatorColor, 0xFFFFFFFF);
             INDICATORWIDTH = typedArray.getDimension(R.styleable.MyTabIndicator_indicatorWidth, 0);

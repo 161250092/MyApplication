@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.kongmin.Constant.Constant;
+import com.example.kongmin.model.IOneCategoryNetwork;
 import com.example.kongmin.myapplication.R;
 import com.example.kongmin.view.lazyfragment.BaseLazyFragment;
 import com.example.kongmin.util.FlowGroupView;
@@ -32,7 +33,7 @@ import java.util.*;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class OneCategoryFragment extends BaseLazyFragment {
+public class OneCategoryFragment extends BaseLazyFragment implements IOneCategoryNetwork {
     /**
      * The fragment argument representing the section number for this
      * fragment.
@@ -49,8 +50,6 @@ public class OneCategoryFragment extends BaseLazyFragment {
     private String mData;
 
     private LinearLayout fragmentlayout;
-
-
 
     //段落内容
     private TextView paracontent;
@@ -74,11 +73,6 @@ public class OneCategoryFragment extends BaseLazyFragment {
     private List<String> checked = new ArrayList<String>();
     private List<Integer> labelids = new ArrayList<>();
 
-
-    //private List<TextView> labellist = new ArrayList<TextView>();
-
-    //private static String label;
-    //private static String content;
 
     private int taskid;
     //是做任务页面还是查看做任务页面
@@ -109,10 +103,6 @@ public class OneCategoryFragment extends BaseLazyFragment {
     public OneCategoryFragment() {
     }
 
-    /**
-     * Returns a new instance of this fragment for the given section
-     * number.
-     */
 
     //新建Fragment
     public static OneCategoryFragment newInstance(int sectionNumber) {
@@ -124,54 +114,9 @@ public class OneCategoryFragment extends BaseLazyFragment {
         return fragment;
     }
 
-    //和设置标签相关的
-    /*private ArrayList<String> names = new ArrayList<String>();
-    private FlowGroupView view;
-
-    private ArrayList<String> checked = new ArrayList<String>();
-    private String str = "";*/
-
-
-     /*@Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_one_category, container, false);
-        //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-        //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-        TextView textView2 = (TextView) rootView.findViewById(R.id.section_label2);
-        //textView2.setText(getString(R.string.section_format,getArguments().getInt(ARG_CONTENT_NUMBER)));
-        TextView textView3 = (TextView) rootView.findViewById(R.id.complete);
-        initData(textView2,textView3);
-        //和设置标签相关的
-        view =  rootView.findViewById(R.id.flowgroupview2);
-        //每次加载之前需要清空一下，否则会有数据重复加载的问题
-        names.clear();
-        setData();
-        for (int i = 0; i < names.size(); i++) {
-            addTextView(names.get(i));
-        }
-        return rootView;
-    }*/
 
     public void initData(TextView textView2,TextView textView3,final String selectlabel){
-        /*textView.setOnLongClickListener(new View.OnLongClickListener() {
 
-            @Override
-            public boolean onLongClick(View v) {
-                // TODO Auto-generated method stub
-                Toast.makeText(getContext(), "点击了textView1", Toast.LENGTH_SHORT).show();
-                return true;
-            }
-        });*/
-       /* textView2.setOnLongClickListener(new View.OnLongClickListener() {
-
-            @Override
-            public boolean onLongClick(View v) {
-                // TODO Auto-generated method stub
-                Toast.makeText(getContext(), "点击了textView2", Toast.LENGTH_SHORT).show();
-                return true;
-            }
-        });*/
         textView3.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -269,24 +214,7 @@ public class OneCategoryFragment extends BaseLazyFragment {
         }
     };
 
-    //和设置标签相关的
-    /**
-     * 动态添加布局
-     * @param str
-     */
-    /*private void addTextView(String str) {
-        TextView child = new TextView(getContext());
-        ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
-        params.setMargins(15, 15, 15, 15);
-        child.setLayoutParams(params);
-        child.setBackgroundResource(R.drawable.line_rect_huise);
-        child.setText(str);
-        child.setPadding(20,5,20,5);
-        child.setTextColor(Color.BLACK);
-        labellist.add(child);
-        initEvents(child);//监听
-        labelview.addView(child);
-    }*/
+
     private void addTextView(int labelid,String str,final ArrayList<Integer> seledlabel) {
         TextView child = new TextView(getContext());
         ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
@@ -356,23 +284,7 @@ public class OneCategoryFragment extends BaseLazyFragment {
         });
     }
 
-    /*private void setData(){
-        names.add("降龙十八掌");
-        names.add("黯然销魂掌");
-        names.add("左右互搏术");
-        names.add("七十二路空明拳");
-        names.add("小无相功");
-        names.add("拈花指");
-        names.add("打狗棍法");
-        names.add("蛤蟆功");
-        names.add("九阴白骨爪");
-        names.add("一招半式闯江湖");
-        names.add("醉拳");
-        names.add("龙蛇虎豹");
-        names.add("葵花宝典");
-        names.add("吸星大法");
-        names.add("如来神掌警示牌");
-    }*/
+
     //设置加载动画
     @Override
     public void loadDataStart() {
@@ -441,7 +353,6 @@ public class OneCategoryFragment extends BaseLazyFragment {
                         addTextView(namelabelid.get(i),names.get(i),seledparalabelid);
                     }
 
-
                     Log.e("DotaskExtract---->", "GET方式请求成功，taskid--->" + taskid);
                     Log.e("DotaskExtract---->", "GET方式请求成功，contentid--->" + contentid);
                     Log.e("DotaskExtract---->", "GET方式请求成功，contentindex--->" + contentindex);
@@ -476,14 +387,7 @@ public class OneCategoryFragment extends BaseLazyFragment {
 
     @Override
     protected void findViewById(View view) {
-        /*mTextView = view.findViewById(R.id.section_label);
-        mPb = view.findViewById(R.id.pb);
-        if (mLoadDataFinished) {
-            // 一般情况下这时候数据请求都还没完成, 所以不会进这个if
-            mTextView.setVisibility(View.VISIBLE);
-            mTextView.setText(mData);
-            mPb.setVisibility(View.GONE);
-        }*/
+
 
         fragmentlayout = (LinearLayout)view.findViewById(R.id.section_label);
         //存放content的textview
@@ -492,8 +396,8 @@ public class OneCategoryFragment extends BaseLazyFragment {
         completecon = (TextView) view.findViewById(R.id.completecon);
         completedoc = (TextView) view.findViewById(R.id.completedoc);
         extractlinear = (LinearLayout) view.findViewById(R.id.extractlinear);
-        saveinst.setOnClickListener(new View.OnClickListener() {
 
+        saveinst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
@@ -501,6 +405,7 @@ public class OneCategoryFragment extends BaseLazyFragment {
                 new Thread(runnable3).start();
             }
         });
+
 
         completecon.setOnClickListener(new View.OnClickListener() {
 
@@ -511,6 +416,7 @@ public class OneCategoryFragment extends BaseLazyFragment {
                 new Thread(completeinstrun).start();
             }
         });
+
 
         completedoc.setOnClickListener(new View.OnClickListener() {
 
@@ -540,4 +446,44 @@ public class OneCategoryFragment extends BaseLazyFragment {
     }
 
 
+    @Override
+    public void saveIns() {
+        saveinst.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                //发送做任务的请求
+                new Thread(runnable3).start();
+            }
+        });
+    }
+
+    @Override
+    public void completeCon() {
+        completecon.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                //发送做任务的请求
+                new Thread(completeinstrun).start();
+            }
+        });
+
+        new Thread(completeinstrun).start();
+
+    }
+
+    @Override
+    public void completeDoc() {
+        completedoc.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                //发送做任务的请求
+                new Thread(completedocrun).start();
+            }
+        });
+    }
 }

@@ -6,7 +6,7 @@
     <string name="title_activity_login">登录</string>
 
     <string name="main_page">主页</string>
-    <string name="mange_information">我</string>
+    <string name="mange_information">个人信息</string>
     <!-- Strings related to login -->
     <string name="prompt_email">用户名</string>
     <string name="prompt_password">密码</string>
@@ -28,16 +28,27 @@
     <string name="share">分享</string>
     <string name="paragraph_content">段落内容</string>
 
+    <string name="submit_paragraph">提交本段</string>
     <string name="selections">选项</string>
     <string name="upload_title">上传附件</string>
     <string name="upload_begin">上传</string>
     <string name="look_pictrue">浏览</string>
     <string name="file_upload">上传附件：</string>
     <string name="task_info">查看任务</string>
-    <string name="get_task">接取任务</string>
+    <string name="get_task">开始标注</string>
     <string name="file_list">文件列表：</string>
     <string name="cancel_back">返回</string>
     <string name="title_activity_show_text">ShowTextActivity</string>
+
+    <string name="before_paragraph">上一页</string>
+    <string name="next_paragraph">下一页</string>
+    <string name="files">文件列表</string>
+    <string name="settings">设置</string>
+    <string name="end_task">结束该文档</string>
+    <string name="search">查询</string>
+    <string name="notification">通知信息.......</string>
+
+    <string name="activity_title">众包文本标注平台</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 

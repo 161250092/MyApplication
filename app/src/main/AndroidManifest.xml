@@ -171,6 +171,7 @@
         <activity android:name="com.example.kongmin.view.rebuild.NavigationActivity" />
         <activity android:name="com.example.kongmin.view.rebuild.TaskListActivity"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
+        <activity android:name="com.example.kongmin.view.rebuild.TaskListFragment" />
     </application>
 
 </manifest>

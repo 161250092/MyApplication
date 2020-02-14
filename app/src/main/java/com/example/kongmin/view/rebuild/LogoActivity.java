@@ -13,6 +13,7 @@ import android.content.Intent;
 
 import com.example.kongmin.model.LoginModel;
 import com.example.kongmin.myapplication.R;
+import com.example.kongmin.pojo.User;
 import com.example.kongmin.presenter.impl.LoginPresenter;
 import com.example.kongmin.presenter.MyCallBack;
 
@@ -115,6 +116,11 @@ public class LogoActivity extends AppCompatActivity implements MyCallBack {
     }
 
     private  void test(){
+        User user = new User();
+        user.setUserId(1);
+        user.setUserName("test");
+        // 将登录用户信息保存到Application对象中
+        mApplication.userLogin(user);
         Intent intent = new Intent(LogoActivity.this, MainActivity.class);
         startActivity(intent);
     }
