@@ -26,9 +26,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingTop="5dp" >
-           <!-- <View  android:layout_height="15px"
-                   android:layout_width="match_parent"
-                   android:background="#F5F5F5" />-->
+
          <TextView
             android:id="@+id/section_label2"
             android:layout_width="match_parent"
@@ -42,25 +40,43 @@
     </ScrollView>
 </LinearLayout>
 
-    <TextView
+
+    <LinearLayout android:id="@+id/pair_selections"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:orientation="vertical">
+
+        <TextView
             android:id="@+id/complete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/selector_message_button"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             android:padding="5dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="5dp"
             android:text="确定匹配"
-            android:textColor="@color/tab_indicator" />
+            android:textColor="@color/colorPrimary" />
+
+        <TextView
+            android:id="@+id/cancel_complete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_message_button"
+            android:layout_gravity="end"
+            android:padding="5dp"
+            android:text="取消匹配"
+            android:textColor="@color/black"
+            android:visibility="gone"
+            />
+    </LinearLayout>
+
     <LinearLayout android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:id="@+id/section_label3"
                   android:layout_alignParentBottom="true"
                   android:layout_alignParentLeft="true"
-                  android:orientation="horizontal">
+                  android:orientation="horizontal"
+                  android:visibility="gone">
     </LinearLayout>
 </RelativeLayout>

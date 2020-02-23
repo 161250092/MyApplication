@@ -14,12 +14,27 @@
         />
 
 
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/notification"
+             android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/notice"
+            android:id="@+id/notice"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/notification"
-            android:background="@color/notification"/>
+            android:layout_toRightOf="@+id/notice"
+            android:layout_centerVertical="true"
+            />
 
+    </RelativeLayout>
 
 
     <GridView

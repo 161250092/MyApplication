@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="30dp"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:src="@drawable/main_page_icon" />
+
+    <TextView
+        android:id="@+id/bar_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        android:textSize="20sp"
+        android:layout_centerHorizontal="true"
+        android:text="文本标注平台"
+        android:textColor="@color/black" />
+
+    <ImageView
+        android:id="@+id/search_icon"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/search_icon" />
+
+
+
+
+
+</RelativeLayout>

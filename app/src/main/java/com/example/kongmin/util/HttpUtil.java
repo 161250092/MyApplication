@@ -13,14 +13,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.UUID;
 import java.util.List;
-import com.example.kongmin.view.rebuild.LogoActivity;
+import com.example.kongmin.view.login.LoginActivity;
 import java.util.Map;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 //HTTP通用类
 public class HttpUtil {
-    static String TAG = LogoActivity.class.getCanonicalName();
+    static String TAG = LoginActivity.class.getCanonicalName();
     private static final String CHARSET = "utf-8"; //设置编码
     /**
      * get提交数据

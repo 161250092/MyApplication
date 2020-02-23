@@ -29,17 +29,12 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity
-                android:name="com.example.kongmin.view.rebuild.MainActivity"
+                android:name="com.example.kongmin.view.mainPage.MainActivity"
                 android:windowSoftInputMode="stateHidden|stateAlwaysHidden"
                 android:label="@string/app_name">
         </activity>
         <activity
-                android:name="com.example.kongmin.view.LoginActivity"
-                android:exported="true"
-                android:label="@string/title_activity_login">
-        </activity>
-        <activity
-            android:name="com.example.kongmin.view.rebuild.LogoActivity"
+            android:name="com.example.kongmin.view.login.LoginActivity"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -65,19 +60,11 @@
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
-        <activity android:name="com.example.kongmin.view.dotask.TaskDetailActivity"
+        <activity android:name="com.example.kongmin.view.taskDetails.TaskDetailActivity"
             android:launchMode="singleTop">
         </activity>
 
         <activity android:name="com.example.kongmin.view.DoTaskListActivity">
-        </activity>
-        <activity
-                android:name="com.example.kongmin.view.DoTaskActivity"
-                android:configChanges="orientation|keyboardHidden|screenSize"
-                android:label="@string/title_activity_do_task"
-                android:theme="@style/FullscreenTheme">
-        </activity>
-        <activity android:name="com.example.kongmin.view.PopupActivity">
         </activity>
         <activity
                 android:name="com.example.kongmin.view.KeyBoardActivity"
@@ -89,7 +76,7 @@
                 android:label="@string/title_activity_file_detail"
                 android:theme="@style/FullscreenTheme">
         </activity>
-        <activity android:name="com.example.kongmin.view.DoTask2Activity">
+        <activity android:name="com.example.kongmin.view.doTask.categoryMatch.MatchCategoryActivity">
         </activity>
         <activity android:name="com.example.kongmin.view.ViewFlipperActivity">
         </activity>
@@ -107,22 +94,21 @@
         </activity>
         <activity android:name="com.example.kongmin.view.textcategory.CategoryTabActivity">
         </activity>
-        <activity android:name="com.example.kongmin.view.textcategory.TextCategoryTabActivity">
+        <activity android:name="com.example.kongmin.view.doTask.categoryRelation.TextCategoryTabActivity">
         </activity>
-        <activity android:name="com.example.kongmin.view.textcategory.OneCategoryActivity">
+        <activity android:name="com.example.kongmin.view.doTask.oneCategory.OneCategoryActivity">
         </activity>
         <activity android:name="com.example.kongmin.view.textcategory.ItemListActivity">
-        </activity>
+        </activity>-
         <activity
                 android:name="com.example.kongmin.view.textcategory.ItemDetailActivity"
                 android:label="@string/title_item_detail"
                 android:parentActivityName="com.example.kongmin.view.textcategory.ItemListActivity"
                 android:theme="@style/AppTheme.NoActionBar">
             <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value="com.example.kongmin.myapplication.com.example.kongmin.view.textcategory.ItemListActivity"/>
-        </activity>
-        <activity android:name="com.example.kongmin.view.textcategory.MatchCategoryActivity">
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.kongmin.view.textcategory.ItemListActivity"/>
+
         </activity>
         <activity
                 android:name="com.example.kongmin.view.publictask.AddListTwoitemsActivity"
@@ -137,19 +123,15 @@
         </activity>
         <activity android:name="com.example.kongmin.view.publictask.AddListMatchCategoryActivity">
         </activity>
-        <activity android:name="com.example.kongmin.view.textcategory.DotaskExtractActivity">
+        <activity android:name="com.example.kongmin.view.doTask.extractText.DoTaskExtractActivity">
         </activity>
         <activity android:name="com.example.kongmin.view.lazyfragment.TabActivity">
         </activity>
         <activity android:name="com.example.kongmin.view.publictask.AddListOneSortActivity">
         </activity>
-        <activity android:name="com.example.kongmin.view.sort.DotaskOneSortActivity">
+        <activity android:name="com.example.kongmin.view.doTask.sort.DtOneSortActivity">
         </activity>
-        <activity android:name="com.example.kongmin.view.sort.SortActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.view.sort.DtOneSortActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.view.rebuild.RegisterActivity">
+        <activity android:name="com.example.kongmin.view.register.RegisterActivity">
         </activity>
         <activity android:name="com.example.kongmin.view.publictask.InfoExtraActivity">
         </activity>
@@ -161,17 +143,14 @@
         </activity>
         <activity android:name="com.example.kongmin.managetask.MypubDolistActivity">
         </activity>
-        <activity android:name="com.example.kongmin.view.QuestionActivity">
+        <activity android:name="com.example.kongmin.managetask.dotask.MyTaskListActivity">
         </activity>
-        <activity android:name="com.example.kongmin.managetask.dotask.MyDotaskListActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.view.dotask.FileContentActivity"
+        <activity android:name="com.example.kongmin.view.taskDetails.FileContentActivity"
             android:launchMode="singleTop">
         </activity>
-        <activity android:name="com.example.kongmin.view.rebuild.NavigationActivity" />
-        <activity android:name="com.example.kongmin.view.rebuild.TaskListActivity"
+        <activity android:name="com.example.kongmin.view.taskList.TaskListActivity"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
-        <activity android:name="com.example.kongmin.view.rebuild.TaskListFragment" />
+        <!--<activity android:name="com.example.kongmin.view.taskList.TaskListFragment" />-->
     </application>
 
 </manifest>

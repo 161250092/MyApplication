@@ -24,7 +24,7 @@ import com.example.kongmin.util.MyApplication;
 import com.example.kongmin.view.BaseActivity;
 import com.example.kongmin.view.EditTextListActivity;
 import com.example.kongmin.view.FileSelectActivity;
-import com.example.kongmin.view.rebuild.MainActivity;
+import com.example.kongmin.view.mainPage.MainActivity;
 import com.example.kongmin.view.ShowFileAdapter;
 
 import java.io.File;

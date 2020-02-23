@@ -1,6 +1,6 @@
 package com.example.kongmin.presenter;
 
-import com.example.kongmin.view.rebuild.ListRenderCallBack;
+import com.example.kongmin.view.iCallBack.ListRenderCallBack;
 
 public interface ITaskListPresenter {
     public void getTaskByPage(int page, int limit, MyCallBack myCallBack,ListRenderCallBack listRenderCallBack);

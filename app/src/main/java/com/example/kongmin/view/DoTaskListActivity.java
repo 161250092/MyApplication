@@ -17,7 +17,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.kongmin.myapplication.R;
 import com.example.kongmin.view.adapter.TaskListItemAdapter;
-import com.example.kongmin.view.dotask.TaskDetailActivity;
+import com.example.kongmin.view.taskDetails.TaskDetailActivity;
 import com.example.kongmin.pojo.MarkCategory1;
 import com.example.kongmin.util.HttpUtil;
 

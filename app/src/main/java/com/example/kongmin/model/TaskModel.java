@@ -10,7 +10,7 @@ import com.example.kongmin.network.Url;
 
 import com.example.kongmin.pojo.MarkCategory1;
 import com.example.kongmin.presenter.MyCallBack;
-import com.example.kongmin.view.rebuild.ListRenderCallBack;
+import com.example.kongmin.view.iCallBack.ListRenderCallBack;
 
 import java.io.IOException;
 import java.util.ArrayList;

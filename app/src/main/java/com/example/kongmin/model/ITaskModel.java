@@ -1,12 +1,7 @@
 package com.example.kongmin.model;
 
-import android.view.LayoutInflater;
-
 import com.example.kongmin.presenter.MyCallBack;
-import com.example.kongmin.view.dotask.MyListView;
-import com.example.kongmin.view.rebuild.ListRenderCallBack;
-
-import java.util.zip.Inflater;
+import com.example.kongmin.view.iCallBack.ListRenderCallBack;
 
 public interface ITaskModel {
 

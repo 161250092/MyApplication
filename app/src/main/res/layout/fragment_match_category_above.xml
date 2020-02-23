@@ -5,31 +5,29 @@
                     android:layout_height="match_parent"
                     tools:context="com.example.kongmin.view.TextCategoryActivity$PlaceholderFragment"
                     android:animateLayoutChanges="true">
-    <ProgressBar
+        <ProgressBar
             android:id="@+id/pb"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerHorizontal="true"/>
-<LinearLayout android:layout_width="match_parent"
+        <LinearLayout android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:visibility="gone"
               android:id="@+id/section_label"
               android:layout_centerInParent="true"
               android:orientation="vertical">
-    <ScrollView   android:layout_width="match_parent"
+            <ScrollView   android:layout_width="match_parent"
                   android:layout_height="match_parent"
                   android:orientation="vertical"
                   android:id="@+id/scrollview"
                   android:background="#FFFAFA">
-        <LinearLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingTop="5dp" >
-           <!-- <View  android:layout_height="15px"
-                   android:layout_width="match_parent"
-                   android:background="#F5F5F5" />-->
-    <TextView
+
+            <TextView
             android:id="@+id/section_label2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -41,18 +39,25 @@
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
-    <TextView
-            android:id="@+id/complete"
-            android:layout_width="wrap_content"
+
+    <LinearLayout android:id="@+id/pair_selections"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/selector_message_button"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="right"
-            android:padding="5dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="5dp"
-            android:text="选中本段"
-            android:textColor="@color/tab_indicator" />
+            android:id="@+id/match_items"
+            android:background="@color/notification"
+            android:visibility="gone"
+            android:hint="已配对项" />
+
+    </LinearLayout>
+
+
+
 </RelativeLayout>

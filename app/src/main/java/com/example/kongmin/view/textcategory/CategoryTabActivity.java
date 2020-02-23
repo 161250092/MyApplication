@@ -4,6 +4,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import com.example.kongmin.myapplication.R;
+import com.example.kongmin.view.doTask.categoryRelation.SectionsPagerAdapter;
+import com.example.kongmin.view.doTask.categoryRelation.PlaceholderFragment;
+
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.TypedValue;

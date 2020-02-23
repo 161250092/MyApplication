@@ -10,29 +10,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <com.example.kongmin.view.mainPage.AvatarImageView
             android:id="@+id/user_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
             android:layout_alignParentLeft="true"
-            android:src="@drawable/pic_temp" />
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/avator" />
 
         <View
             android:id="@+id/empty_1"
             android:layout_width="40dp"
             android:layout_height="20dp"
             android:layout_toRightOf="@id/user_logo"
-            android:background="@color/white" />
+             />
 
         <TextView
             android:id="@+id/user_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/empty_1"
-            android:layout_marginLeft="-5dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginLeft="-13dp"
+            android:layout_marginTop="-10dp"
             android:layout_toRightOf="@id/empty_1"
             android:hint="用户账号"
+            android:textColor="@color/black"
             android:textSize="30sp" />
 
 
@@ -41,17 +44,129 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/user_account"
-            android:layout_marginLeft="45dp"
-            android:layout_marginTop="21dp"
+            android:layout_marginLeft="29dp"
+            android:layout_marginTop="18dp"
             android:layout_toRightOf="@+id/user_logo"
-            android:hint="当前id"
+            android:hint="ID "
             android:textSize="18sp" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="45dp"
+            android:layout_marginTop="13dp"
+            android:layout_toRightOf="@+id/user_account"
+            android:src="@drawable/camera1" />
 
     </RelativeLayout>
     <!--发任务界面-->
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+         android:background="@color/mask_color"/>
+
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:id="@+id/my_task_line">
+
+        <ImageView
+            android:id="@+id/task_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/task_icon" />
+
+        <TextView
+            android:id="@+id/my_task"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/task_icon"
+            android:text="任务"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/colorPrimary"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+            <ImageView
+                android:id="@+id/person_info"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/setting1" />
+
+            <TextView
+                android:id="@+id/setting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/person_info"
+                android:text="设置"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:background="@color/colorPrimary"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/my_logout"
+            android:padding="8dp" >
+
+
+            <ImageView
+                android:id="@+id/logout_icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/switch1" />
+
+        <TextView
+            android:id="@+id/logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/logout_icon"
+            android:textColor="@android:color/black"
+            android:text="登出"
+            android:textSize="18sp" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+
+
     <ListView
             android:id="@+id/list_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+        android:visibility="gone">
     </ListView>
+
+
 </LinearLayout>

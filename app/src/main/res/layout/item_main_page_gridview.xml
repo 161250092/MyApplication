@@ -8,9 +8,10 @@
     android:orientation="vertical"
     android:gravity="center">
 
-    <ImageView android:src="@drawable/pic_temp"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content">
+    <ImageView android:src="@drawable/dotask_icon"
+        android:layout_height="100dp"
+        android:layout_width="wrap_content"
+        android:id="@+id/icon">
     </ImageView>
 
     <TextView
@@ -19,7 +20,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/selections"
-        android:textColor="#050505"
-        android:textSize="20sp"/>
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"/>
 </LinearLayout>
 

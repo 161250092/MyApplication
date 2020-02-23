@@ -22,7 +22,6 @@ public class Constant {
     public static final String onesortaddtaskUrl = Url.port+"task/sorting";
 
     //做任务模块查看所有发布的任务
-    //public static final String selectalltaskUrl = Url.port+"task/selectall";
     public static final String selectalltaskUrl = Url.port+"task/all";
     //做任务模块查看发布的任务详情
     public static final String taskdetailUrl = Url.port+"task/detail";
@@ -60,12 +59,15 @@ public class Constant {
 
     //做任务模块信息抽取查看任务对应的文本的详细内容
     public static final String relationfileUrl = Url.port+"relation";
+
     //做任务模块信息抽取做任务
     public static final String relationdotaskUrl = Url.port+"relation";
+
     //做任务模块信息抽取结束一个段落
-    public static final String relationdtparaUrl = Url.port+"dpara/status";
+    public static final String relationdtparaUrl = Url.port+"dinstance/status";
+
     //做任务模块信息抽取结束整篇文档
-    public static final String relationdtdocUrl = Url.port+"dpara/doc/status";
+    public static final String relationdtdocUrl = Url.port+"dinstance/doc/status";
 
     //做任务模块文本配对查看任务对应的文本的详细内容
     public static final String pairingfileUrl = Url.port+"pairing";
@@ -105,4 +107,9 @@ public class Constant {
     public static int PageIndex = 1;
     //每页加载数量
     public static int PageCapacity = 8;
+
+
+    public static String COMPLETED = "已完成" ;
+
+    public static String UNCOMPLETED = "正在进行";
 }

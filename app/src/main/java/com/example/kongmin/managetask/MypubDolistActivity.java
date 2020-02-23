@@ -21,15 +21,15 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.kongmin.Constant.Constant;
-import com.example.kongmin.view.DoTask2Activity;
+import com.example.kongmin.view.doTask.categoryMatch.MatchCategoryActivity;
 import com.example.kongmin.view.adapter.TaskListItemAdapter;
 import com.example.kongmin.myapplication.R;
-import com.example.kongmin.view.sort.DtOneSortActivity;
-import com.example.kongmin.view.textcategory.OneCategoryActivity;
-import com.example.kongmin.view.textcategory.TextCategoryTabActivity;
+import com.example.kongmin.view.doTask.sort.DtOneSortActivity;
+import com.example.kongmin.view.doTask.oneCategory.OneCategoryActivity;
+import com.example.kongmin.view.doTask.categoryRelation.TextCategoryTabActivity;
 import com.example.kongmin.pojo.MarkCategory1;
 import com.example.kongmin.util.HttpUtil;
-import com.example.kongmin.view.textcategory.DotaskExtractActivity;
+import com.example.kongmin.view.doTask.extractText.DoTaskExtractActivity;
 import com.example.kongmin.util.SerializableMap;
 
 import java.util.ArrayList;
@@ -214,7 +214,7 @@ public class MypubDolistActivity extends AppCompatActivity {
                 //startActivity(intent);
 
                 if(tasktype==1) {
-                    Intent intent = new Intent(MypubDolistActivity.this, DotaskExtractActivity.class);
+                    Intent intent = new Intent(MypubDolistActivity.this, DoTaskExtractActivity.class);
                     intent.putExtra("taskid", taskid);
                     intent.putExtra("type", "mypub");
                     //intent.putExtra("fileid", fileidstr);
@@ -264,7 +264,7 @@ public class MypubDolistActivity extends AppCompatActivity {
                 } else if(tasktype==4){
                     //Intent intent = new Intent(TaskDetailActivity.this, MatchCategoryActivity.class);
                     //如果任务类型是文本配对，则不发送标签
-                    Intent intent = new Intent(MypubDolistActivity.this, DoTask2Activity.class);
+                    Intent intent = new Intent(MypubDolistActivity.this, MatchCategoryActivity.class);
                     intent.putExtra("taskid", taskid);
                     intent.putExtra("type", "mypub");
                     Bundle bundle = new Bundle();

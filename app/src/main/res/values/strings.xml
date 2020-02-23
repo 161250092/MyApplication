@@ -47,7 +47,9 @@
     <string name="end_task">结束该文档</string>
     <string name="search">查询</string>
     <string name="notification">通知信息.......</string>
-
+    <string name="chooseTheOne">选中本段</string>
+    <string name="cancelTheOne">取消选中</string>
+    <string name="no_tasks">暂无任务信息</string>
     <string name="activity_title">众包文本标注平台</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
