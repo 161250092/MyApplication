@@ -10,7 +10,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="#009688"/>
 
-    <com.example.kongmin.util.MaterialTabHost
+    <com.example.textannotation.util.MaterialTabHost
             android:id="@+id/tabHost"
             android:layout_width="match_parent"
             android:layout_height="48dp"

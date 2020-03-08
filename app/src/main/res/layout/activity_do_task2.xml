@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/tools">
 
-        <com.example.kongmin.view.textcategory.MyTabIndicator
+        <com.example.textannotation.view.commonVIew.MyTabIndicator
             android:id="@+id/mTabIndicator"
             android:layout_width="match_parent"
             android:layout_height="44dp"

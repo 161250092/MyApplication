@@ -50,9 +50,9 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context="com.example.kongmin.myapplication.com.example.kongmin.view.PopupActivity">
+                tools:context="com.example.textannotation.myapplication.com.example.kongmin.view.PopupActivity">
 
-<com.example.kongmin.view.SlideBottomLayout
+<com.example.textannotation.view.SlideBottomLayout
         android:id="@+id/slideLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -119,6 +119,6 @@
 
     </LinearLayout>
 
-</com.example.kongmin.view.SlideBottomLayout>
+</com.example.textannotation.view.SlideBottomLayout>
 
 </RelativeLayout>

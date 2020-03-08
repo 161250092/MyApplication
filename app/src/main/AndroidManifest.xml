@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-          package="com.example.kongmin.myapplication">
+          package="com.example.textannotation.myapplication">
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
@@ -20,7 +20,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <application
-            android:name="com.example.kongmin.util.MyApplication"
+            android:name="com.example.textannotation.util.MyApplication"
             android:allowBackup="true"
             android:icon="@drawable/app_logo"
             android:label="@string/app_name"
@@ -29,128 +29,70 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity
-                android:name="com.example.kongmin.view.mainPage.MainActivity"
+                android:name="com.example.textannotation.view.mainPage.MainActivity"
                 android:windowSoftInputMode="stateHidden|stateAlwaysHidden"
                 android:label="@string/app_name">
         </activity>
         <activity
-            android:name="com.example.kongmin.view.login.LoginActivity"
-            >
+            android:name="com.example.textannotation.view.login.LoginActivity">
+
+        </activity>
+
+        <activity android:name="com.example.textannotation.view.taskDetails.TaskDetailActivity"
+            android:launchMode="singleTop">
+        </activity>
+
+        <activity android:name="com.example.textannotation.view.doTask.categoryMatch.MatchCategoryActivity">
+        </activity>
+        <activity android:name="com.example.textannotation.view.doTask.categoryRelation.TextCategoryTabActivity">
+        </activity>
+        <activity android:name="com.example.textannotation.view.doTask.oneCategory.OneCategoryActivity">
+        </activity>
+        <activity android:name="com.example.textannotation.view.incompletePart.ItemListActivity">
+        </activity>
+
+        <activity
+                android:name="com.example.textannotation.view.incompletePart.ItemDetailActivity"
+                android:label="@string/title_item_detail"
+                android:parentActivityName="com.example.textannotation.view.incompletePart.ItemListActivity"
+                android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.textannotation.view.incompletePart.ItemListActivity"/>
+
+        </activity>
+
+        <activity android:name="com.example.textannotation.view.doTask.extractText.DoTaskExtractActivity">
+        </activity>
+        <activity android:name="com.example.textannotation.view.lazyfragment.TabActivity">
+        </activity>
+
+        <activity android:name="com.example.textannotation.view.doTask.sort.DtOneSortActivity">
+        </activity>
+        <activity android:name="com.example.textannotation.view.register.RegisterActivity">
+        </activity>
+
+        <activity android:name="com.example.textannotation.view.incompletePart.SelectActivity">
+        </activity>
+        <activity android:name="com.example.textannotation.view.myTasks.MyTaskListActivity">
+        </activity>
+        <activity android:name="com.example.textannotation.view.taskDetails.FileContentActivity"
+            android:launchMode="singleTop">
+        </activity>
+        <activity android:name="com.example.textannotation.view.taskList.TaskListActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
+
+        <activity android:name="com.example.textannotation.view.launcher.LaunchActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name="com.example.textannotation.view.taskList.ViewAllTaskActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name="com.example.textannotation.view.taskList.SpecifiedTaskListActivity" />
+        <activity android:name="com.example.textannotation.view.doTask.oneCategory.TextCategoryActivity" />
 
-        <activity android:name="com.example.kongmin.view.EditTextListActivity">
-        </activity>
-        <activity
-                android:name="com.example.kongmin.view.AddListActivity"
-                android:screenOrientation="portrait"
-                android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
-        </activity>
-
-        <activity android:name="com.example.kongmin.view.FileSelectActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.view.FileUploadActivity">
-        </activity>
-        <activity
-                android:name="com.example.kongmin.view.ShowTextActivity"
-                android:label="@string/title_activity_show_text"
-                android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-
-        <activity android:name="com.example.kongmin.view.taskDetails.TaskDetailActivity"
-            android:launchMode="singleTop">
-        </activity>
-
-        <activity android:name="com.example.kongmin.view.DoTaskListActivity">
-        </activity>
-        <activity
-                android:name="com.example.kongmin.view.KeyBoardActivity"
-                android:windowSoftInputMode="adjustResize|stateHidden">
-        </activity>
-        <activity
-                android:name="com.example.kongmin.view.FileDetailActivity"
-                android:configChanges="orientation|keyboardHidden|screenSize"
-                android:label="@string/title_activity_file_detail"
-                android:theme="@style/FullscreenTheme">
-        </activity>
-        <activity android:name="com.example.kongmin.view.doTask.categoryMatch.MatchCategoryActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.view.ViewFlipperActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.view.TextCategoryActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.view.TabActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.view.IconTabActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.view.TextTabActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.view.SwipableIconTabActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.view.SwipableTextTabActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.view.textcategory.CategoryTabActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.view.doTask.categoryRelation.TextCategoryTabActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.view.doTask.oneCategory.OneCategoryActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.view.textcategory.ItemListActivity">
-        </activity>-
-        <activity
-                android:name="com.example.kongmin.view.textcategory.ItemDetailActivity"
-                android:label="@string/title_item_detail"
-                android:parentActivityName="com.example.kongmin.view.textcategory.ItemListActivity"
-                android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.kongmin.view.textcategory.ItemListActivity"/>
-
-        </activity>
-        <activity
-                android:name="com.example.kongmin.view.publictask.AddListTwoitemsActivity"
-                android:screenOrientation="portrait"
-                android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
-        </activity>
-        <activity android:name="com.example.kongmin.keyboard.KeyboardMainActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.keyboard.ResolvedActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.keyboard.UnresolvedActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.view.publictask.AddListMatchCategoryActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.view.doTask.extractText.DoTaskExtractActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.view.lazyfragment.TabActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.view.publictask.AddListOneSortActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.view.doTask.sort.DtOneSortActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.view.register.RegisterActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.view.publictask.InfoExtraActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.view.textcategory.SelectActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.taskmanager.MypubListActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.managetask.SimpleActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.managetask.MypubDolistActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.managetask.dotask.MyTaskListActivity">
-        </activity>
-        <activity android:name="com.example.kongmin.view.taskDetails.FileContentActivity"
-            android:launchMode="singleTop">
-        </activity>
-        <activity android:name="com.example.kongmin.view.taskList.TaskListActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
-        <!--<activity android:name="com.example.kongmin.view.taskList.TaskListFragment" />-->
     </application>
 
 </manifest>

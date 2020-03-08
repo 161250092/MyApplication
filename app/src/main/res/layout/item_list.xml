@@ -9,5 +9,5 @@
                                         android:layout_marginLeft="16dp"
                                         android:layout_marginRight="16dp"
                                         app:layoutManager="LinearLayoutManager"
-                                        tools:context="com.example.kongmin.view.textcategory.ItemListActivity"
+                                        tools:context="com.example.textannotation.view.incompletePart.ItemListActivity"
                                         tools:listitem="@layout/item_list_content"/>

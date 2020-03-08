@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.example.kongmin.view.mainPage.AvatarImageView
+        <com.example.textannotation.view.mainPage.AvatarImageView
             android:id="@+id/user_logo"
             android:layout_width="110dp"
             android:layout_height="110dp"

@@ -5,7 +5,7 @@
                 android:id="@+id/activity_main"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-    <com.example.kongmin.view.MyScrollerView
+    <com.example.textannotation.view.MyScrollerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -25,6 +25,6 @@
                     android:text="我是一个按钮"/>
         </LinearLayout>
 
-    </com.example.kongmin.view.MyScrollerView>
+    </com.example.textannotation.view.MyScrollerView>
 
 </RelativeLayout>

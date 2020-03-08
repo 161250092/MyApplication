@@ -4,7 +4,7 @@
               android:layout_height="match_parent"
               android:background="@color/white"
               android:orientation="vertical"
-              tools:context="com.example.kongmin.myapplication.com.example.kongmin.view.textcategory.util.GirdDropDownAdapter">
+              tools:context="com.example.textannotation.myapplication.com.example.kongmin.view.textcategory.util.GirdDropDownAdapter">
     <!--做任务条件选择下拉框-->
     <TextView
         android:id="@+id/text"

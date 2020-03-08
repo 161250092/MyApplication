@@ -5,7 +5,7 @@
                 android:layout_height="match_parent"
                 android:background="#efefef"
                 android:paddingTop="5dp"
-                tools:context="com.example.kongmin.view.mainPage.MainActivity" >
+                tools:context="com.example.textannotation.view.mainPage.MainActivity" >
     <LinearLayout
 
             android:layout_width="fill_parent"

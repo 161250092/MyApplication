@@ -4,7 +4,7 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="com.example.kongmin.myapplication.com.example.kongmin.view.AddListActivity"
+             tools:context="com.example.textannotation.myapplication.com.example.kongmin.view.AddListActivity"
              android:id="@+id/message_root">
 <ScrollView android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -202,12 +202,12 @@
                     android:ems="10">
                 <requestFocus />
             </EditText>-->
-            <com.example.kongmin.util.Flowlayout
+            <com.example.textannotation.util.Flowlayout
                     android:id="@+id/tag_layout"
                     android:layout_marginTop="6dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
-            </com.example.kongmin.util.Flowlayout>
+            </com.example.textannotation.util.Flowlayout>
         </LinearLayout>
         <View  android:layout_height="1px"
                android:layout_width="match_parent"
@@ -372,7 +372,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-        <com.example.kongmin.view.SlideBottomLayout
+        <com.example.textannotation.view.SlideBottomLayout
                 android:id="@+id/slideLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -471,7 +471,7 @@
 
             </LinearLayout>
 
-        </com.example.kongmin.view.SlideBottomLayout>
+        </com.example.textannotation.view.SlideBottomLayout>
 
     </RelativeLayout>
 </RelativeLayout>

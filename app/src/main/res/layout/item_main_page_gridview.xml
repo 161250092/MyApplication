@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/selections"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/black"
         android:textSize="18sp"/>
 </LinearLayout>
 

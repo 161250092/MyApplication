@@ -51,9 +51,13 @@
     <string name="cancelTheOne">取消选中</string>
     <string name="no_tasks">暂无任务信息</string>
     <string name="activity_title">众包文本标注平台</string>
-    <string name="large_text">
-        "Material is the metaphor.\n\n"
 
+    <string name="task_list_action_bar"> 任务列表 </string>
+    <string name="my_task_action_bar">我的任务</string>
+    <string name="task_detail_action_bar">任务详情</string>
+
+
+    <string name="large_text">
         "A material metaphor is the unifying theory of a rationalized space and a system of motion."
         "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
         "technologically advanced and open to imagination and magic.\n"

@@ -3,7 +3,7 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent" >
 
-    <com.example.kongmin.util.RevealColorView
+    <com.example.textannotation.util.RevealColorView
             android:id="@+id/reveal"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

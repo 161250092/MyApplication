@@ -52,4 +52,12 @@
     <color name="m_warm_grey">#777777</color>
     <color name="m_item_text">#535353</color>
     <color name="notification">#fbfd87</color>
+
+    <color name="type1">#ef0206</color>
+    <color name="type2">#a7c62a</color>
+    <color name="type3">#00a79f</color>
+    <color name="type4">#f47615</color>
+    <color name="type5">#1bb100</color>
+    <color name="type6">#030386</color>
+
 </resources>

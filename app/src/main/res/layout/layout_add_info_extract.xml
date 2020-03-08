@@ -6,7 +6,7 @@
             android:id="@+id/scrollView"
             android:layout_height="0dp"
             android:layout_weight="1"
-            tools:context="com.example.kongmin.view.publictask.AddListTwoitemsActivity">
+            tools:context="com.example.textannotation.view.publictask.AddListTwoitemsActivity">
          <!--信息抽取发任务界面-->
         <LinearLayout android:layout_width="match_parent"
                       android:layout_height="match_parent"
@@ -133,12 +133,12 @@
                             android:background="@null"
                             android:textSize="18sp"
                             android:ems="10"/>
-                    <com.example.kongmin.util.Flowlayout
+                    <com.example.textannotation.util.Flowlayout
                             android:id="@+id/infotag"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center">
-                    </com.example.kongmin.util.Flowlayout>
+                    </com.example.textannotation.util.Flowlayout>
                 </LinearLayout>
                 <View  android:layout_height="2px"
                        android:layout_width="match_parent"

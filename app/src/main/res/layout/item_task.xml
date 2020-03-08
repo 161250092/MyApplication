@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/selector_message_button">
+
+    <TextView
+        android:layout_marginStart="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="或许很长的标题"
+        android:textColor="@color/black"
+        android:layout_marginTop="10dp"
+        android:ellipsize="marquee"
+        android:id="@+id/title"
+        android:textSize="18sp"/>
+
+    <LinearLayout android:orientation="horizontal"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/typeName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="任务类型"
+             />
+
+        <TextView
+            android:id="@+id/taskcompstatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20%" />
+    </LinearLayout>
+
+
+
+
+    <TextView
+        android:layout_marginStart="15dp"
+        android:id="@+id/description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:layout_marginTop="7dp"
+        android:text="@string/large_text"
+        android:textColor="@color/black"
+        android:textSize="15sp"/>
+
+
+    <LinearLayout
+        android:layout_marginStart="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/viewnum"
+            android:text="213 浏览"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/attendnum"
+            android:layout_marginLeft="10dp"
+            android:text="10 参与者"/>
+
+    </LinearLayout>
+
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/createtime"
+        android:layout_gravity="end"
+        android:layout_marginTop="8dp"
+        android:text="2020.02.01"
+        />
+
+</LinearLayout>

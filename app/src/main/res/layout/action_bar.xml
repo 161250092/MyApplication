@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
-        android:src="@drawable/main_page_icon" />
+        android:src="@drawable/menu_icon" />
 
     <TextView
         android:id="@+id/bar_text"

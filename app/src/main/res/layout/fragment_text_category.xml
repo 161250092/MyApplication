@@ -3,7 +3,7 @@
                     xmlns:tools="http://schemas.android.com/tools"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    tools:context="com.example.kongmin.view.TextCategoryActivity$PlaceholderFragment" >
+                    tools:context="com.example.textannotation.view.TextCategoryActivity$PlaceholderFragment" >
     <ProgressBar
             android:id="@+id/pb"
             android:layout_width="30dp"
@@ -21,14 +21,14 @@
     <View  android:layout_height="1px"
            android:layout_width="match_parent"
            android:background="#d9d9d9" />
-    <com.example.kongmin.util.FlowGroupView
+    <com.example.textannotation.util.FlowGroupView
             android:id="@+id/instancelabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_gravity="top"
             android:layout_marginBottom="5dp">
-    </com.example.kongmin.util.FlowGroupView>
+    </com.example.textannotation.util.FlowGroupView>
     <View  android:layout_height="1px"
            android:layout_width="match_parent"
            android:background="#d9d9d9" />
@@ -45,26 +45,26 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:background="#FFFAFA">
-            <com.example.kongmin.util.FlowGroupView
+            <com.example.textannotation.util.FlowGroupView
                     android:id="@+id/item1label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp">
-            </com.example.kongmin.util.FlowGroupView>
+            </com.example.textannotation.util.FlowGroupView>
             <include
                     android:id="@+id/sample1"
                     layout="@layout/expand_text_item" />
             <View  android:layout_height="15px"
                    android:layout_width="match_parent"
                    android:background="#F5F5F5" />
-            <com.example.kongmin.util.FlowGroupView
+            <com.example.textannotation.util.FlowGroupView
                     android:id="@+id/item2label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp">
-            </com.example.kongmin.util.FlowGroupView>
+            </com.example.textannotation.util.FlowGroupView>
             <include
                     android:id="@+id/sample2"
                     layout="@layout/expand_text_item" />
