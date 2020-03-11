@@ -8,15 +8,14 @@
 
 
     <item
-        android:id="@+id/before"
-        android:icon="@drawable/before_para"
-        android:title=""/>
-
-    <item
         android:id="@+id/next"
         android:icon="@drawable/next_paragraph"
         android:title=""/>
 
+    <item
+        android:id="@+id/pass_task"
+        android:icon="@drawable/end_task1"
+        android:title=""/>
 
     <item
         android:id="@+id/file_list"

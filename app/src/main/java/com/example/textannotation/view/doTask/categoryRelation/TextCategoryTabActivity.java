@@ -237,35 +237,7 @@ public class TextCategoryTabActivity extends AppCompatActivity implements Bottom
             Log.e("ExtractActivity---->", "GET方式请求成功，item2标签--->" + labelname+item2strmap.get(labelname));
         }
 
-        LinearLayout extractlinear = findViewById(R.id.extractlinear);
-        if(typename.equals("dotask")){
-            extractlinear.setVisibility(View.GONE);
-        }else{
-            extractlinear.setVisibility(View.VISIBLE);
-        }
         getFileContent();
-
-        //下载文档按钮
-        downloadextract = (TextView)findViewById(R.id.downloadextract);
-        //是做任务页面还是查看做任务页面
-        if(typename.equals("dotask")){
-            downloadextract.setVisibility(View.GONE);
-        }else{
-            downloadextract.setVisibility(View.VISIBLE);
-            downloadextract.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        CreateText();
-                        //print("写入文件中的内容\n写入文件中的内容");
-                        print(downloadfilecontent.toString());
-                    }catch(Exception e){
-                        e.printStackTrace();
-                    }
-                    Toast.makeText(TextCategoryTabActivity.this,"点击了下载按钮",Toast.LENGTH_LONG).show();
-                }
-            });
-        }
 
 
         mTabIndicator.setViewPager(mViewPager, 0);
@@ -356,33 +328,6 @@ public class TextCategoryTabActivity extends AppCompatActivity implements Bottom
 
     }
 
-    //向已创建的文件中写入数据
-    public void print(String str) {
-        FileWriter fw = null;
-        BufferedWriter bw = null;
-        String datetime = "";
-        try {
-            SimpleDateFormat tempDate = new SimpleDateFormat("yyyy-MM-dd" + " "+"hh:mm:ss");
-            datetime = tempDate.format(new java.util.Date()).toString();
-            fw = new FileWriter(filenameTemp,true);
-            //创建FileWriter对象，用来写入字符流
-            bw = new BufferedWriter(fw); // 将缓冲对文件的输出
-            //String myreadline = datetime + "[]" + str;
-            String myreadline = str;
-            bw.write(myreadline + "\n"); // 写入文件
-            bw.newLine();
-            bw.flush(); // 刷新该流的缓冲
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            try {
-                bw.close();
-                fw.close();
-            } catch (IOException e1) {
-                // TODO Auto-generated catch block
-            }
-        }
-    }
 
     public void initFragment(SerializableMap inststrMap){
         titles.clear();

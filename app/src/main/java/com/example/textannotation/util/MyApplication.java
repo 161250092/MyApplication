@@ -11,7 +11,7 @@ public class MyApplication extends Application {
     public String appVersion = "v1.0";
 
     //当前登录用户
-    private User loginUser = new User();
+    private static User loginUser = new User();
 
     public User geLogintUser(){
         return loginUser;

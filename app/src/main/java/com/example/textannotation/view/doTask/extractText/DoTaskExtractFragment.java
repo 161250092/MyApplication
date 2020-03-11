@@ -18,8 +18,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.textannotation.Constant.Constant;
 import com.example.textannotation.model.ITaskUpload;
+import com.example.textannotation.model.doTask.ITaskFragment;
 import com.example.textannotation.myapplication.R;
+import com.example.textannotation.network.OkHttpUtil;
 import com.example.textannotation.util.threadPool.ThreadPool;
+import com.example.textannotation.view.doTask.ResolveHttpResponse;
 import com.example.textannotation.view.lazyfragment.BaseLazyFragment;
 import com.example.textannotation.util.*;
 
@@ -27,7 +30,12 @@ import android.text.TextPaint;
 import android.text.style.ForegroundColorSpan;
 import android.text.Spanned;
 
+import java.io.IOException;
 import java.util.*;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 
 /**
@@ -37,11 +45,8 @@ import java.util.*;
  * 2018.12.29
  */
 
-public class DoTaskExtractFragment extends BaseLazyFragment implements ITaskUpload {
-    /**
-     * The fragment argument representing the section number for this
-     * fragment.
-     */
+public class DoTaskExtractFragment extends BaseLazyFragment implements ITaskFragment {
+
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     //设置加载动画
@@ -52,15 +57,8 @@ public class DoTaskExtractFragment extends BaseLazyFragment implements ITaskUplo
 
     private LinearLayout fragmentlayout;
 
-
     //段落内容
     private TextView doccontent;
-    //完成本段按钮
-    private TextView completecon;
-    //完成本文档按钮
-    private TextView completedoc;
-    //按钮的LinearLayout
-    private LinearLayout extractlinear;
 
     //和设置标签相关的
     private ArrayList<String> names = new ArrayList<String>();
@@ -74,23 +72,17 @@ public class DoTaskExtractFragment extends BaseLazyFragment implements ITaskUplo
     private String typename;
     private SerializableMap labelMap;
     private Map<String,Integer> hashmap = new LinkedHashMap<>();
-    private int contentid;
-    //段落在文本中的索引
-    private int contentindex;
+
     private String content;
     private int userid;
 
     private int docid;
 
-    private static int sectionnumber;
+    private int pid;
 
     //设置样式的时候用的
     private SpannableStringBuilder spannableString;
-    private Map<Integer,String> hashmapcontent = new HashMap<Integer,String>();
     private Map<Integer,String> hashmaplabel = new LinkedHashMap<Integer,String>();
-
-    //传送过来的段落的状态
-    private String parastatus;
 
     //随机生成的颜色
     private String colorstr;
@@ -172,90 +164,91 @@ public class DoTaskExtractFragment extends BaseLazyFragment implements ITaskUplo
     //设置加载动画
     @Override
     public void loadDataStart() {
-        Log.d(TAG, "loadDataStart");
+       // loadData();
+        getCurrentTask();
+    }
 
-        // 模拟请求数据
-        mHandler.postDelayed(new Runnable() {
+    private void getCurrentTask(){
+
+        mHandler.post(new Runnable() {
             @Override
             public void run() {
-                mData = "这是加载下来的数据";
-                // 一旦获取到数据, 就应该立刻标记数据加载完成
-                mLoadDataFinished = true;
-                if (mViewInflateFinished) {
-                    fragmentlayout.setVisibility(View.VISIBLE);
-                    names.clear();
-                    Bundle bundle =getArguments();
 
-                    sectionnumber = bundle.getInt("fragmentindex");
-                    taskid =  bundle.getInt("taskid");
-                    docid = bundle.getInt("docid");
-                    typename = bundle.getString("type");
-                    //任务标签
-                    labelMap = (SerializableMap)bundle.get("lebelmap");
-                    hashmap = labelMap.getMap();
-                    if(typename.equals("dotask")) {
-                        colors = bundle.getStringArrayList("colors");
-                        colorsMap = (SerializableSortMap) bundle.get("colormap");
-                        colormap = colorsMap.getMap();
-                    }else{
-                        //把文本设置为只读属性
-                        doccontent.setTextColor(Color.BLACK);
-                        doccontent.setEnabled(false);
-                    }
-                    for(String labelname:hashmap.keySet()){
-                        int labelid = hashmap.get(labelname);
-                        //给标签数组赋值
-                        names.add(labelname);
-                        hashmaplabel.put(labelid,labelname);
-                        Log.e("DotaskExtract---->", "GET方式请求成功，labelname+labelid--->" + labelname+labelid);
-                    }
-                    for(int labelid:colormap.keySet()){
-                        Log.e("DotaskExtract---->", "GET方式请求成功，labelname+colormap--->" + labelid+colormap.get(labelid));
-                    }
-                    //文本ID
-                    String contentidstr = "contentid"+sectionnumber;
-                    contentid = bundle.getInt(contentidstr);
-                    Log.e("DotaskExtract---->", "fragment中的contentidstr--->" + contentidstr);
-                    contentindex = bundle.getInt("contentindex"+sectionnumber);
-                    Log.e("DotaskExtract---->", "fragment中的contentindex--->" + contentindex);
-                    content = bundle.getString("content"+sectionnumber);
-                    userid = bundle.getInt("userid");
-                    //段落的状态
-                    parastatus = bundle.getString("parastatus"+sectionnumber);
+                fragmentlayout.setVisibility(View.VISIBLE);
+
+                names.clear();
+
+                Bundle bundle = getArguments();
 
 
-                    colorlist = bundle.getStringArrayList("colorlist");
-                    beginlist = bundle.getIntegerArrayList("beginlist");
-                    endlist = bundle.getIntegerArrayList("endlist");
-                    labelidlist = bundle.getIntegerArrayList("labelidlist");
+                taskid =  bundle.getInt("taskid");
+                docid = bundle.getInt("docid");
+                typename = bundle.getString("type");
 
 
-                    /*mTextView.setText(mData);
-                    mTextView.setText("这是改变后的数据");*/
-                    doccontent.setText(content);
-                    doccontent.setCustomSelectionActionModeCallback(new MyActionModeCallback());
-                    spannableString = new SpannableStringBuilder();
-                    spannableString.append(doccontent.getText().toString());
+                userid = bundle.getInt("userid");
 
-                    if(typename.equals("mypub")){
-                        extractlinear.setVisibility(View.GONE);
-                    }else{
-                        extractlinear.setVisibility(View.VISIBLE);
-                    }
 
-                    //setData();
-                    for (int i = 0; i < names.size(); i++) {
-                        addTextView(names.get(i));
-                    }
+                //任务标签
+                labelMap = (SerializableMap)bundle.get("lebelmap");
+                hashmap = labelMap.getMap();
 
-                    //如果时已完成的，显示标注的信息
-                    if(parastatus.equals("已完成")) {
-                        inittaskextract(colorlist,beginlist,endlist,labelidlist);
-                    }
-                    mPb.setVisibility(View.GONE);
+                colors = bundle.getStringArrayList("colors");
+                colorsMap = (SerializableSortMap) bundle.get("colormap");
+                colormap = colorsMap.getMap();
+
+                for(String labelname:hashmap.keySet()){
+                    int labelid = hashmap.get(labelname);
+                    //给标签数组赋值
+                    names.add(labelname);
+                    hashmaplabel.put(labelid,labelname);
+                    Log.e("DotaskExtract---->", "GET方式请求成功，labelname+labelid--->" + labelname+labelid);
                 }
+
+                String param = "?docId="+docid+"&taskId="+taskid+"&userId="+userid;
+                Log.e("Extract",Constant.getNextExtractTask + param);
+                OkHttpUtil.sendGetRequest(Constant.getNextExtractTask + param, new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String result = response.body().string();
+                        Log.e("extract",result);
+                        JSONObject jsonObject = JSONObject.parseObject(result);
+                        JSONObject  data = jsonObject.getJSONObject("data");
+                        pid = data.getInteger("pid");
+                        content = data.getString("paracontent");
+                        initView();
+                    }
+                });
             }
-        }, 500);
+        });
+
+    }
+
+
+
+
+    public void initView(){
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+
+                doccontent.setText(content);
+                doccontent.setCustomSelectionActionModeCallback(new MyActionModeCallback());
+                spannableString = new SpannableStringBuilder();
+                spannableString.append(doccontent.getText().toString());
+
+                for (int i = 0; i < names.size(); i++) {
+                    addTextView(names.get(i));
+                }
+                mPb.setVisibility(View.GONE);
+            }
+        });
+
 
     }
 
@@ -290,7 +283,9 @@ public class DoTaskExtractFragment extends BaseLazyFragment implements ITaskUplo
         selectionEnd = doccontent.getSelectionEnd();
 
         String txt = doccontent.getText().toString();
-        substring = txt.substring(selectionStart, selectionEnd);
+        Log.e("text",txt);
+
+
         dotaskcolor = colormap.get(labelid);
 
         ClickableSpan clickableSpan = new ClickableSpan() {
@@ -308,19 +303,18 @@ public class DoTaskExtractFragment extends BaseLazyFragment implements ITaskUplo
 
             @Override
             public void onClick(View view) {
-                //Toast.makeText(getContext(), "请不要点我+substring="+substring, Toast.LENGTH_SHORT).show();
-                //spannableString.setSpan(clickableSpannoline, selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
             }
         };
+
         spannableString.setSpan(clickableSpan, selectionStart, selectionEnd, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
         //spannableString.removeSpan(clickableSpan);
         doccontent.setText(spannableString);
+        Log.e("text",spannableString.toString());
         doccontent.setMovementMethod(LinkMovementMethod.getInstance());
         //给选中的标签设置颜色
         for(int i=0;i<labellist.size();i++){
             TextView textView = labellist.get(i);
             if(textView.getText().toString().equals(label)){
-                //textView.setBackgroundResource(R.drawable.red_sold_round_sel);
                 textView.setBackgroundColor(Color.parseColor(dotaskcolor));
                 textView.setTextColor(Color.WHITE);
                 Log.e("params---->", "Post方式请求成功，dotaskcolor--->" + dotaskcolor);
@@ -330,6 +324,8 @@ public class DoTaskExtractFragment extends BaseLazyFragment implements ITaskUplo
         lid = labelid;
         ThreadPool.fixedThreadPool().submit(runnable);
     }
+
+
     //页面加载时就初始化已经做过的任务
     public void inittaskextract(ArrayList<String> colors,ArrayList<Integer> index_begins,ArrayList<Integer> index_ends,final ArrayList<Integer> label_ids){
            //截取选中的文本
@@ -410,17 +406,12 @@ public class DoTaskExtractFragment extends BaseLazyFragment implements ITaskUplo
     @Override
     protected void findViewById(View view) {
          fragmentlayout = (LinearLayout)view.findViewById(R.id.section_label);
-         //btnbutton = (LinearLayout)view.findViewById(R.id.btnbutton);
-         //存放content的textview
+
          doccontent = (TextView) view.findViewById(R.id.doccontent);
-       //  completecon = (TextView) view.findViewById(R.id.completecon);
-       //  completedoc = (TextView) view.findViewById(R.id.completedoc);
-         extractlinear = (LinearLayout) view.findViewById(R.id.extractlinear);
+
          //和设置标签相关的
          labelview = (FlowGroupView)view.findViewById(R.id.flowgroupview2);
 
-        // 获取整个应用的Application对象
-        // 在不同的Activity中获取的对象是同一个
         mApplication = (MyApplication)getActivity().getApplication();
         userId = mApplication.getLoginUserId();
         Log.e("params---->", "Post方式请求成功，userID--->" + userId);
@@ -439,88 +430,172 @@ public class DoTaskExtractFragment extends BaseLazyFragment implements ITaskUplo
         @Override
         public void run() {
             String requestUrl = Constant.extradotaskUrl;
-            String params ="?taskId="+taskid+"&docId="+docid+"&paraId="+contentid+"&labelId="+lid+"&indexBegin="+selectionStart+"&indexEnd="+selectionEnd+"&userId="+userId;
+            String params ="?taskId="+taskid+"&docId="+docid+"&paraId="+pid+"&labelId="+lid+"&indexBegin="+selectionStart+"&indexEnd="+selectionEnd+"&userId="+userId;
             Log.e("params---->", "Post方式请求成功，params--->" + params);
-            Log.e("taskid---->", "Post方式请求成功，addtaskresult--->" + taskid);
+
             String result = HttpUtil.requestPost(requestUrl,params);
-            Log.e("listview---->", "Post方式请求成功，result--->" + result);
+            ResolveHttpResponse.showHttpResponse(result,getActivity());
         }
     };
 
+    private void updateContent() {
+        // sleep 1 second in case loading info disappear too fast
+        try {
+            Thread.sleep(800);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-    private Runnable pararunnable = new Runnable() {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                initLabelText();
+                ((DoTaskExtractActivity)getActivity()).hideLoading();
+                doccontent.setText(content);
+                spannableString = new SpannableStringBuilder();
+                spannableString.append(doccontent.getText().toString());
+            }
+        });
+    }
+
+
+
+    private void initLabelText(){
+        for (TextView textView:labellist) {
+            initEvents(textView);
+            textView.setBackgroundResource(R.drawable.line_rect_huise);
+            textView.setTextColor(Color.BLACK);
+        }
+    }
+
+    private Runnable passCurrentTaskParagraph = new Runnable(){
+
         @Override
         public void run() {
-            // TODO: http request.
-            String requestUrl = Constant.extradtparaUrl;;
-            //要传递的参数
-            String params ="?taskId="+taskid+"&docId="+docid+"&paraId="+contentid+"&userId="+userId;
-            Log.e("params---->", "Post方式请求成功，pararunnable--->" + params);
-            Log.e("taskid---->", "Post方式请求成功，pararunnable--->" + taskid);
-            String result = HttpUtil.requestPost(requestUrl,params);
-            Log.e("listview---->", "Post方式请求成功，pararunnable--->" + result);
-            //等待请求结束
-            JSONObject jsonObject= (JSONObject) JSON.parse(result);
-            Integer data = (Integer) jsonObject.getInteger("status");
-            if(data.toString().equals("0")){
-                String loginres = jsonObject.getString("msg");
-                Looper.prepare();
-                Toast.makeText(getContext(),loginres,Toast.LENGTH_LONG).show();
-                Looper.loop();
-            }else{
-                String loginres = jsonObject.getString("msg");
-                Looper.prepare();
-                Toast.makeText(getContext(),loginres,Toast.LENGTH_LONG).show();
-                Looper.loop();
-            }
+            String requestUrl = Constant.passCurrentExtractTask;
+            String params = "?docId="+docid+"&paraId="+pid+"&taskId="+taskid+"&userId="+userId;
+            String result = HttpUtil.requestGet(requestUrl,params);
+            Log.e("OneCategory",requestUrl+params);
+            Log.e("OneCategory", result);
+            JSONObject jsonObject = JSONObject.parseObject(result);
+            JSONObject  data = jsonObject.getJSONObject("data");
+            pid = data.getInteger("pid");
+            content = data.getString("paracontent");
+            updateContent();
         }
     };
 
-    private Runnable docrunnable = new Runnable() {
+
+    private Runnable getNextTaskParagraph = new Runnable(){
         @Override
         public void run() {
-            // TODO: http request.
-            String requestUrl = Constant.extradtdocUrl;
-            //要传递的参数
-            String params ="?taskId="+taskid+"&docId="+docid+"&userId="+userId;
-            Log.e("params---->", "Post方式请求成功，docrunnable--->" + params);
-            Log.e("taskid---->", "Post方式请求成功，docrunnable--->" + taskid);
-            String result = HttpUtil.requestPost(requestUrl,params);
-            Log.e("listview---->", "Post方式请求成功，docrunnable--->" + result);
-            //等待请求结束
-            JSONObject jsonObject= (JSONObject) JSON.parse(result);
-            Integer data = (Integer) jsonObject.getInteger("status");
-            if(data.toString().equals("0")){
-                String loginres = jsonObject.getString("msg");
-                Looper.prepare();
-                Toast.makeText(getContext(),loginres,Toast.LENGTH_LONG).show();
-                Looper.loop();
-            }else{
-                //上传的文件不符合要求
-                //4011,"msg":"该文件你的段落还没有全部完成"
-                String loginres = jsonObject.getString("msg");
-                Looper.prepare();
-                Toast.makeText(getContext(),loginres,Toast.LENGTH_LONG).show();
-                Looper.loop();
-            }
+            final String requestUrl = Constant.getNextExtractTask;
+            String params = "?docId="+docid+"&taskId="+taskid+"&userId="+userId;
+            OkHttpUtil.sendGetRequest(requestUrl + params, new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String result = response.body().string();
+                    JSONObject jsonObject = JSONObject.parseObject(result);
+                    JSONObject  data = jsonObject.getJSONObject("data");
+                    if (data == null)
+                        return;
+
+                    pid = data.getInteger("pid");
+                    content = data.getString("paracontent");
+                    updateContent();
+                }
+            });
         }
     };
+
+
+
+
+
 
     @Override
-    public void saveIns() {
+    public void saveAnnotationInfo() {
         ThreadPool.fixedThreadPool().submit(runnable);
     }
 
     @Override
-    public void completeCon() {
-        ThreadPool.fixedThreadPool().submit(pararunnable);
+    public void getCurrentTaskParagraph() {
 
     }
 
     @Override
-    public void completeDoc() {
-        ThreadPool.fixedThreadPool().submit(docrunnable);
+    public void doNextTask() {
+        ThreadPool.fixedThreadPool().submit(getNextTaskParagraph);
     }
+
+    @Override
+    public void passCurrentTask() {
+        ThreadPool.fixedThreadPool().submit(passCurrentTaskParagraph);
+    }
+
+    private String errorInfo = "";
+    private Runnable submitErr = new Runnable() {
+
+        @Override
+        public void run() {
+            final String requestUrl = Constant.submitErrorUrl;
+            String params = "?docId="+docid+"&paraId="+pid+"&msg="+errorInfo+"&taskId="+taskid+"&userId="+userId;
+            String result = HttpUtil.requestGet(requestUrl,params);
+
+            OkHttpUtil.sendGetRequest(requestUrl + params, new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    Log.e("OneCategory", response.body().string());
+                }
+            });
+
+        }
+    };
+
+    @Override
+    public void submitErrors(String text) {
+        errorInfo = text;
+        ThreadPool.fixedThreadPool().submit(submitErr);
+    }
+
+    @Override
+    public void compareOthersTextAnnotation() {
+        ThreadPool.fixedThreadPool().submit(compareOthersLabels);
+    }
+    private Runnable compareOthersLabels = new Runnable() {
+
+        @Override
+        public void run() {
+
+            String requestUrl = Constant.compareWithOtherExtractAnnotation;
+            String params = "?docId="+docid+"&taskId="+taskid+"&paraId="+pid+"&userId="+userId;
+            Log.e("OneCategory",requestUrl+params);
+            String result = HttpUtil.requestPost(requestUrl,params);
+            Log.e("OneCategory", result);
+            showCompareInfo(result);
+        }
+    };
+
+    public void showCompareInfo( final String msg){
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                ((DoTaskExtractActivity)getActivity()).showOthersAnnotation(msg);
+            }
+        });
+    }
+
+
 
 
     private class MyActionModeCallback implements ActionMode.Callback {

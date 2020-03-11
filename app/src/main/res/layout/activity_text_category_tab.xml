@@ -12,7 +12,8 @@
         android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_above="@+id/tools">
 
         <com.example.textannotation.view.commonVIew.MyTabIndicator
             android:id="@+id/mTabIndicator"
@@ -41,7 +42,7 @@
         android:layout_height="wrap_content"
         android:background="?android:attr/windowBackground"
         android:layout_alignParentBottom="true"
-        app:menu="@menu/menu_tool"
+        app:menu="@menu/new_tools"
         />
 
 </RelativeLayout>

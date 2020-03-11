@@ -6,6 +6,14 @@
               android:layout_height="match_parent">
 
 
+    <!--发任务界面-->
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+         android:background="@color/mask_color"/>
+
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -23,8 +31,7 @@
             android:id="@+id/empty_1"
             android:layout_width="40dp"
             android:layout_height="20dp"
-            android:layout_toRightOf="@id/user_logo"
-             />
+            android:layout_toRightOf="@id/user_logo" />
 
         <TextView
             android:id="@+id/user_account"
@@ -44,8 +51,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/user_account"
-            android:layout_marginLeft="29dp"
-            android:layout_marginTop="18dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="11dp"
             android:layout_toRightOf="@+id/user_logo"
             android:hint="ID "
             android:textSize="18sp" />
@@ -57,17 +64,22 @@
             android:layout_marginLeft="45dp"
             android:layout_marginTop="13dp"
             android:layout_toRightOf="@+id/user_account"
+            android:id="@+id/camera"
             android:src="@drawable/camera1" />
 
+        <TextView
+            android:id="@+id/reliability"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/user_id"
+
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="11dp"
+            android:layout_toRightOf="@+id/user_logo"
+
+            android:hint="置信度:90%" />
+
     </RelativeLayout>
-    <!--发任务界面-->
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-         android:background="@color/mask_color"/>
-
-
 
     <LinearLayout
         android:layout_width="wrap_content"

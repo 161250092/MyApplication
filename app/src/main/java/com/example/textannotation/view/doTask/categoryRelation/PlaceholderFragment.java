@@ -62,12 +62,8 @@ public class PlaceholderFragment extends BaseLazyFragment implements ITaskUpload
     private ExpandableTextView item2content;
     //标记label按钮
     private TextView labelitembtn;
-    //完成一段instance的按钮
-    private TextView savebtn;
-    private TextView completeinst;
-    private TextView completedoc;
-    //按钮的LinearLayout
-    private LinearLayout extractlinear;
+
+
 
 
 
@@ -346,7 +342,6 @@ public class PlaceholderFragment extends BaseLazyFragment implements ITaskUpload
                 for(int i=0;i<checked.size();i++){
                     selectlabel+=checked.get(i);
                 }
-                initData(savebtn,selectlabel);
             }
         });
     }
@@ -459,11 +454,6 @@ public class PlaceholderFragment extends BaseLazyFragment implements ITaskUpload
                         Log.e("DotaskExtract---->", "GET方式请求成功，issorted.equals(\"true\")--->" + "标注了排序的");
                     }
 
-                    if(typename.equals("mypub")){
-                        extractlinear.setVisibility(View.GONE);
-                    }else{
-                        extractlinear.setVisibility(View.VISIBLE);
-                    }
 
 
                     for (int i = 0; i < instancelabels.size(); i++) {
@@ -533,12 +523,7 @@ public class PlaceholderFragment extends BaseLazyFragment implements ITaskUpload
 
         //标记item按钮
         labelitembtn = (TextView) view.findViewById(R.id.labelitem);
-        //完成按钮
-        //completebtn = (TextView) view.findViewById(R.id.completeinst);
-        savebtn = (TextView) view.findViewById(R.id.saveinst);
-        completeinst = (TextView) view.findViewById(R.id.completeinst);
-        completedoc = (TextView) view.findViewById(R.id.completedoc);
-        extractlinear = (LinearLayout) view.findViewById(R.id.extractlinear);
+
 
         // 获取整个应用的Application对象
         // 在不同的Activity中获取的对象是同一个
@@ -546,39 +531,6 @@ public class PlaceholderFragment extends BaseLazyFragment implements ITaskUpload
         userId = mApplication.getLoginUserId();
         Log.e("params---->", "Post方式请求成功，userID--->" + userId);
 
-        savebtn.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                //Toast.makeText(getContext(), "选中了"+selectlabel+" ", Toast.LENGTH_SHORT).show();
-                //发送做任务的请求
-                new Thread(runnable3).start();
-            }
-        });
-
-        //完成一段
-        completeinst.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                //Toast.makeText(getContext(), "选中了"+selectlabel+" ", Toast.LENGTH_SHORT).show();
-                //发送做任务的请求
-                new Thread(completeinstrun).start();
-            }
-        });
-        //完成整篇文档
-        completedoc.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                //Toast.makeText(getContext(), "选中了"+selectlabel+" ", Toast.LENGTH_SHORT).show();
-                //发送做任务的请求
-                new Thread(completedocrun).start();
-            }
-        });
 
         mPb = view.findViewById(R.id.pb);
         if (mLoadDataFinished) {

@@ -24,6 +24,10 @@ import com.example.textannotation.network.OkHttpUtil;
 import com.example.textannotation.view.commonVIew.MyTabIndicator;
 import com.example.textannotation.util.*;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.impl.BottomListPopupView;
+import com.lxj.xpopup.impl.LoadingPopupView;
+import com.lxj.xpopup.interfaces.OnConfirmListener;
+import com.lxj.xpopup.interfaces.OnInputConfirmListener;
 import com.lxj.xpopup.interfaces.OnSelectListener;
 
 import java.io.IOException;
@@ -159,25 +163,13 @@ public class OneCategoryActivity extends AppCompatActivity implements BottomNavi
         }
 
         getFileContent();
-
         mTabIndicator.setViewPager(mViewPager, 0);
-        mTabIndicator.setOnPageChangeListener(new MyTabIndicator.PageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-            }
-            @Override
-            public void onPageSelected(int position) {
-
-            }
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
+        loadingPopupView = new XPopup.Builder(this).asLoading("loading");
+        initBottomListPopupView();
     }
 
+    //老版本，获取所有TASK 信息
     public void initFragment(SerializableMap inststrMap){
         titles.clear();
         fragment_list.clear();
@@ -214,7 +206,6 @@ public class OneCategoryActivity extends AppCompatActivity implements BottomNavi
                 Log.e("DotaskExtract---->", "进来未排序");
             }
 
-
             bundle.putIntegerArrayList("seledinstid"+i,seledparalabelid);
 
             bundle.putString("parastatus"+ i, parastatus.get(i));
@@ -230,6 +221,28 @@ public class OneCategoryActivity extends AppCompatActivity implements BottomNavi
         mViewPager.setAdapter(mOneCategoryAdapter);
         mTabIndicator.setTitles(titles);
     }
+
+    //新版本， 只加载一个FRAGMENT
+    public void initFragment(){
+        titles.clear();
+        fragment_list.clear();
+        titles.add("常规任务");
+        OneCategoryFragment f1 = OneCategoryFragment.newInstance(0);
+        fragment_list.add(f1);
+        Bundle bundle = new Bundle();
+        //传递lebel数据
+        bundle.putInt("taskid", taskid);
+        bundle.putInt("docid", docId);
+        bundle.putInt("userid",userId);
+        bundle.putSerializable("lebelmap",inststrMap);
+        fragment_list.get(0).setArguments(bundle);
+
+        mOneCategoryAdapter = new OneCategoryAdapter(getSupportFragmentManager(),fragment_list);
+        mOneCategoryAdapter.notifyDataSetChanged();
+        mViewPager.setAdapter(mOneCategoryAdapter);
+        mTabIndicator.setTitles(titles);
+    }
+
 
     public void getFileContent(){
         String requestUrl = Constant.classifyfileUrl;
@@ -320,46 +333,79 @@ public class OneCategoryActivity extends AppCompatActivity implements BottomNavi
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        initFragment(inststrMap);
+                       // initFragment(inststrMap);
+                        initFragment();
                     }
                 });
 
             }
         });
     }
+
     private void toastInfo(final String mgs){
         Toast.makeText(this,mgs,Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()){
 
+
+    private void submitError( ){
+        new XPopup.Builder(this).asInputConfirm("提交错误信息","具体信息", new OnInputConfirmListener() {
+            @Override
+            public void onConfirm(String text) {
+                int fragmentIndex = mViewPager.getCurrentItem();
+                OneCategoryFragment currentFragment  = (OneCategoryFragment)mOneCategoryAdapter.getItem(fragmentIndex);
+                currentFragment.submitErrors(text);
+            }
+        }).show();
+    }
+
+
+
+
+    private void getOthersAnnotation(){
+        int fragmentIndex = mViewPager.getCurrentItem();
+        OneCategoryFragment currentFragment  = (OneCategoryFragment)mOneCategoryAdapter.getItem(fragmentIndex);
+        currentFragment.compareOthersTextAnnotation();
+    }
+
+    public void showOthersAnnotation(String msg){
+        new XPopup.Builder(this).asConfirm("同任务比较", msg, new OnConfirmListener() {
+        @Override
+        public void onConfirm() {
+        }
+        }).show();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem){
+        switch (menuItem.getItemId()) {
             case R.id.upload_paragraph: {
                 int fragmentIndex = mViewPager.getCurrentItem();
-                Log.e("mwx",fragmentIndex+"");
-                OneCategoryFragment currentFragment  = (OneCategoryFragment)mOneCategoryAdapter.getItem(fragmentIndex);
-                currentFragment.saveIns();
-                return  true;
-            }
-
-            case R.id.before: {
-                int fragmentIndex = mViewPager.getCurrentItem();
-                fragmentIndex =  (fragmentIndex == 0) ? fragment_list.size() - 1 : fragmentIndex - 1 ;
-                mViewPager.setCurrentItem(fragmentIndex);
-                return false;
+                Log.e("mwx", fragmentIndex + "");
+                OneCategoryFragment currentFragment = (OneCategoryFragment) mOneCategoryAdapter.getItem(fragmentIndex);
+                currentFragment.saveAnnotationInfo();
+                return true;
             }
 
             case R.id.next: {
                 int fragmentIndex = mViewPager.getCurrentItem();
-                fragmentIndex = (fragmentIndex + 1) % fragment_list.size();
-                mViewPager.setCurrentItem(fragmentIndex);
+                OneCategoryFragment currentFragment  = (OneCategoryFragment)mOneCategoryAdapter.getItem(fragmentIndex);
+                showLoading("获取下一个任务");
+                currentFragment.doNextTask();
+                return false;
+            }
+
+            case R.id.pass_task: {
+                int fragmentIndex = mViewPager.getCurrentItem();
+                OneCategoryFragment currentFragment  = (OneCategoryFragment)mOneCategoryAdapter.getItem(fragmentIndex);
+                showLoading("跳过当前任务");
+                currentFragment.passCurrentTask();
                 return false;
             }
 
             case R.id.file_list:{
                 new XPopup.Builder(this)
-                        .asCenterList("选择文件", mFileNames,
+                        .asBottomList("选择文件", mFileNames,
                                 new OnSelectListener() {
                                     @Override
                                     public void onSelect(int position, String text) {
@@ -373,47 +419,49 @@ public class OneCategoryActivity extends AppCompatActivity implements BottomNavi
                 return false;
             }
 
-            case R.id.settings:{
 
-                new XPopup.Builder(this)
-                        .asCenterList("设置",new String[]{"全部","待完成","提交错误信息","与其他人比较"} ,
-                                new OnSelectListener() {
-                                    @Override
-                                    public void onSelect(int position, String text) {
-                                        if (position == 0) {
-                                            docStatus = status[0];
-                                            Toast.makeText(OneCategoryActivity.this, "显示全部任务",Toast.LENGTH_SHORT).show();
-                                            getFileContent();
-                                        }
-
-                                        else if (position == 1){
-                                            docStatus = status[1];
-                                            Toast.makeText(OneCategoryActivity.this, "只显示未完成任务"+text,Toast.LENGTH_SHORT).show();
-                                            getFileContent();
-                                        }
-
-                                        else if (position == 2) {
-                                            int fragmentIndex = mViewPager.getCurrentItem();
-                                            OneCategoryFragment currentFragment  = (OneCategoryFragment)mOneCategoryAdapter.getItem(fragmentIndex);
-                                            currentFragment.completeCon();
-
-                                        } else{
-                                            int fragmentIndex = mViewPager.getCurrentItem();
-                                            OneCategoryFragment currentFragment  = (OneCategoryFragment)mOneCategoryAdapter.getItem(fragmentIndex);
-                                            currentFragment.completeDoc();
-                                        }
-                                    }
-                                })
-                        .show();
-
-
+            case R.id.settings :{
+                settingView.show();
                 return false;
             }
 
+
         }
 
-        return true;
+        return  true;
     }
+
+    private LoadingPopupView loadingPopupView;
+    public void showLoading(String msg){
+        loadingPopupView.setTitle(msg);
+        loadingPopupView.show();
+    }
+
+    public void hideLoading(){
+        loadingPopupView.dismiss();
+    }
+
+
+    private BottomListPopupView settingView;
+    private void  initBottomListPopupView(){
+        settingView = new XPopup.Builder(this)
+                       .asBottomList("设置", new String[]{"提交错误信息", "与其他人比较"}, new OnSelectListener() {
+                           @Override
+                           public void onSelect(int position, String text) {
+                               switch (position){
+                                   case 0:
+                                       submitError();
+                                       break;
+                                   case 1:
+                                       getOthersAnnotation();
+                                       break;
+                               }
+                           }
+                       });
+    }
+
+
+
 
 
 }

@@ -1,17 +1,15 @@
 package com.example.textannotation.view.doTask.extractText;
 
 import android.content.Intent;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.*;
-import butterknife.ButterKnife;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -19,19 +17,28 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.textannotation.myapplication.R;
 import com.example.textannotation.network.OkHttpUtil;
 import com.example.textannotation.network.Url;
-import com.example.textannotation.util.*;
+import com.example.textannotation.util.MyApplication;
+import com.example.textannotation.util.SerializableMap;
+import com.example.textannotation.util.SerializableSortMap;
 import com.example.textannotation.view.commonVIew.MyTabIndicator;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.impl.BottomListPopupView;
+import com.lxj.xpopup.impl.LoadingPopupView;
+import com.lxj.xpopup.interfaces.OnConfirmListener;
+import com.lxj.xpopup.interfaces.OnInputConfirmListener;
 import com.lxj.xpopup.interfaces.OnSelectListener;
 
-import java.util.*;
-
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.annotation.SuppressLint;
+import butterknife.ButterKnife;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 /**
  *
  * 信息抽取做任务界面
@@ -43,9 +50,7 @@ public class DoTaskExtractActivity extends AppCompatActivity implements BottomNa
 
     private DoTaskExtractAdapter mDoTaskExtractAdapter;
 
-
     private ViewPager mViewPager;
-
     //导航栏
     private MyTabIndicator mTabIndicator;
 
@@ -80,17 +85,11 @@ public class DoTaskExtractActivity extends AppCompatActivity implements BottomNa
 
     private String[] mLabelNames;
 
-    //选中的fileID
-    private int btnfileid = -1;
-    //选中的文件状态
-    private String filestatus="";
     //某一个段落的状态
     private String parastatusstr;
     private List<String> parastatus= new ArrayList<String>();
 
     private String status[] = {"全部", "进行中"};
-
-
     //任务ID
     private int taskid;
     //是做任务页面还是查看做任务页面
@@ -98,32 +97,8 @@ public class DoTaskExtractActivity extends AppCompatActivity implements BottomNa
     private int docId;
     //文件状态默认是全部
     private String docStatus = "全部";
-    //todo 设置userId
+
     private int userId;
-
-    //已经标注了的标签
-    private ArrayList<Integer> index_begins = new ArrayList<Integer>();
-
-    private ArrayList<Integer> index_ends = new ArrayList<Integer>();
-
-    private ArrayList<Integer> label_ids = new ArrayList<Integer>();
-
-    private int index_begin;
-    private int index_end;
-    private int label_id;
-
-    private TextView downloadextract;
-
-    private String filePath = "/sdcard/xinjian/";
-
-    private String filenameTemp = filePath+ "信息抽取"+ ".txt";
-
-    private StringBuffer downloadfilecontent = new StringBuffer();
-    private String singlelinecontent;
-
-    private String downloadfilename;
-    private String downloadlabelname;
-    private String downloadcontent;
 
     private Map<Integer,String> downloadlabel = new LinkedHashMap<Integer,String>();
 
@@ -139,6 +114,85 @@ public class DoTaskExtractActivity extends AppCompatActivity implements BottomNa
     private HashMap<Integer,ArrayList<Integer>> endhashMap = new HashMap<>();
     private HashMap<Integer,ArrayList<Integer>> labelidhashMap = new HashMap<>();
 
+    private LoadingPopupView loadingPopupView;
+    public void showLoading(String msg){
+        loadingPopupView.setTitle(msg);
+        loadingPopupView.show();
+    }
+
+    public void hideLoading(){
+        loadingPopupView.dismiss();
+    }
+
+    //显示匹配确认框
+    public void showConfirmView(String selectedMsg,final DoTaskExtractFragment currentFragment){
+
+        new XPopup.Builder(this).asConfirm("选中内容",selectedMsg, new OnConfirmListener() {
+            @Override
+            public void onConfirm() {
+                showLabelSelections(currentFragment);
+            }
+        }).show();
+    }
+    //显示标签选项
+    public void showLabelSelections(final DoTaskExtractFragment currentFragment){
+
+        new XPopup.Builder(DoTaskExtractActivity.this).asCenterList("请在下列标签选择", mLabelNames,
+                new OnSelectListener() {
+                    @Override
+                    public void onSelect(int position, String text) {
+                        String  labelName = mLabelNames[position];
+                        int labelId = inststrmap.get(labelName);
+                        currentFragment.addTag(labelId,labelName);
+                    }
+                }).show();
+    }
+
+
+    private BottomListPopupView settingView;
+    private void  initBottomListPopupView(){
+        settingView = new XPopup.Builder(this)
+                .asBottomList("设置", new String[]{"提交错误信息", "与其他人比较"}, new OnSelectListener() {
+                    @Override
+                    public void onSelect(int position, String text) {
+                        switch (position){
+                            case 0:
+                                submitError();
+                                break;
+                            case 1:
+                                getOthersAnnotation();
+                                break;
+                        }
+                    }
+                });
+    }
+
+    private void submitError( ){
+        new XPopup.Builder(this).asInputConfirm("提交错误信息","具体信息", new OnInputConfirmListener() {
+            @Override
+            public void onConfirm(String text) {
+                int fragmentIndex = mViewPager.getCurrentItem();
+                DoTaskExtractFragment currentFragment  = (DoTaskExtractFragment)mDoTaskExtractAdapter.getItem(fragmentIndex);
+                currentFragment.submitErrors(text);
+            }
+        }).show();
+    }
+
+    private void getOthersAnnotation(){
+        int fragmentIndex = mViewPager.getCurrentItem();
+        DoTaskExtractFragment currentFragment  = (DoTaskExtractFragment)mDoTaskExtractAdapter.getItem(fragmentIndex);
+        currentFragment.compareOthersTextAnnotation();
+    }
+
+    public void showOthersAnnotation(String msg){
+        new XPopup.Builder(this).asConfirm("同任务比较", msg, new OnConfirmListener() {
+            @Override
+            public void onConfirm() {
+            }
+        }).show();
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,9 +200,6 @@ public class DoTaskExtractActivity extends AppCompatActivity implements BottomNa
         if (getSupportActionBar() != null){
             getSupportActionBar().hide();
         }
-        //获取读写权限
-        requestReadExternalPermission();
-        requestWriteExternalPermission();
 
         mTabIndicator = (MyTabIndicator) findViewById(R.id.mTabIndicator);
         mViewPager = (ViewPager) findViewById(R.id.mViewPager);
@@ -175,7 +226,6 @@ public class DoTaskExtractActivity extends AppCompatActivity implements BottomNa
         mFileIds = fileid.toArray(new Integer[fileid.size()]);
 
         docId = fileid.get(0);
-        downloadfilename = filename.get(0);
         //传送过来的做任务的标签内容
         inststrMap = (SerializableMap) tdbundle.get("instlabel");
         inststrmap = inststrMap.getMap();
@@ -193,61 +243,48 @@ public class DoTaskExtractActivity extends AppCompatActivity implements BottomNa
         }
 
         getFileContent();
-
         mTabIndicator.setViewPager(mViewPager, 0);
-        mTabIndicator.setOnPageChangeListener(new MyTabIndicator.PageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.tools);
+        navigation.setOnNavigationItemSelectedListener(this);
 
-            }
-            @Override
-            public void onPageSelected(int position) {
+        loadingPopupView = new XPopup.Builder(this).asLoading("loading");
+        initBottomListPopupView();
 
-            }
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
     }
 
+    //新版本初始化
+    public void initFragment(){
 
+        titles.clear();
+        fragment_list.clear();
 
-    @SuppressLint("NewApi")
-    private void requestReadExternalPermission() {
-        if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            Log.d("DotaskExtract---->", "READ permission IS NOT granted...");
-            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
-        } else {
-            Log.d("DotaskExtract---->", "READ permission is granted...");
-        }
+        titles.add("当前任务");
+        DoTaskExtractFragment f1 = DoTaskExtractFragment.newInstance(0);
+        fragment_list.add(f1);
+        Bundle bundle = new Bundle();
+        //传递数据
+        bundle.putInt("taskid", taskid);
+        bundle.putInt("docid", docId);
+        //是做任务页面还是查看做任务页面
+        bundle.putString("type",typename);
+
+        bundle.putSerializable("lebelmap", inststrMap);
+        bundle.putSerializable("colormap",colorsMap);
+        bundle.putStringArrayList("colors",colors);
+
+        bundle.putInt("userid", userId);
+        fragment_list.get(0).setArguments(bundle);
+        Log.e("mwx","3");
+
+        mDoTaskExtractAdapter = new DoTaskExtractAdapter(getSupportFragmentManager(),fragment_list);
+        mDoTaskExtractAdapter.notifyDataSetChanged();
+        mViewPager.setAdapter(mDoTaskExtractAdapter);
+        mTabIndicator.setTitles(titles);
+
+        Log.e("mwx","4");
     }
 
-    @SuppressLint("NewApi")
-    private void requestWriteExternalPermission() {
-        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            Log.d("DotaskExtract---->", "WRITE permission IS NOT granted...");
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
-        } else {
-            Log.d("DotaskExtract---->", "WRITE permission is granted...");
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == 0){
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.e("DotaskExtract---->","获取到了权限");
-            } else{
-                // 没有获取到权限，做特殊处理
-                Log.e("DotaskExtract---->","没有获取到权限");
-                Toast.makeText(DoTaskExtractActivity.this,"没有获取读取手机权限，请到应用中心手动打开该权限",Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-
+    //老版本初始化
     public void initFragment(SerializableMap inststrMap){
         titles.clear();
         fragment_list.clear();
@@ -317,6 +354,7 @@ public class DoTaskExtractActivity extends AppCompatActivity implements BottomNa
                 JSONObject jsonObject = (JSONObject) JSON.parse(temp);
 
                 JSONArray jsonArray = (JSONArray)jsonObject.get("data");
+
                 fragmentsize = jsonArray.size();
                 //清空content
                 contentids.clear();
@@ -346,75 +384,22 @@ public class DoTaskExtractActivity extends AppCompatActivity implements BottomNa
                             parastatus.add(parastatusstr);
                             Log.e("DotaskExtract---->", "activity中的contentparastatus-->" + parastatusstr);
                         }else{
-                            //不是已完成任务的状态就是空
                             parastatus.add("");
                         }
 
-                        //已经做了的部分
-                        JSONArray alreadyDone = (JSONArray)job.get("alreadyDone");
-
-                        ArrayList<String> colorlist = new ArrayList<String>();
-                        ArrayList<Integer> beginlist = new ArrayList<Integer>();
-                        ArrayList<Integer> endlist = new ArrayList<Integer>();
-                        ArrayList<Integer> labelidlist = new ArrayList<Integer>();
-                        if(alreadyDone!=null && alreadyDone.size()>0) {
-                            for (int j = 0; j < alreadyDone.size(); j++) {
-                                //遍历jsonarray数组，把每一个对象转成json对象
-                                JSONObject done = alreadyDone.getJSONObject(j);
-                                //得到每个对象中的属性值
-                                if (done.get("color") != null) {
-                                    String color = (String) done.get("color");
-                                    colorlist.add(color);
-                                    //Log.e("DotaskExtract---->", "activity中的index_begins--->" + index_begins.get(j) + "------");
-                                }
-                                if (done.get("index_begin") != null) {
-                                    index_begin = (Integer) done.get("index_begin");
-                                    index_begins.add(index_begin);
-                                    beginlist.add(index_begin);
-                                    //Log.e("DotaskExtract---->", "activity中的index_begins--->" + index_begins.get(j) + "------");
-                                }
-                                if (done.get("index_end") != null) {
-                                    index_end = (Integer) done.get("index_end");
-                                    index_ends.add(index_end);
-                                    endlist.add(index_end);
-                                    //下载文件对应的抽取内容
-                                    downloadcontent = content.substring(index_begin,index_end);
-                                    //Log.e("DotaskExtract---->", "activity中的index_ends--->" + index_ends.get(j) + "------" );
-                                }
-                                if (done.get("label_id") != null) {
-                                    label_id = (Integer) done.get("label_id");
-                                    label_ids.add(label_id);
-                                    labelidlist.add(label_id);
-                                    //下载文件对应的标签名称
-                                    downloadlabelname = downloadlabel.get(label_id);
-                                    //Log.e("DotaskExtract---->", "activity中的label_id--->" + label_ids.get(j) + "------");
-                                }
-                                singlelinecontent = downloadfilename+"\t"+downloadlabelname+"\t"+downloadcontent+"\n";
-                                downloadfilecontent.append(singlelinecontent);
-                            }
-                            colorhashMap.put(contentid,colorlist);
-                            beginhashMap.put(contentid,beginlist);
-                            endhashMap.put(contentid,endlist);
-                            labelidhashMap.put(contentid,labelidlist);
-                            for(int j=0;j<index_begins.size();j++){
-                                Log.e("DotaskExtract---->", "activity中的index_beginsindex_ends--->" + index_begins.get(j) + "------" );
-                            }
-                        }
                     }
                 }
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        initFragment(inststrMap);
+                        initFragment();
                     }
                 });
             }
         });
 
     }
-
-
 
 
     @Override
@@ -424,32 +409,24 @@ public class DoTaskExtractActivity extends AppCompatActivity implements BottomNa
             case R.id.upload_paragraph: {
                 int fragmentIndex = mViewPager.getCurrentItem();
                 final DoTaskExtractFragment currentFragment  = (DoTaskExtractFragment) mDoTaskExtractAdapter.getItem(fragmentIndex);
-
                 String selectedContent = currentFragment.getSelectedContent();
-                new XPopup.Builder(this).asCenterList("选中内容:"+selectedContent, mLabelNames,
-                        new OnSelectListener() {
-                            @Override
-                            public void onSelect(int position, String text) {
-                                Toast.makeText(DoTaskExtractActivity.this,mLabelNames[position]+" "+inststrmap.get(mLabelNames[position]),Toast.LENGTH_SHORT).show();
-                                String  labelName = mLabelNames[position];
-                                int labelId = inststrmap.get(labelName);
-                                currentFragment.addTag(labelId,labelName);
-                            }
-                        }).show();
+                showConfirmView(selectedContent,currentFragment);
                 return  true;
-            }
-
-            case R.id.before: {
-                int fragmentIndex = mViewPager.getCurrentItem();
-                fragmentIndex =  (fragmentIndex == 0) ? fragment_list.size() - 1 : fragmentIndex - 1 ;
-                mViewPager.setCurrentItem(fragmentIndex);
-                return false;
             }
 
             case R.id.next: {
                 int fragmentIndex = mViewPager.getCurrentItem();
-                fragmentIndex = (fragmentIndex + 1) % fragment_list.size();
-                mViewPager.setCurrentItem(fragmentIndex);
+                DoTaskExtractFragment currentFragment  = (DoTaskExtractFragment) mDoTaskExtractAdapter.getItem(fragmentIndex);
+                showLoading("获取下一个任务");
+                currentFragment.doNextTask();
+                return false;
+            }
+
+            case R.id.pass_task:{
+                int fragmentIndex = mViewPager.getCurrentItem();
+                DoTaskExtractFragment currentFragment  = (DoTaskExtractFragment) mDoTaskExtractAdapter.getItem(fragmentIndex);
+                showLoading("跳过当前任务");
+                currentFragment.passCurrentTask();
                 return false;
             }
 
@@ -466,45 +443,11 @@ public class DoTaskExtractActivity extends AppCompatActivity implements BottomNa
                                     }
                                 })
                         .show();
-
                 return false;
             }
 
             case R.id.settings:{
-
-                new XPopup.Builder(this)
-                        .asBottomList("设置",new String[]{"显示全部","只显示未完成","结束该段","结束该文档"} ,
-                                new OnSelectListener() {
-                                    @Override
-                                    public void onSelect(int position, String text) {
-
-                                        if (position == 0) {
-                                            docStatus = status[0];
-                                            Toast.makeText(DoTaskExtractActivity.this, "显示全部段落",Toast.LENGTH_SHORT).show();
-                                            getFileContent();
-
-                                        }
-
-                                        else if (position == 1){
-                                            docStatus = status[1];
-                                            Toast.makeText(DoTaskExtractActivity.this, "只显示未完成段落"+text,Toast.LENGTH_SHORT).show();
-                                            getFileContent();
-                                        }
-                                        else if (position == 2) {
-                                            int fragmentIndex = mViewPager.getCurrentItem();
-                                            DoTaskExtractFragment currentFragment  = (DoTaskExtractFragment) mDoTaskExtractAdapter.getItem(fragmentIndex);
-                                            currentFragment.completeCon();
-
-                                        } else{
-                                            int fragmentIndex = mViewPager.getCurrentItem();
-                                            DoTaskExtractFragment currentFragment  = (DoTaskExtractFragment) mDoTaskExtractAdapter.getItem(fragmentIndex);
-                                            currentFragment.completeDoc();
-                                        }
-
-
-                                    }
-                                })
-                        .show();
+                settingView.show();
                 return false;
             }
         }

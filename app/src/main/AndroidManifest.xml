@@ -91,7 +91,6 @@
         <activity android:name="com.example.textannotation.view.taskList.ViewAllTaskActivity"
             android:launchMode="singleTask"/>
         <activity android:name="com.example.textannotation.view.taskList.SpecifiedTaskListActivity" />
-        <activity android:name="com.example.textannotation.view.doTask.oneCategory.TextCategoryActivity" />
 
     </application>
 

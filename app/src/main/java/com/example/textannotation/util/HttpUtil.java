@@ -70,8 +70,6 @@ public class HttpUtil {
         return result;
     }
 
-
-
     /**
      * post提交数据
      * @param baseurl
@@ -459,16 +457,6 @@ public class HttpUtil {
 
         return null;
     }
-
-
-
-
-
-
-
-
-
-
 
 
 
