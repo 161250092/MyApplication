@@ -10,7 +10,9 @@ import android.graphics.Color;
 import com.example.textannotation.myapplication.R;
 import com.example.textannotation.pojo.TaskInfo;
 
-
+/**
+ * 任务列表 adapter ，用于任务列表、我的任务等
+ */
 public class TaskListItemAdapter extends BaseAdapter{
         LayoutInflater inflater;
         ArrayList<TaskInfo> array;

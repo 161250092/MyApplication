@@ -12,6 +12,8 @@ import com.example.textannotation.presenter.IRegisterPresenter;
 import com.example.textannotation.presenter.MyCallBack;
 import com.example.textannotation.presenter.impl.RegisterPresenter;
 import com.example.textannotation.view.login.LoginActivity;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.OnConfirmListener;
 
 /**
  * Created by kongmin on 2019/02/11.
@@ -38,9 +40,6 @@ public class RegisterActivity extends AppCompatActivity implements MyCallBack {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getSupportActionBar() != null){
-            getSupportActionBar().hide();
-        }
         setContentView(R.layout.activity_register);
         init();
     }
@@ -74,18 +73,26 @@ public class RegisterActivity extends AppCompatActivity implements MyCallBack {
 
     @Override
     public void onSuccess() {
-        Toast.makeText(this,"注册成功，请登录",Toast.LENGTH_SHORT).show();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-        startActivity(intent);
+        new XPopup.Builder(this).asConfirm("","注册成功，请登录", new OnConfirmListener() {
+            @Override
+            public void onConfirm() {
+                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        }).show();
+
+
     }
 
     @Override
     public void onFailure(String msg) {
-        Toast.makeText(this,"网络不佳，请确认网络连接情况",Toast.LENGTH_SHORT).show();
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(RegisterActivity.this,"网络不佳，请确认网络连接情况",Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 }

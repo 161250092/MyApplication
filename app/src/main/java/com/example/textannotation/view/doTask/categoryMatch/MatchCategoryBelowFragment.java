@@ -94,7 +94,6 @@ public class MatchCategoryBelowFragment extends BaseLazyFragment {
     public void loadDataStart() {
         Log.d(TAG, "loadDataStart");
         // 模拟请求数据
-
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -172,11 +171,9 @@ public class MatchCategoryBelowFragment extends BaseLazyFragment {
                                 showedcolors.add(donebolwcolors.get(i));
                                 donebutton(donebolwcolors.get(i));
                             }
-
                         }
-
                     }
-
+                    itemcontent.setText(listitemcon);
                     mPb.setVisibility(View.GONE);
                 }
             }

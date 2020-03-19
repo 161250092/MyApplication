@@ -92,7 +92,6 @@ public class MatchCategoryAboveFragment extends BaseLazyFragment {
                 if (mViewInflateFinished) {
                     fragmentlayout.setVisibility(View.VISIBLE);
 
-
                     Bundle bundle =getArguments();
                     sectionnumber = bundle.getInt("fragmentindex");
                     taskid =  bundle.getInt("taskid");

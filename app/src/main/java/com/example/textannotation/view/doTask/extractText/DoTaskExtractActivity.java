@@ -8,15 +8,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.textannotation.Constant.Constant;
 import com.example.textannotation.myapplication.R;
 import com.example.textannotation.network.OkHttpUtil;
-import com.example.textannotation.network.Url;
 import com.example.textannotation.util.MyApplication;
 import com.example.textannotation.util.SerializableMap;
 import com.example.textannotation.util.SerializableSortMap;
@@ -281,7 +280,6 @@ public class DoTaskExtractActivity extends AppCompatActivity implements BottomNa
         mViewPager.setAdapter(mDoTaskExtractAdapter);
         mTabIndicator.setTitles(titles);
 
-        Log.e("mwx","4");
     }
 
     //老版本初始化
@@ -335,9 +333,9 @@ public class DoTaskExtractActivity extends AppCompatActivity implements BottomNa
     }
 
     private void getFileContent(){
-        Log.e("mwx",Url.extradotaskUrl+"?docId="+docId+"&status="+docStatus+"&taskId="+taskid+"&userId="+userId);
+        Log.e("mwx",Constant.extrafileUrl+"?docId="+docId+"&status="+docStatus+"&taskId="+taskid+"&userId="+userId);
 
-        OkHttpUtil.sendGetRequest(Url.extradotaskUrl+"?docId="+docId+"&status="+docStatus+"&taskId="+taskid+"&userId="+userId, new Callback() {
+        OkHttpUtil.sendGetRequest(Constant.extrafileUrl+"?docId="+docId+"&status="+docStatus+"&taskId="+taskid+"&userId="+userId, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 runOnUiThread(new Runnable() {

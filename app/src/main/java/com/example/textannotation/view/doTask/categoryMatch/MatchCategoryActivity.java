@@ -27,16 +27,20 @@ import com.example.textannotation.network.OkHttpUtil;
 import com.example.textannotation.view.commonVIew.MyTabIndicator;
 import com.example.textannotation.util.MyApplication;
 import com.example.textannotation.util.SerializableMap;
+import com.example.textannotation.view.doTask.categoryRelation.PlaceholderFragment;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.impl.BottomListPopupView;
+import com.lxj.xpopup.impl.LoadingPopupView;
+import com.lxj.xpopup.interfaces.OnConfirmListener;
+import com.lxj.xpopup.interfaces.OnInputConfirmListener;
 import com.lxj.xpopup.interfaces.OnSelectListener;
 
 /*
  * 文本配对做任务新页面
  * update by mwx
- * 2020.2.10
+ * 2020.3.16
  * */
 public class MatchCategoryActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
-
     private MatchCategoryAdapter mMatchCategoryAdapter;
 
     private ViewPager mViewPager;
@@ -94,7 +98,6 @@ public class MatchCategoryActivity extends AppCompatActivity implements BottomNa
     private String docStatus = "全部";
 
     private String tasktype;
-    private int selectedaboveitemid;
 
     private int doneaitemid;
     private int donebitemid;
@@ -108,6 +111,76 @@ public class MatchCategoryActivity extends AppCompatActivity implements BottomNa
 
     private MyApplication mApplication;
     private int userId;
+
+    BottomNavigationView navigation;
+
+    private LoadingPopupView loadingPopupView;
+    public void showLoading(String msg){
+        loadingPopupView.setTitle(msg);
+        loadingPopupView.show();
+    }
+
+    public void hideLoading(){
+        loadingPopupView.dismiss();
+    }
+
+
+    private BottomListPopupView settingView;
+    private void  initBottomListPopupView(){
+        settingView = new XPopup.Builder(this)
+                .asBottomList("设置", new String[]{"提交错误信息", "与其他人比较"}, new OnSelectListener() {
+                    @Override
+                    public void onSelect(int position, String text) {
+                        switch (position){
+                            case 0:
+                                submitError();
+                                break;
+                            case 1:
+                                getOthersAnnotation();
+                                break;
+                        }
+                    }
+                });
+    }
+
+    private void submitError( ){
+        new XPopup.Builder(this).asInputConfirm("提交错误信息","具体信息", new OnInputConfirmListener() {
+            @Override
+            public void onConfirm(String text) {
+                int fragmentIndex = mViewPager.getCurrentItem();
+                MatchCategoryFragment currentFragment  = (MatchCategoryFragment)mMatchCategoryAdapter.getItem(fragmentIndex);
+                currentFragment.submitErrors(text);
+            }
+        }).show();
+    }
+
+    private void getOthersAnnotation(){
+        int fragmentIndex = mViewPager.getCurrentItem();
+        MatchCategoryFragment currentFragment  = (MatchCategoryFragment)mMatchCategoryAdapter.getItem(fragmentIndex);
+        currentFragment.compareOthersTextAnnotation();
+    }
+
+    public void showNotice(String title,String msg){
+        new XPopup.Builder(this).asConfirm(title, msg, new OnConfirmListener() {
+            @Override
+            public void onConfirm() {
+
+            }
+        }).show();
+    }
+
+    public void uploadInfo(String msg){
+        new XPopup.Builder(this).asConfirm("提交情况",msg , new OnConfirmListener() {
+            @Override
+            public void onConfirm() {
+                int fragmentIndex = mViewPager.getCurrentItem();
+                MatchCategoryFragment currentFragment  = (MatchCategoryFragment)mMatchCategoryAdapter.getItem(fragmentIndex);
+                showLoading("获取下一个任务");
+                currentFragment.doNextTask();
+            }
+        }).show();
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,14 +217,7 @@ public class MatchCategoryActivity extends AppCompatActivity implements BottomNa
         mFileNames = filename.toArray(new String[filename.size()]) ;
         mFileIds = fileid.toArray(new Integer[fileid.size()]);
 
-        LinearLayout extractlinear = findViewById(R.id.extractlinear);
-        if(typename.equals("dotask")){
-            extractlinear.setVisibility(View.GONE);
-        }else{
-            extractlinear.setVisibility(View.VISIBLE);
-        }
-
-        getFileContent();
+        initWorkPlaceFragment();
 
         mTabIndicator.setViewPager(mViewPager, 0);
         mTabIndicator.setOnPageChangeListener(new MyTabIndicator.PageChangeListener() {
@@ -169,209 +235,40 @@ public class MatchCategoryActivity extends AppCompatActivity implements BottomNa
             }
         });
 
+        navigation = (BottomNavigationView) findViewById(R.id.tools);
+        navigation.setOnNavigationItemSelectedListener(this);
+        loadingPopupView = new XPopup.Builder(this).asLoading("loading");
+        initBottomListPopupView();
+        initTitle();
+    }
+    private void initTitle(){
+        titles.add("当前任务");
+        mTabIndicator.setTitles(titles);
+        mTabIndicator.setViewPager(mViewPager, 0);
     }
 
-    public void initFragment(){
+    public void initWorkPlaceFragment(){
         titles.clear();
         fragment_list.clear();
         Log.e("mwx","init fragment");
-        for(int i=0;i<fragmentsize;i++){
-            //导航栏加标题
-            titles.add("任务"+instanceindexs.get(i));
-            MatchCategoryFragment f1 = MatchCategoryFragment.newInstance(i);
-            fragment_list.add(f1);
-            Bundle bundle = new Bundle();
-            //传递lebel数据
-            bundle.putInt("fragmentindex",i);
-            bundle.putInt("taskid", taskid);
-            bundle.putInt("docid", docId);
-            //是做任务页面还是查看做任务页面
-            bundle.putString("type",typename);
-            bundle.putInt("instanceid" + i,instanceids.get(i));
-            bundle.putInt("instanceindex" + i,instanceindexs.get(i));
-            bundle.putString("tasktype",tasktype);
-            ArrayList<Integer> clistitemids1 = new ArrayList<>();
-            ArrayList<String> clitemcontents1 = new ArrayList<>();
-            ArrayList<Integer> clistindexs1 = new ArrayList<>();
-            ArrayList<Integer> clitemindexs1 = new ArrayList<>();
-            //list2
-            ArrayList<Integer> clistitemids2 = new ArrayList<>();
-            ArrayList<String> clitemcontents2 = new ArrayList<>();
-            ArrayList<Integer> clistindexs2 = new ArrayList<>();
-            ArrayList<Integer> clitemindexs2 = new ArrayList<>();
 
-            //和item相关的参数
-            for(int j=0;j<iteminstids.size();j++){
-                if(iteminstids.get(j).equals(instanceids.get(i))){
-                    if(listindexs.get(j)==1){
-                        clistitemids1.add(listitemids.get(j));
-                        clitemcontents1.add(litemcontents.get(j));
-                        clistindexs1.add(listindexs.get(j));
-                        clitemindexs1.add(litemindexs.get(j));
-                    }else{
-                        clistitemids2.add(listitemids.get(j));
-                        clitemcontents2.add(litemcontents.get(j));
-                        clistindexs2.add(listindexs.get(j));
-                        clitemindexs2.add(litemindexs.get(j));
-                    }
-                }
-            }
+        MatchCategoryFragment f1 = MatchCategoryFragment.newInstance(0);
+        fragment_list.add(f1);
+        Bundle bundle = new Bundle();
+        //传递lebel数据
+        bundle.putInt("taskid", taskid);
+        bundle.putInt("docid", docId);
+        bundle.putInt("userid", userId);
+        bundle.putString("tasktype",tasktype);
+        fragment_list.get(0).setArguments(bundle);
 
-            for(int j=0;j<doneinstids.size();j++){
-                if(doneinstids.get(j).equals(instanceids.get(i))){
-                    chuansdoneaitemids.add(doneaitemids.get(j));
-                    chuansdonebitemids.add(donebitemids.get(j));
-                }
-            }
-
-            bundle.putIntegerArrayList("itemid1p"+i, clistitemids1);
-            bundle.putStringArrayList("itemcon1p"+i,clitemcontents1);
-            bundle.putIntegerArrayList("itemlist1p"+i, clistindexs1);
-            bundle.putIntegerArrayList("iteminst1p"+i, clitemindexs1);
-
-            bundle.putIntegerArrayList("itemid2p"+i, clistitemids2);
-            bundle.putStringArrayList("itemcon2p"+i,clitemcontents2);
-            bundle.putIntegerArrayList("itemlist2p"+i, clistindexs2);
-            bundle.putIntegerArrayList("iteminst2p"+i, clitemindexs2);
-
-            bundle.putIntegerArrayList("chuansdoneaitemids"+i, chuansdoneaitemids);
-            bundle.putIntegerArrayList("chuansdonebitemids"+i, chuansdonebitemids);
-
-            bundle.putInt("userid", userId);
-            fragment_list.get(i).setArguments(bundle);
-        }
         mMatchCategoryAdapter = new MatchCategoryAdapter(getSupportFragmentManager(),fragment_list);
         mMatchCategoryAdapter.notifyDataSetChanged();
         mViewPager.setAdapter(mMatchCategoryAdapter);
-        mTabIndicator.setTitles(titles);
-
-
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.tools);
-        navigation.setOnNavigationItemSelectedListener(this);
-
         Log.e("mwx","init fragment end");
     }
 
 
-    public void getFileContent(){
-        String requestUrl = Constant.pairingfileUrl;
-        String paramUrl;
-        if(typename.equals("dotask")){
-            paramUrl = "?docId="+docId+"&status="+docStatus+"&taskId="+taskid+"&userId="+userId;
-        }else{
-            paramUrl = "?docId="+docId+"&status="+docStatus+"&taskId="+taskid+"&userId="+userId;
-            Log.e("ExtractActivity---->", "GET方式请求成功，result2---> 查看我做的任务");
-        }
-
-        OkHttpUtil.sendGetRequest(requestUrl + paramUrl, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String listitem = response.body().string();
-                Log.e("mwx",listitem);
-                JSONObject instanceItemjson = JSONObject.parseObject(listitem);
-                JSONArray instanceItemArray = (JSONArray)instanceItemjson.get("instanceItem");
-                fragmentsize = instanceItemArray.size();
-                instanceids.clear();
-                instanceindexs.clear();
-                listitemids.clear();
-                iteminstids.clear();
-                litemcontents.clear();
-                listindexs.clear();
-                litemindexs.clear();
-                if(instanceItemArray.size()>0){
-                    for(int i=0;i<instanceItemArray.size();i++){
-                        //遍历jsonarray数组，把每一个对象转成json对象
-                        JSONObject job = instanceItemArray.getJSONObject(i);
-                        //得到每个对象中的属性值
-                        if(job.get("instid")!=null) {
-                            //instance
-                            instanceid = (Integer)job.get("instid");
-                            instanceids.add(instanceid);
-                            Log.e("DoTask2Activity---->", "activity中的instanceid--->" + instanceid);
-                        }
-                        if(job.get("instindex")!=null) {
-                            //instance
-                            String instindexstr = (String)job.get("instindex").toString();
-                            instanceindex = Integer.valueOf(instindexstr);
-                            instanceindexs.add(instanceindex);
-                            Log.e("DoTask2Activity---->", "activity中的instanceindex--->" + instanceindex);
-                        }
-                        if(job.get("listitems")!=null) {
-                            //instance
-                            JSONArray itemList = (JSONArray)job.get("listitems");
-                            for(int j=0;j<itemList.size();j++){
-                                JSONObject item = itemList.getJSONObject(j);
-                                if(item.get("ltid")!=null) {
-                                    //instance
-                                    listitemid = (Integer)item.get("ltid");
-                                    listitemids.add(listitemid);
-                                    iteminstids.add(instanceid);
-                                    Log.e("DoTask2Activity---->", "activity中的listitemid--->" + listitemid);
-                                }
-                                if(item.get("litemcontent")!=null) {
-                                    //instance
-                                    litemcontent = (String)item.get("litemcontent").toString();
-                                    litemcontents.add(litemcontent);
-                                    Log.e("DoTask2Activity---->", "activity中的litemcontent--->" + litemcontent);
-                                }
-                                if(item.get("listIndex")!=null) {
-                                    //instance
-                                    String listindexstr = item.get("listIndex").toString();
-                                    listindex = Integer.valueOf(listindexstr);
-                                    listindexs.add(listindex);
-                                    Log.e("DoTask2Activity---->", "activity中的listindex--->" + listindex);
-                                }
-                                if(item.get("litemindex")!=null) {
-                                    //instance
-                                    String litemindexstr = item.get("litemindex").toString();
-                                    litemindex = Integer.valueOf(litemindexstr);
-                                    litemindexs.add(litemindex);
-                                    Log.e("DoTask2Activity---->", "activity中的litemindex--->" + litemindex);
-                                }
-                            }
-                        }
-
-                        //已经做过的部分
-                        if(job.get("alreadyDone")!=null) {
-                            JSONArray alreadyDonelArray = (JSONArray)job.get("alreadyDone");
-                            if(alreadyDonelArray!=null&&alreadyDonelArray.size()>0){
-                                for(int j=0;j<alreadyDonelArray.size();j++){
-                                    //遍历jsonarray数组，把每一个对象转成json对象
-                                    JSONObject alreadyDone = alreadyDonelArray.getJSONObject(j);
-                                    //得到每个对象中的属性值
-                                    if(alreadyDone.get("aLitemid")!=null) {
-                                        //instance
-                                        doneaitemid = (Integer)alreadyDone.get("aLitemid");
-                                        doneinstids.add(instanceid);
-                                        doneaitemids.add(doneaitemid);
-                                        Log.e("DotaskOneCategory---->", "activity中的doneaitemid--->" + doneaitemid);
-                                    }
-                                    if(alreadyDone.get("bLitemid")!=null) {
-                                        //instance
-                                        donebitemid = (Integer)alreadyDone.get("bLitemid");
-                                        donebitemids.add(donebitemid);
-                                        Log.e("DotaskOneCategory---->", "activity中的donebitemid--->" + donebitemid);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        initFragment();
-                    }
-                });
-            }
-        });
-
-    }
 
 
     @Override
@@ -380,24 +277,25 @@ public class MatchCategoryActivity extends AppCompatActivity implements BottomNa
         switch (menuItem.getItemId()){
             case R.id.upload_paragraph: {
                 int fragmentIndex = mViewPager.getCurrentItem();
-                Toast.makeText(this,"upload",Toast.LENGTH_SHORT).show();
                 Log.e("mwx",fragmentIndex+"");
                 MatchCategoryFragment currentFragment  = (MatchCategoryFragment)mMatchCategoryAdapter.getItem(fragmentIndex);
-                currentFragment.saveIns();
+                currentFragment.saveAnnotationInfo();
                 return  true;
-            }
-
-            case R.id.before: {
-                int fragmentIndex = mViewPager.getCurrentItem();
-                fragmentIndex =  (fragmentIndex == 0) ? fragment_list.size() - 1 : fragmentIndex - 1 ;
-                mViewPager.setCurrentItem(fragmentIndex);
-                return false;
             }
 
             case R.id.next: {
                 int fragmentIndex = mViewPager.getCurrentItem();
-                fragmentIndex = (fragmentIndex + 1) % fragment_list.size();
-                mViewPager.setCurrentItem(fragmentIndex);
+                MatchCategoryFragment currentFragment  = (MatchCategoryFragment)mMatchCategoryAdapter.getItem(fragmentIndex);
+                showLoading("获取下一个任务");
+                currentFragment.doNextTask();
+                return false;
+            }
+
+            case R.id.pass_task: {
+                int fragmentIndex = mViewPager.getCurrentItem();
+                MatchCategoryFragment currentFragment  = (MatchCategoryFragment)mMatchCategoryAdapter.getItem(fragmentIndex);
+                showLoading("跳过当前任务");
+                currentFragment.passCurrentTask();
                 return false;
             }
 
@@ -410,7 +308,7 @@ public class MatchCategoryActivity extends AppCompatActivity implements BottomNa
                                     public void onSelect(int position, String text) {
                                         Toast.makeText(MatchCategoryActivity.this,"切换到" + text,Toast.LENGTH_SHORT).show();
                                         docId = mFileIds[position];
-                                        getFileContent();
+                                        initWorkPlaceFragment();
                                     }
                                 })
                         .show();
@@ -420,37 +318,7 @@ public class MatchCategoryActivity extends AppCompatActivity implements BottomNa
 
             case R.id.settings:{
 
-                new XPopup.Builder(this)
-                        .asBottomList("设置",new String[]{"显示全部段落","只显示未完成段落","结束该段","结束该文档"} ,
-                                new OnSelectListener() {
-                                    @Override
-                                    public void onSelect(int position, String text) {
-
-                                        if (position == 0) {
-                                            docStatus = status[0];
-                                            Toast.makeText(MatchCategoryActivity.this, "显示全部段落",Toast.LENGTH_SHORT).show();
-                                            getFileContent();
-                                        }
-
-                                        else if (position == 1){
-                                            docStatus = status[1];
-                                            Toast.makeText(MatchCategoryActivity.this, "只显示未完成段落"+text,Toast.LENGTH_SHORT).show();
-                                            getFileContent();
-                                        }
-                                        else if (position == 2) {
-                                            int fragmentIndex = mViewPager.getCurrentItem();
-                                            MatchCategoryFragment currentFragment  = (MatchCategoryFragment)mMatchCategoryAdapter.getItem(fragmentIndex);
-                                            currentFragment.completeCon();
-
-                                        } else{
-                                            int fragmentIndex = mViewPager.getCurrentItem();
-                                            MatchCategoryFragment currentFragment  = (MatchCategoryFragment)mMatchCategoryAdapter.getItem(fragmentIndex);
-                                            currentFragment.completeDoc();
-                                        }
-
-                                    }
-                                })
-                        .show();
+                settingView.show();
                 return false;
             }
         }

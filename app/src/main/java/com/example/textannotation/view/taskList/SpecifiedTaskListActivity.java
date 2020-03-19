@@ -21,8 +21,10 @@ import com.example.textannotation.pojo.TaskInfo;
 import com.example.textannotation.presenter.MyCallBack;
 import com.example.textannotation.view.adapter.TaskListItemAdapter;
 import com.example.textannotation.view.iCallBack.ListRenderCallBack;
+import com.example.textannotation.view.mainPage.MainActivity;
 import com.example.textannotation.view.taskDetails.TaskDetailActivity;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.OnInputConfirmListener;
 import com.lxj.xpopup.interfaces.OnSelectListener;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -105,6 +107,19 @@ public class SpecifiedTaskListActivity extends AppCompatActivity  implements Lis
             }
         });
 
+        ImageView search_icon = actionBar.getCustomView().findViewById(R.id.search_icon);
+        search_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new XPopup.Builder(SpecifiedTaskListActivity.this).asInputConfirm("","请输入搜索内容",new OnInputConfirmListener(){
+                    @Override
+                    public void onConfirm(String text) {
+
+
+                    }
+                }).show();
+            }
+        });
 
     }
 

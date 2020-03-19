@@ -17,8 +17,11 @@ import com.example.textannotation.myapplication.R;
 import com.example.textannotation.pojo.TaskInfo;
 import com.example.textannotation.view.adapter.TaskListItemAdapter;
 import com.example.textannotation.view.iCallBack.ListRenderCallBack;
+import com.example.textannotation.view.mainPage.MainActivity;
 import com.example.textannotation.view.taskDetails.TaskDetailActivity;
 import com.hb.dialog.dialog.LoadingDialog;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.OnInputConfirmListener;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -89,6 +92,20 @@ public class ViewAllTaskActivity  extends AppCompatActivity implements ListRende
             @Override
             public void onClick(View v) {
                 ViewAllTaskActivity.this.finish();
+            }
+        });
+
+        ImageView search_icon = actionBar.getCustomView().findViewById(R.id.search_icon);
+        search_icon.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                new XPopup.Builder(ViewAllTaskActivity.this).asInputConfirm("","请输入搜索内容",new OnInputConfirmListener(){
+                    @Override
+                    public void onConfirm(String text) {
+
+
+                    }
+                }).show();
             }
         });
     }

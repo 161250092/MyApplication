@@ -61,11 +61,9 @@ public interface IMatchCategory {
      */
     public void deleteMatchPair(int aboveItemId, int belowItemId);
 
-
     /**
      * 在滑动viewPage时改变匹配按钮状态
      */
-
 
     public void updateBtnStatus();
 

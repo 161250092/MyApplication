@@ -149,14 +149,14 @@ public class LoginActivity extends AppCompatActivity implements MyCallBack {
      * 动态检查权限
      */
     private void checkPermissions(){
-        for (String permission: permissions){
-            if (ContextCompat.checkSelfPermission(this, permission)
-                    != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{permission},
-                        request_success);
-            }
-        }
+//        for (String permission: permissions){
+//            if (ContextCompat.checkSelfPermission(this, permission)
+//                    != PackageManager.PERMISSION_GRANTED) {
+//                ActivityCompat.requestPermissions(this,
+//                        new String[]{permission},
+//                        request_success);
+//            }
+//        }
     }
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -180,7 +180,13 @@ public class LoginActivity extends AppCompatActivity implements MyCallBack {
     }
 
     @Override
-    public void onFailure(String msg) {
-        Toast.makeText(LoginActivity.this,msg,Toast.LENGTH_SHORT).show();
+    public void onFailure(final String msg) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(LoginActivity.this,msg,Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 }

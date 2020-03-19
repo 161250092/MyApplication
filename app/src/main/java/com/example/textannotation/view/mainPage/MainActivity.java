@@ -10,9 +10,15 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.view.View;
+import android.widget.ImageView;
 
+import com.example.textannotation.Constant.Constant;
 import com.example.textannotation.myapplication.R;
 import com.example.textannotation.util.MyApplication;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.OnInputConfirmListener;
+import com.lxj.xpopup.interfaces.OnSelectListener;
 
 /**
  * update by mwx on 2020/01/18.
@@ -48,6 +54,22 @@ public class MainActivity extends AppCompatActivity {
             actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM); //Enable自定义的View
             actionBar.setCustomView(R.layout.action_bar);  //绑定自定义的布局：
         }
+
+        ImageView search_icon = actionBar.getCustomView().findViewById(R.id.search_icon);
+        search_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new XPopup.Builder(MainActivity.this).asInputConfirm("","请输入搜索内容",new OnInputConfirmListener(){
+                    @Override
+                    public void onConfirm(String text) {
+
+
+                    }
+                }).show();
+            }
+        });
+
+
     }
 
     //初始化fragment和fragment数组

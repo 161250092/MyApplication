@@ -3,6 +3,7 @@ package com.example.textannotation.view.doTask.sort;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
@@ -11,17 +12,31 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.example.textannotation.Constant.Constant;
 import com.example.textannotation.model.ITaskUpload;
+import com.example.textannotation.model.doTask.ITaskFragment;
 import com.example.textannotation.myapplication.R;
+import com.example.textannotation.network.OkHttpUtil;
 import com.example.textannotation.util.threadPool.ThreadPool;
 import com.example.textannotation.view.doTask.ResolveHttpResponse;
+import com.example.textannotation.view.doTask.extractText.DoTaskExtractActivity;
 import com.example.textannotation.view.lazyfragment.BaseLazyFragment;
 import com.example.textannotation.util.HttpUtil;
 import com.example.textannotation.util.MyApplication;
 import com.example.textannotation.util.SerializableSortMap;
+import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.*;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 /**
  *
  * 单个文本排序界面
@@ -29,7 +44,7 @@ import java.util.*;
  * 2018.12.29
 */
 
-public class OneSortFragment extends BaseLazyFragment implements ITaskUpload {
+public class OneSortFragment extends BaseLazyFragment implements ITaskFragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final String ARG_CONTENT_NUMBER = "content_number";
@@ -48,24 +63,12 @@ public class OneSortFragment extends BaseLazyFragment implements ITaskUpload {
 
     private RecyclerView rv;
     private DtSortAdapter adapter;
-    private List<DataBean> list;
+    private List<DataBean> list = new ArrayList<>();
     private SimpleItemTouchHelperCallback callback;
 
 
-    private String issorted;
-    //已经排好序的做任务的结果
-    private ArrayList<Integer> sortedindex = new ArrayList<Integer>();
-    private ArrayList<Integer> sorteditemId = new ArrayList<Integer>();
 
-    private SerializableSortMap sortMap;
-
-    private Map<Integer,String> sortmap = new HashMap<>();
-
-    private Map<Integer,Integer> idindex = new TreeMap<>();
-
-
-
-    private int docId;
+    private int instanceId;
     private int userid;
 
     private List<Integer> swap = new ArrayList<>();
@@ -103,93 +106,92 @@ public class OneSortFragment extends BaseLazyFragment implements ITaskUpload {
     //设置加载动画
     @Override
     public void loadDataStart() {
-        Log.d(TAG, "loadDataStart");
-        // 模拟请求数据
-        mHandler.postDelayed(new Runnable() {
+
+        mHandler.post(new Runnable() {
             @Override
             public void run() {
-                mData = "这是加载下来的数据";
-                // 一旦获取到数据, 就应该立刻标记数据加载完成
-                mLoadDataFinished = true;
-                if (mViewInflateFinished) {
-                    fragmentlayout.setVisibility(View.VISIBLE);
+                fragmentlayout.setVisibility(View.VISIBLE);
+                Bundle bundle = getArguments();
+                taskid = bundle.getInt("taskid");
+                userid = bundle.getInt("userid");
+                docid = bundle.getInt("docid");
 
-                    //获取传过来的数据
-                    Bundle bundle = getArguments();
-                    sectionnumber = bundle.getInt("fragmentindex");
-                    taskid = bundle.getInt("taskid");
-                    userid = bundle.getInt("userid");
-                    docid = bundle.getInt("docid");
-                    typename = bundle.getString("type");
-                    instanceid = bundle.getInt("instanceid"+sectionnumber);
-                    instanceindex = bundle.getInt("instanceindex"+sectionnumber);
-                    Log.e("MatchCategory---->", "GET方式请求成功，sectionnumber--->" + sectionnumber);
+                final String requestUrl = Constant.DotaskOneSortGetCurrentTaskUrl;
+                String paramUrl = "?docId="+docid+"&taskId="+taskid+"&userId="+userid;
+                Log.e("mwx",requestUrl + paramUrl);
+                OkHttpUtil.sendGetRequest(requestUrl + paramUrl, new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
 
-                    itemids =  bundle.getIntegerArrayList("itemidp"+sectionnumber);
-                    itemcontents = bundle.getStringArrayList("itemconp"+sectionnumber);
-                    itemindexs = bundle.getIntegerArrayList("itemindexp"+sectionnumber);
-
-                    Log.e("MatchCategory---->", "GET方式请求成功，instanceid--->" + instanceid);
-                    Log.e("MatchCategory---->", "GET方式请求成功，instanceindex--->" + instanceindex);
-                    Log.e("MatchCategory---->", "GET方式请求成功，itemids--->" + itemids);
-                    Log.e("MatchCategory---->", "GET方式请求成功，itemcontents--->" + itemcontents);
-                    Log.e("MatchCategory---->", "GET方式请求成功，itemindexs--->" + itemindexs);
-
-                    for(int i=0;i<itemids.size();i++){
-                        sortmap.put(itemids.get(i),itemcontents.get(i));
                     }
 
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
 
-                    issorted = bundle.getString("issorted"+sectionnumber);
-                    if(issorted.equals("true")){
-                        //todo 存在的itemId才加进去
-                        sortedindex = bundle.getIntegerArrayList("sortedindex"+sectionnumber);
-                        sorteditemId = bundle.getIntegerArrayList("sorteditemId"+sectionnumber);
-                        for(int i=0;i<sortedindex.size();i++){
-                            if(sortmap.containsKey(sorteditemId.get(i))) {
-                                idindex.put(sortedindex.get(i), sorteditemId.get(i));
-                                Log.e("DotaskExtract---->", "GET方式请求成功，issorted.equals(true)--->" + sortedindex.get(i) + "-----" + sorteditemId.get(i));
-                            }
+                        String result = response.body().string();
+                        JSONObject instanceItemjson = JSONObject.parseObject(result);
+                        JSONObject instanceItem= (JSONObject)instanceItemjson.get("data");
+
+                        itemids.clear();
+                        itemcontents.clear();
+                        itemindexs.clear();
+                        instanceId = instanceItem.getInteger("instid");
+
+                        JSONArray listItem = instanceItem.getJSONArray("itemList");
+                        Log.e("mwx",listItem.toJSONString());
+                        for (int i = 0 ;i < listItem.size() ; i++) {
+                            JSONObject jsonObject = listItem.getJSONObject(i);
+                            int id = jsonObject.getInteger("itid");
+                            int index = jsonObject.getInteger("itemindex");
+                            String content = jsonObject.getString("itemcontent");
+                            itemcontents.add(content);
+                            itemindexs.add(index);
+                            itemids.add(id);
                         }
-                        initsortedData();
-                        Log.e("DotaskExtract---->", "GET方式请求成功，issorted.equals(\"true\")--->" + "标注了排序的");
-                    }else{
-                        initData();
+                        initView();
                     }
+                });
 
-                    adapter=new DtSortAdapter(list);
-                    rv.setAdapter(adapter);
-                    mPb.setVisibility(View.GONE);
-                    initmotivation();
-                }
             }
-        }, 300);
+        });
 
     }
 
+    private void initView(){
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                initData();
+                LinearLayoutManager lr=new LinearLayoutManager(getActivity());
+                lr.setOrientation(OrientationHelper.VERTICAL);
+                rv.setLayoutManager(lr);
+
+                adapter = new DtSortAdapter(list);
+                rv.setAdapter(adapter);
+                mPb.setVisibility(View.GONE);
+                initmotivation();
+            }
+        });
+
+    }
+
+
+
+
+
+
     private void initData() {
-        list = new ArrayList<>();
+        list.clear();
         //String[] arrays=getResources().getStringArray(R.array.news);
         for(int i=0;i<itemcontents.size();i++){
             DataBean bean=new DataBean();
             bean.setText(itemcontents.get(i));
-            //bean.setItemid(itemindexs.get(i));
             bean.setItemid(itemids.get(i));
             list.add(bean);
         }
     }
-    public void initsortedData(){
-        list = new ArrayList<>();
-        for(Integer sortedindex:idindex.keySet()){
-            int sorteditemId = idindex.get(sortedindex);
-            DataBean bean=new DataBean();
-            bean.setItemid(sorteditemId);
-            bean.setText(sortmap.get(sorteditemId));
-            //bean.setItemid(itemindexs.get(i));
-            list.add(bean);
-            Log.e("DotaskExtract---->", "GET方式请求成功，sorteditemId+itemcontent--->" + sorteditemId+sortmap.get(sorteditemId));
-        }
-    }
+
+
     private void initmotivation() {
 
         adapter.setOnItemClickListener(new DtSortAdapter.OnItemClickListener() {
@@ -204,80 +206,8 @@ public class OneSortFragment extends BaseLazyFragment implements ITaskUpload {
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         //调用ItemTouchHelper的attachToRecyclerView方法建立联系
         touchHelper.attachToRecyclerView(rv);
-
-
 }
 
-    private Runnable saveinst = new Runnable() {
-        @Override
-        public void run() {
-            String requestUrl = Constant.DotaskOneSortUrl;
-            //要传递的参数
-            Collections.sort(itemids);
-            StringBuffer itemidstr = new StringBuffer();
-            for(int i=0;i<itemids.size()-1;i++){
-                itemidstr.append(itemids.get(i)+",");
-            }
-            itemidstr.append(itemids.get(itemids.size()-1));
-            //排完序之后的新的顺序
-
-            for (int i=0;i<adapter.getItemCount();i++){
-                List<DataBean> itemlist = adapter.getItemList();
-                map.put(itemlist.get(i).getItemid(),i);
-                Log.e("params---->", "Post方式请求成功，itemlist.get(i).getItemid()--->" + itemlist.get(i).getItemid());
-            }
-            swap.clear();
-            for(Integer key:map.keySet()){
-                swap.add(map.get(key));
-                Log.e("params---->", "Post方式请求成功，itemlist.get(i).getItemid()--->" + key+"-----"+map.get(key));
-            }
-            StringBuffer itemindexstr = new StringBuffer();
-            for(int i=0;i<swap.size()-1;i++){
-                itemindexstr.append(swap.get(i)+",");
-            }
-            itemindexstr.append(swap.get(swap.size()-1));
-
-            String params ="?taskId="+taskid+"&docId="+docid+"&instanceId="+instanceid+"&itemIds="+itemidstr+"&newIndex="+itemindexstr+"&userId="+userId;
-            Log.e("params---->", "Post方式请求成功，params--->" + params);
-            String result = HttpUtil.requestPost(requestUrl,params);
-            Log.e("listview---->", "Post方式请求成功，result--->" + result);
-            ResolveHttpResponse.showHttpResponse(result,getContext());
-        }
-    };
-
-
-    private Runnable completeinst = new Runnable() {
-        @Override
-        public void run() {
-
-            String requestUrl = Constant.DtOneSortcominstUrl;
-            //要传递的参数
-            String params ="?taskId="+taskid+"&docId="+docid+"&instanceId="+instanceid+"&userId="+userId;
-            Log.e("params---->", "Post方式请求成功，pararunnable--->" + params);
-            Log.e("taskid---->", "Post方式请求成功，pararunnable--->" + taskid);
-            String result = HttpUtil.requestPost(requestUrl,params);
-            Log.e("listview---->", "Post方式请求成功，pararunnable--->" + result);
-            //等待请求结束
-            ResolveHttpResponse.showHttpResponse(result,getContext());
-
-        }
-    };
-
-    private Runnable completedoc = new Runnable() {
-        @Override
-        public void run() {
-            String requestUrl = Constant.DtOneSortcomdocUrl;
-            //要传递的参数
-            String params ="?taskId="+taskid+"&docId="+docid+"&userId="+userId;
-            Log.e("params---->", "Post方式请求成功，docrunnable--->" + params);
-            Log.e("taskid---->", "Post方式请求成功，docrunnable--->" + taskid);
-            String result = HttpUtil.requestPost(requestUrl,params);
-            Log.e("listview---->", "Post方式请求成功，docrunnable--->" + result);
-            //等待请求结束
-            ResolveHttpResponse.showHttpResponse(result,getContext());
-
-        }
-    };
 
 
     @Override
@@ -311,18 +241,201 @@ public class OneSortFragment extends BaseLazyFragment implements ITaskUpload {
     }
 
     @Override
-    public void saveIns() {
-        ThreadPool.fixedThreadPool().submit(saveinst);
+    public void saveAnnotationInfo() {
+        OkHttpUtil.sendPostRequest(Constant.DotaskOneSortUrl, getRequestBody(), new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                showInfo(result);
+            }
+        });
     }
 
     @Override
-    public void completeCon() {
-        ThreadPool.fixedThreadPool().submit(completeinst);
+    public void getCurrentTaskParagraph() {
+
     }
 
     @Override
-    public void completeDoc() {
-        ThreadPool.fixedThreadPool().submit(completedoc);
+    public void doNextTask() {
+        String requestUrl = Constant.DotaskOneSortGetCurrentTaskUrl;
+        String paramUrl = "?docId="+docid+"&taskId="+taskid+"&userId="+userid;
+        Log.e("mwx",requestUrl + paramUrl);
+        OkHttpUtil.sendGetRequest(requestUrl + paramUrl, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                String result = response.body().string();
+                JSONObject instanceItemjson = JSONObject.parseObject(result);
+                JSONObject instanceItem= (JSONObject)instanceItemjson.get("data");
+
+                itemids.clear();
+                itemcontents.clear();
+                itemindexs.clear();
+                instanceId = instanceItem.getInteger("instid");
+
+                JSONArray listItem = instanceItem.getJSONArray("itemList");
+                Log.e("mwx",listItem.toJSONString());
+                for (int i = 0 ;i < listItem.size() ; i++) {
+                    JSONObject jsonObject = listItem.getJSONObject(i);
+                    int id = jsonObject.getInteger("itid");
+                    int index = jsonObject.getInteger("itemindex");
+                    String content = jsonObject.getString("itemcontent");
+                    itemcontents.add(content);
+                    itemindexs.add(index);
+                    itemids.add(id);
+                }
+                updateContent();
+            }
+        });
+    }
+
+    @Override
+    public void passCurrentTask() {
+        String requestUrl = Constant.DotaskOneSortPassCurrentTaskUrl;
+        String paramUrl = "?docId="+docid+"&instanceId="+instanceId+"&taskId="+taskid+"&userId="+userid;
+        Log.e("mwx",requestUrl + paramUrl);
+        OkHttpUtil.sendGetRequest(requestUrl + paramUrl, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                String result = response.body().string();
+                JSONObject instanceItemjson = JSONObject.parseObject(result);
+                JSONObject instanceItem= (JSONObject)instanceItemjson.get("data");
+
+                itemids.clear();
+                itemcontents.clear();
+                itemindexs.clear();
+                instanceId = instanceItem.getInteger("instid");
+
+                JSONArray listItem = instanceItem.getJSONArray("itemList");
+                Log.e("mwx",listItem.toJSONString());
+                for (int i = 0 ;i < listItem.size() ; i++) {
+                    JSONObject jsonObject = listItem.getJSONObject(i);
+                    int id = jsonObject.getInteger("itid");
+                    int index = jsonObject.getInteger("itemindex");
+                    String content = jsonObject.getString("itemcontent");
+                    itemcontents.add(content);
+                    itemindexs.add(index);
+                    itemids.add(id);
+                }
+                updateContent();
+            }
+        });
+    }
+
+
+    private void updateContent(){
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                initData();
+                adapter.notifyDataSetChanged();
+                ((DtOneSortActivity)getActivity()).hideLoading();
+            }
+        });
+
+    }
+    @Override
+    public void submitErrors(String text) {
+        String requestUrl = Constant.submitErrorUrl;
+        String params = "?docId="+docid+"&paraId="+instanceid+"&msg="+text+"&taskId="+taskid+"&userId="+userId;
+        OkHttpUtil.sendGetRequest(requestUrl + params, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Log.e("OneCategory", response.body().string());
+            }
+        });
+    }
+
+    @Override
+    public void compareOthersTextAnnotation() {
+
+        OkHttpUtil.sendPostRequest(Constant.DotaskOneSortPassCompareUrl, getRequestBody(), new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                showInfo("比较信息",result);
+            }
+        });
+    }
+
+    private RequestBody getRequestBody(){
+        Collections.sort(itemids);
+        //排完序之后的新的顺序
+        for (int i=0;i<adapter.getItemCount();i++){
+            List<DataBean> itemlist = adapter.getItemList();
+            map.put(itemlist.get(i).getItemid(),i+1);
+        }
+        swap.clear();
+        for(Integer key:map.keySet()){
+            swap.add(map.get(key));
+        }
+
+        String itemIds = new Gson().toJson(itemids).replace("[","").replace("]","");
+        String newIndex = new Gson().toJson(swap).replace("[","").replace("]","");
+
+        RequestBody requestBody = new FormBody.Builder()
+                .add("docId", docid+"")
+                .add("taskId",taskid+"")
+                .add("instanceId",instanceId+"")
+                .add("itemIds", itemIds)
+                .add("newIndex",newIndex)
+                .add("userId",userid+"")
+                .build();
+
+        Log.e("mwx",itemIds);
+        Log.e("mwx",newIndex);
+        return requestBody;
+    }
+
+    public void showInfo(final String title, final String msg){
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                ((DtOneSortActivity)getActivity()).showNotice(title,msg);
+            }
+        });
+    }
+
+    public void showInfo(final String msg){
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                ((DtOneSortActivity)getActivity()).uploadInfo(msg);
+            }
+        });
     }
 }
 

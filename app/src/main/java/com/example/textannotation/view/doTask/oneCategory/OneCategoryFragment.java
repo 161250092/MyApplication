@@ -13,11 +13,9 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.textannotation.Constant.Constant;
-import com.example.textannotation.model.ITaskUpload;
 import com.example.textannotation.model.doTask.ITaskFragment;
 import com.example.textannotation.myapplication.R;
 import com.example.textannotation.network.OkHttpUtil;
-import com.example.textannotation.network.Url;
 import com.example.textannotation.util.threadPool.ThreadPool;
 import com.example.textannotation.view.lazyfragment.BaseLazyFragment;
 import com.example.textannotation.util.FlowGroupView;
@@ -363,16 +361,26 @@ public class OneCategoryFragment extends BaseLazyFragment implements ITaskFragme
             String params ="?taskId="+taskid+"&docId="+docid+"&paraId="+pid+"&labelId="+labelstr+"&userId="+userId;
             Log.e("mwx",requestUrl+params);
             String result = HttpUtil.requestPost(requestUrl,params);
-            Log.e("mwx", "result--->" + result);
-            showHttpResponse(result);
+            showInfo(result);
         }
     };
+
+
+    public void showInfo(final String msg){
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                ((OneCategoryActivity)getActivity()).uploadInfo(msg);
+            }
+        });
+    }
 
     private Runnable passCurrentTask = new Runnable() {
         @Override
         public void run() {
             String requestUrl = Constant.passCurrentTask;
             String params = "?docId="+docid+"&paraId="+pid+"&taskId="+taskid+"&userId="+userId;
+
             String result = HttpUtil.requestGet(requestUrl,params);
             Log.e("OneCategory",requestUrl+params);
             Log.e("OneCategory", result);
@@ -393,8 +401,6 @@ public class OneCategoryFragment extends BaseLazyFragment implements ITaskFragme
         public void run() {
             final String requestUrl = Constant.submitErrorUrl;
             String params = "?docId="+docid+"&paraId="+pid+"&msg="+errorInfo+"&taskId="+taskid+"&userId="+userId;
-            String result = HttpUtil.requestGet(requestUrl,params);
-
             OkHttpUtil.sendGetRequest(requestUrl + params, new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
@@ -478,76 +484,6 @@ public class OneCategoryFragment extends BaseLazyFragment implements ITaskFragme
     @Override
     public void compareOthersTextAnnotation() {
         ThreadPool.fixedThreadPool().submit(compareOthersLabels);
-    }
-
-
-
-    private void oldVersionLoadData(){
-        // 模拟请求数据
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mData = "这是加载下来的数据";
-                // 一旦获取到数据, 就应该立刻标记数据加载完成
-                mLoadDataFinished = true;
-                if (mViewInflateFinished) {
-                    fragmentlayout.setVisibility(View.VISIBLE);
-
-                    //每次加载之前需要清空一下，否则会有数据重复加载的问题
-                    names.clear();
-
-                    Bundle bundle = getArguments();
-
-                    sectionnumber = bundle.getInt("fragmentindex");
-                    taskid = bundle.getInt("taskid");
-                    docid = bundle.getInt("docid");
-                    typename = bundle.getString("type");
-                    //任务标签
-                    labelMap = (SerializableMap) bundle.get("lebelmap");
-                    hashmap = labelMap.getMap();
-                    for (String labelname : hashmap.keySet()) {
-                        int labelid = hashmap.get(labelname);
-                        //给标签数组赋值
-                        names.add(labelname);
-                        namelabelid.add(labelid);
-                        Log.e("DotaskExtract---->", "GET方式请求成功，labelname+labelid--->" + labelname + labelid);
-                    }
-                    //段落的状态
-                    parastatus = bundle.getString("parastatus" + sectionnumber);
-                    //文本ID
-                    String contentidstr = "contentid" + sectionnumber;
-                    contentid = bundle.getInt(contentidstr);
-                    Log.e("DotaskExtract---->", "fragment中的contentidstr--->" + contentidstr);
-                    contentindex = bundle.getInt("contentindex" + sectionnumber);
-                    content = bundle.getString("content" + sectionnumber);
-                    userid = bundle.getInt("userid");
-
-                    issorted = bundle.getString("issorted" + sectionnumber);
-                    if (issorted.equals("true")) {
-                        seledparalabelid = bundle.getIntegerArrayList("seledinstid" + sectionnumber);
-                        Log.e("DotaskExtract---->", "GET方式请求成功，seledparalabelid--->" + seledparalabelid);
-                    }
-
-                    //setData();
-                    //给instance的label赋值
-                    for (int i = 0; i < names.size(); i++) {
-                        addTextView(namelabelid.get(i), names.get(i), seledparalabelid);
-                    }
-
-                    Log.e("DotaskExtract---->", "GET方式请求成功，taskid--->" + taskid);
-                    Log.e("DotaskExtract---->", "GET方式请求成功，contentid--->" + contentid);
-                    Log.e("DotaskExtract---->", "GET方式请求成功，contentindex--->" + contentindex);
-                    Log.e("DotaskExtract---->", "GET方式请求成功，content--->" + content);
-                    Log.e("DotaskExtract---->", "GET方式请求成功，userid--->" + userid);
-
-
-                    paracontent.setText(content);
-                    mPb.setVisibility(View.GONE);
-
-                }
-            }
-        }, 300);
-
     }
 
 

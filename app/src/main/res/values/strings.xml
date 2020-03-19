@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">文本标注平台</string>
+    <string name="app_name">文本标注</string>
     <string name="title_home">发任务</string>
     <string name="title_dashboard">做任务</string>
     <string name="title_notifications">任务管理</string>
