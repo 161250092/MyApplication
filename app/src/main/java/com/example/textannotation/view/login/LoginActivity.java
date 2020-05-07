@@ -2,8 +2,6 @@ package com.example.textannotation.view.login;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,10 +9,10 @@ import android.view.View.OnClickListener;
 import android.widget.*;
 import android.content.Intent;
 
-import com.example.textannotation.model.LoginModel;
+import com.example.textannotation.model.login.LoginModel;
 import com.example.textannotation.myapplication.R;
-import com.example.textannotation.pojo.User;
-import com.example.textannotation.presenter.impl.LoginPresenter;
+import com.example.textannotation.pojo.login.User;
+import com.example.textannotation.presenter.login.LoginPresenter;
 import com.example.textannotation.presenter.MyCallBack;
 
 import com.example.textannotation.util.MyApplication;
@@ -104,9 +102,9 @@ public class LoginActivity extends AppCompatActivity implements MyCallBack {
                 userName = etUserName.getText().toString();
                 userPassword = etUserPassword.getText().toString();
                 if (userName.equals("")||userPassword.equals("")) {
-                    //Toast.makeText(LogoActivity.this,"账号或密码为空",Toast.LENGTH_SHORT).show();
-                    loading();
-                    test();
+                    Toast.makeText(LoginActivity.this,"账号或密码为空",Toast.LENGTH_SHORT).show();
+//                    loading();
+//                    test();
                     return;
                 }
                 Toast.makeText(LoginActivity.this,"登录中....",Toast.LENGTH_SHORT).show();

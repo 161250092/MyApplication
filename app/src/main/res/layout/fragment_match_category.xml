@@ -13,19 +13,19 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerHorizontal="true"/>
-<LinearLayout android:layout_width="match_parent"
+    <LinearLayout android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:visibility="gone"
               android:id="@+id/above"
               android:layout_centerInParent="true"
               android:orientation="vertical">
-    <LinearLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
             android:background="@color/colorPrimary">
-        <com.example.textannotation.view.commonVIew.MyTabIndicator
+        <com.example.textannotation.view.common.MyTabIndicator
                 android:id="@+id/mTabIndicator1"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
@@ -41,15 +41,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="4dp"/>
-    </LinearLayout>
+        </LinearLayout>
 
-    <LinearLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
             android:background="#aaccdd">
-        <com.example.textannotation.view.commonVIew.MyTabIndicator
+        <com.example.textannotation.view.common.MyTabIndicator
                 android:id="@+id/mTabIndicator2"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
@@ -66,7 +66,6 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="4dp"/>
     </LinearLayout>
-
 
 </LinearLayout>
 </RelativeLayout>

@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.textannotation.myapplication.R;
-import com.example.textannotation.view.commonVIew.MyTabIndicator;
+import com.example.textannotation.view.common.MyTabIndicator;
 
 import java.util.ArrayList;
 import java.util.List;

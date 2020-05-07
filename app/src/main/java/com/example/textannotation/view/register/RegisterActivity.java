@@ -6,11 +6,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 
-import com.example.textannotation.model.RegisterModel;
+import com.example.textannotation.model.register.RegisterModel;
 import com.example.textannotation.myapplication.R;
-import com.example.textannotation.presenter.IRegisterPresenter;
+import com.example.textannotation.presenter.register.IRegisterPresenter;
 import com.example.textannotation.presenter.MyCallBack;
-import com.example.textannotation.presenter.impl.RegisterPresenter;
+import com.example.textannotation.presenter.register.RegisterPresenter;
 import com.example.textannotation.view.login.LoginActivity;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnConfirmListener;
@@ -80,19 +80,17 @@ public class RegisterActivity extends AppCompatActivity implements MyCallBack {
                 startActivity(intent);
             }
         }).show();
-
-
     }
 
     @Override
     public void onFailure(String msg) {
-
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Toast.makeText(RegisterActivity.this,"网络不佳，请确认网络连接情况",Toast.LENGTH_SHORT).show();
             }
         });
-
     }
+
+
 }

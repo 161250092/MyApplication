@@ -11,15 +11,13 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.example.textannotation.model.ITaskModel;
-import com.example.textannotation.model.TaskModel;
+import com.example.textannotation.model.task.ITaskModel;
+import com.example.textannotation.model.task.TaskModel;
 import com.example.textannotation.myapplication.R;
-import com.example.textannotation.pojo.TaskInfo;
-import com.example.textannotation.view.adapter.TaskListItemAdapter;
-import com.example.textannotation.view.iCallBack.ListRenderCallBack;
-import com.example.textannotation.view.mainPage.MainActivity;
+import com.example.textannotation.pojo.task.TaskInfo;
+import com.example.textannotation.view.common.adapter.TaskListItemAdapter;
+import com.example.textannotation.view.taskList.taskListRenderCallBack.ListRenderCallBack;
 import com.example.textannotation.view.taskDetails.TaskDetailActivity;
-import com.hb.dialog.dialog.LoadingDialog;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnInputConfirmListener;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -40,8 +38,6 @@ public class ViewAllTaskActivity  extends AppCompatActivity implements ListRende
 
     private int taskType  = 0;
 
-    private LoadingDialog loadingDialog;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +51,6 @@ public class ViewAllTaskActivity  extends AppCompatActivity implements ListRende
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 refreshlayout.finishRefresh(800/*,false*/);//传入false表示刷新失败
-
                 taskModel.getFirstPage(ViewAllTaskActivity.this);
 
             }
@@ -73,7 +68,6 @@ public class ViewAllTaskActivity  extends AppCompatActivity implements ListRende
 
         taskModel.getFirstPage(this);
 
-        //initList();
     }
 
 

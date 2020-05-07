@@ -1,7 +1,7 @@
 package com.example.textannotation.util;
 
 import android.app.Application;
-import com.example.textannotation.pojo.User;
+import com.example.textannotation.pojo.login.User;
 
 /**
  * 可以比作运行时session,保留用户ID和账户
@@ -10,6 +10,7 @@ public class MyApplication extends Application {
 
     public String appVersion = "v1.0";
 
+    public static String sessionId = null;
     //当前登录用户
     private static User loginUser = new User();
 
@@ -32,5 +33,13 @@ public class MyApplication extends Application {
 
     public void userLogout(){
         loginUser = new User();
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 }

@@ -33,7 +33,7 @@
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="30dp"
             android:text="@string/look_pictrue"/>
         </LinearLayout>
     </ScrollView>
@@ -41,6 +41,7 @@
 
 
     <LinearLayout android:id="@+id/pair_selections"
+        android:layout_marginTop="@dimen/dp_50"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

@@ -7,10 +7,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.widget.TextView;
 
-import com.example.textannotation.model.LoginModel;
+import com.example.textannotation.model.login.LoginModel;
 import com.example.textannotation.myapplication.R;
 import com.example.textannotation.presenter.MyCallBack;
-import com.example.textannotation.presenter.impl.LoginPresenter;
+import com.example.textannotation.presenter.login.LoginPresenter;
 import com.example.textannotation.util.MyApplication;
 import com.example.textannotation.view.login.LoginActivity;
 import com.example.textannotation.view.mainPage.MainActivity;

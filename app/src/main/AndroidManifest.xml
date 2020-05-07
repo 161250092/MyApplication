@@ -42,38 +42,21 @@
             android:launchMode="singleTop">
         </activity>
 
-        <activity android:name="com.example.textannotation.view.doTask.categoryMatch.MatchCategoryActivity">
+        <activity android:name="com.example.textannotation.view.doTask.textMatch.TextMatchActivity">
         </activity>
-        <activity android:name="com.example.textannotation.view.doTask.categoryRelation.TextCategoryTabActivity">
+        <activity android:name="com.example.textannotation.view.doTask.textRelation.TextRelationActivity">
         </activity>
-        <activity android:name="com.example.textannotation.view.doTask.oneCategory.OneCategoryActivity">
-        </activity>
-        <activity android:name="com.example.textannotation.view.incompletePart.ItemListActivity">
+        <activity android:name="com.example.textannotation.view.doTask.textCategory.TextCategoryActivity">
         </activity>
 
-        <activity
-                android:name="com.example.textannotation.view.incompletePart.ItemDetailActivity"
-                android:label="@string/title_item_detail"
-                android:parentActivityName="com.example.textannotation.view.incompletePart.ItemListActivity"
-                android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.textannotation.view.incompletePart.ItemListActivity"/>
-
+        <activity android:name="com.example.textannotation.view.doTask.textExtract.TextExtractActivity">
         </activity>
 
-        <activity android:name="com.example.textannotation.view.doTask.extractText.DoTaskExtractActivity">
-        </activity>
-        <activity android:name="com.example.textannotation.view.lazyfragment.TabActivity">
-        </activity>
-
-        <activity android:name="com.example.textannotation.view.doTask.sort.DtOneSortActivity">
+        <activity android:name="com.example.textannotation.view.doTask.textSort.TextSortActivity">
         </activity>
         <activity android:name="com.example.textannotation.view.register.RegisterActivity">
         </activity>
 
-        <activity android:name="com.example.textannotation.view.incompletePart.SelectActivity">
-        </activity>
         <activity android:name="com.example.textannotation.view.myTasks.MyTaskListActivity">
         </activity>
         <activity android:name="com.example.textannotation.view.taskDetails.FileContentActivity"
@@ -91,6 +74,7 @@
         <activity android:name="com.example.textannotation.view.taskList.ViewAllTaskActivity"
             android:launchMode="singleTask"/>
         <activity android:name="com.example.textannotation.view.taskList.SpecifiedTaskListActivity" />
+        <activity android:name="com.example.textannotation.view.doTask.textCategorization.TextCategorizationActivity" />
 
     </application>
 

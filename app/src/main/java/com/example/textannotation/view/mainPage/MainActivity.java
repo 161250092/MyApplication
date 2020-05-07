@@ -13,12 +13,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.example.textannotation.Constant.Constant;
 import com.example.textannotation.myapplication.R;
 import com.example.textannotation.util.MyApplication;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnInputConfirmListener;
-import com.lxj.xpopup.interfaces.OnSelectListener;
 
 /**
  * update by mwx on 2020/01/18.

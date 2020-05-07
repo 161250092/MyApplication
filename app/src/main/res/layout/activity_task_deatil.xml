@@ -303,6 +303,7 @@
                     android:background="@android:color/transparent"
                     android:lines="3"
                     android:maxLines="1"
+                    android:gravity="left"
                     android:textSize="18sp" />
             </LinearLayout>
 
@@ -332,13 +333,13 @@
                     android:text="相关标签："
                     android:textSize="15sp" />
 
-                <com.example.textannotation.util.FlowGroupView
+                <com.example.textannotation.view.common.FlowGroupView
                     android:id="@+id/instancelabel"
                     android:layout_weight="2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:layout_marginBottom="2dp"></com.example.textannotation.util.FlowGroupView>
+                    android:layout_marginBottom="2dp"></com.example.textannotation.view.common.FlowGroupView>
 
             </LinearLayout>
 
@@ -365,7 +366,7 @@
                     android:layout_weight="1"
                     android:textSize="15sp" />
 
-                <com.example.textannotation.util.FlowGroupView
+                <com.example.textannotation.view.common.FlowGroupView
                     android:id="@+id/item1label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -397,7 +398,7 @@
                     android:text="item2标签："
                     android:textSize="15sp" />
 
-                <com.example.textannotation.util.FlowGroupView
+                <com.example.textannotation.view.common.FlowGroupView
                     android:id="@+id/item2label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/tools">
 
-        <com.example.textannotation.view.commonVIew.MyTabIndicator
+        <com.example.textannotation.view.common.MyTabIndicator
             android:id="@+id/mTabIndicator"
             android:layout_width="match_parent"
             android:layout_height="44dp"
@@ -21,7 +21,6 @@
             app:textSelectedColor="#060606"
             app:textNormalSize="4dp"
             app:textSelectedSize="5dp"
-            app:indicatorColor="#ff6633"
             app:indicatorWidth="13dp"
             app:backGroundColor="#fff"/>
 
@@ -40,7 +39,7 @@
         android:layout_height="wrap_content"
         android:background="?android:attr/windowBackground"
         android:layout_alignParentBottom="true"
-        app:menu="@menu/new_tools"
+        app:menu="@menu/menu_tool"
         />
 
 </RelativeLayout>

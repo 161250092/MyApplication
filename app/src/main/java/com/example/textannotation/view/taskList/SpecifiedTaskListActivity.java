@@ -11,17 +11,16 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.example.textannotation.Constant.Constant;
-import com.example.textannotation.model.ISpecifiedTypeTaskModel;
+import com.example.textannotation.constant.Constant;
+import com.example.textannotation.model.specifiedTypeTask.ISpecifiedTypeTaskModel;
 
-import com.example.textannotation.model.SpecifiedTypeTaskModel;
+import com.example.textannotation.model.specifiedTypeTask.SpecifiedTypeTaskModel;
 
 import com.example.textannotation.myapplication.R;
-import com.example.textannotation.pojo.TaskInfo;
+import com.example.textannotation.pojo.task.TaskInfo;
 import com.example.textannotation.presenter.MyCallBack;
-import com.example.textannotation.view.adapter.TaskListItemAdapter;
-import com.example.textannotation.view.iCallBack.ListRenderCallBack;
-import com.example.textannotation.view.mainPage.MainActivity;
+import com.example.textannotation.view.common.adapter.TaskListItemAdapter;
+import com.example.textannotation.view.taskList.taskListRenderCallBack.ListRenderCallBack;
 import com.example.textannotation.view.taskDetails.TaskDetailActivity;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.interfaces.OnInputConfirmListener;

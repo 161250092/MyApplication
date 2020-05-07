@@ -84,18 +84,6 @@
         <attr name="duration" format="integer"></attr>
     </declare-styleable>
     <!--做任务选择文件菜单动画-->
-    <declare-styleable name="DropDownMenu">
 
-        <attr name="ddunderlineColor" format="color"/>
-        <attr name="dddividerColor" format="color"/>
-        <attr name="ddtextSelectedColor" format="color"/>
-        <attr name="ddtextUnselectedColor" format="color"/>
-        <attr name="ddmenuBackgroundColor" format="color"/>
-        <attr name="ddmaskColor" format="color"/>
-        <attr name="ddmenuTextSize" format="dimension"/>
-        <attr name="ddmenuSelectedIcon" format="reference"/>
-        <attr name="ddmenuUnselectedIcon" format="reference"/>
-        <attr name="ddmenuMenuHeightPercent" format="float"/>
-    </declare-styleable>
 
 </resources>

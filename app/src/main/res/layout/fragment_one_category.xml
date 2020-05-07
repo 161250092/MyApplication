@@ -19,13 +19,13 @@
                android:layout_width="match_parent"
                android:background="#d9d9d9" />
 
-        <com.example.textannotation.util.FlowGroupView
+        <com.example.textannotation.view.common.FlowGroupView
                 android:id="@+id/flowgroupview2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp">
-        </com.example.textannotation.util.FlowGroupView>
+        </com.example.textannotation.view.common.FlowGroupView>
         <View  android:layout_height="2px"
                android:layout_width="match_parent"
                android:background="#d9d9d9" />
