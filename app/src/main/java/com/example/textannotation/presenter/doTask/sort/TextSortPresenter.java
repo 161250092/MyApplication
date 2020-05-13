@@ -74,12 +74,17 @@ public class TextSortPresenter implements ITextSortPresenter{
             iTextSortView.showExceptionInfo("网络异常");
             return;
         }
+        else if (jsonObject.getInteger("code") == null){
+            iTextSortView.showSimpleInfo("服务器异常");
+            return;
+        }
+
         else if (jsonObject.getInteger("code") == 5000){
             iTextSortView.showSimpleInfo("当前任务未提交");
             return;
         }
         else if (jsonObject.getInteger("code") == -1){
-            iTextSortView.showSimpleInfo(jsonObject.toJSONString());
+            iTextSortView.showSimpleInfo("已经是第一个任务");
             return;
         }
         JSONArray itemList = jsonObject.getJSONObject("data").getJSONArray("itemList");
@@ -94,6 +99,9 @@ public class TextSortPresenter implements ITextSortPresenter{
     @Override
     public void submitCallBack(JSONObject jsonObject) {
         Log.e("presenter submit view",jsonObject.toJSONString());
-        iTextSortView.showSubmitInfo(jsonObject.toJSONString());
+        if (jsonObject.getString("msg")!= null)
+            iTextSortView.showSubmitInfo(jsonObject.getString("msg"));
+        else
+            iTextSortView.showSubmitInfo(jsonObject.toJSONString());
     }
 }

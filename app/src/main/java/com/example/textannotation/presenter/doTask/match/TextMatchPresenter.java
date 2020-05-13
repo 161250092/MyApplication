@@ -73,6 +73,10 @@ public class TextMatchPresenter implements ITextMatchPresenter{
             return;
         }
 
+        else if (jsonObject.getInteger("code") == null){
+            iTextMatchView.showSimpleInfo("服务器异常");
+            return;
+        }
         else if (jsonObject.getInteger("code") == 5000){
             iTextMatchView.showSimpleInfo("当前任务未提交");
             return;
@@ -93,10 +97,9 @@ public class TextMatchPresenter implements ITextMatchPresenter{
 
     @Override
     public void submitCallBack(JSONObject jsonObject) {
-//        if (jsonObject.getInteger("status") == 0){
-//            iTextMatchView.showSubmitInfo("已提交，请进行下一个任务");
-//            return;
-//        }
-        iTextMatchView.showSubmitInfo(jsonObject.toJSONString());
+        if (jsonObject.getString("msg")!= null)
+            iTextMatchView.showSubmitInfo(jsonObject.getString("msg"));
+        else
+            iTextMatchView.showSubmitInfo(jsonObject.toJSONString());
     }
 }

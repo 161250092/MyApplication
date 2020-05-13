@@ -271,7 +271,6 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="3px"
-
                 android:background="@color/colorPrimary" />
 
 
@@ -300,12 +299,17 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:background="@android:color/transparent"
+                    android:background="@drawable/description_bg"
                     android:lines="3"
                     android:maxLines="1"
                     android:gravity="left"
                     android:textSize="18sp" />
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3px"
+                android:background="@color/colorPrimary" />
 
 
             <LinearLayout

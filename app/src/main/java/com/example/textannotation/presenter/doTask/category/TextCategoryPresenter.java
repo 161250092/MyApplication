@@ -88,6 +88,11 @@ public class TextCategoryPresenter implements ITextCategoryPresenter  {
             iTextCategoryView.showExceptionInfo("网络异常");
             return;
         }
+        else if (jsonObject.getInteger("code") == null){
+            iTextCategoryView.showExceptionInfo("服务器异常");
+            return;
+        }
+
         else if (jsonObject.getInteger("code") == 5000){
             iTextCategoryView.showSimpleInfo("当前任务未提交");
             return;

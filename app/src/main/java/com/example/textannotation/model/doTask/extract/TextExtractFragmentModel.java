@@ -89,6 +89,8 @@ public class TextExtractFragmentModel implements ITextExtractFragmentModel {
 
     @Override
     public void saveAnnotationInfo(DoExtractionData doExtractionData) {
+
+        Log.e("model",doExtractionData.getEntities().size()+" ");
         OkHttpUtil.sendPostRequest(Constant.extradotaskUrl, doExtractionData, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {

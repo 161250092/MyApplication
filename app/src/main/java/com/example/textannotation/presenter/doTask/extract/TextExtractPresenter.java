@@ -1,5 +1,6 @@
 package com.example.textannotation.presenter.doTask.extract;
 
+import android.support.v4.app.NavUtils;
 import android.util.Log;
 
 
@@ -70,12 +71,15 @@ public class TextExtractPresenter implements ITextExtractPresenter{
 
     @Override
     public void updateViewCallBack(JSONObject jsonObject) {
-        Log.e("update view ",jsonObject.toJSONString());
-
         if (jsonObject == null) {
             iTextExtractView.showExceptionInfo("网络异常");
             return;
         }
+        else if (jsonObject.getInteger("code") == null){
+            iTextExtractView.showExceptionInfo("服务器异常");
+            return;
+        }
+
 
         else if (jsonObject.getInteger("code") == 5000){
             iTextExtractView.showSimpleInfo("当前任务未提交");
@@ -83,7 +87,7 @@ public class TextExtractPresenter implements ITextExtractPresenter{
         }
 
         else if (jsonObject.getInteger("code") == -1){
-            iTextExtractView.showSimpleInfo(jsonObject.toJSONString());
+            iTextExtractView.showSimpleInfo("已经是第一个任务");
             return;
         }
         else if (jsonObject.getInteger("code") == 5001){
@@ -101,6 +105,9 @@ public class TextExtractPresenter implements ITextExtractPresenter{
 
     @Override
     public void submitCallBack(JSONObject jsonObject) {
-        iTextExtractView.showSubmitInfo(jsonObject.toJSONString());
+        if (jsonObject.getInteger("status") != null && jsonObject.getInteger("status") == 0)
+            iTextExtractView.showSubmitInfo("提交成功");
+        else
+            iTextExtractView.showSubmitInfo(jsonObject.toJSONString());
     }
 }

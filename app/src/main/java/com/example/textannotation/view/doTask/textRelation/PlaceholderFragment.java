@@ -441,8 +441,6 @@ public class PlaceholderFragment extends BaseLazyFragment implements IMenuAction
         });
     }
 
-
-
     public void showInfo(final String title, final String msg){
         mHandler.post(new Runnable() {
             @Override

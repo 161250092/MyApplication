@@ -50,8 +50,13 @@ public class TextRelationPresenter implements ITextRelationPresenter {
     @Override
     public void initViewCallBack(JSONObject jsonObject) {
 
-        if (jsonObject == null ) {
+        if (jsonObject == null) {
             iTextRelationView.showExceptionInfo("网络异常");
+            return;
+        }
+
+        if (jsonObject.getInteger("code") == null){
+            iTextRelationView.showExceptionInfo("服务器异常");
             return;
         }
 

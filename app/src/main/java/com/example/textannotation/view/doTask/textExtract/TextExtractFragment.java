@@ -251,6 +251,7 @@ public class TextExtractFragment extends BaseLazyFragment implements ITextExtrac
     }
 
     public void cancelAnnotation(int selectionStart,int selectionEnd){
+        relation_temp.setHeadEntity(null);
         for(int i = 0; i < entities.size(); i++){
             Entity entity = entities.get(i);
             if (entity.getStartIndex() == selectionStart && entity.getEndIndex() == selectionEnd){
@@ -369,6 +370,8 @@ public class TextExtractFragment extends BaseLazyFragment implements ITextExtrac
 
 
     /**
+     * ui变动核心方法
+     * 通过选择框选定文本，将相应文本显示出来
      */
     public void addTag(final String selectedText, final int labelid, final String labelName){
         String txt = doccontent.getText().toString();
