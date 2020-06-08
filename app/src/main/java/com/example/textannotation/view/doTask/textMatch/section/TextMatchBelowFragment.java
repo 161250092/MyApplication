@@ -178,7 +178,7 @@ public class TextMatchBelowFragment extends BaseLazyFragment {
                     mPb.setVisibility(View.GONE);
                 }
             }
-        }, 200);
+        }, 100);
 
     }
 

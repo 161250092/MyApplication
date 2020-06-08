@@ -31,14 +31,11 @@ public class ViewAllTaskActivity  extends AppCompatActivity implements ListRende
     ListView mTaskList;
 
     private ITaskModel taskModel;
-
     RefreshLayout refreshLayout;
     private LayoutInflater inflater;
     private TaskListItemAdapter adapter;
 
     private int taskType  = 0;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

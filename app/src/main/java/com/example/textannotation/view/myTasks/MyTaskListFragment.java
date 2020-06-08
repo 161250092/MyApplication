@@ -164,7 +164,7 @@ public class MyTaskListFragment extends Fragment implements ListRenderCallBack {
                             tasktype = 4;
                         }else if (typename.equals("文本排序")){//浅紫色
                             tasktype = 5;
-                        }else if (typename.equals("类比排序")){//浅橘色
+                        }else if (typename.equals("文本类比排序")){//浅橘色
                             tasktype = 6;
                         }
                         loadingDialog = new LoadingDialog(getActivity());
